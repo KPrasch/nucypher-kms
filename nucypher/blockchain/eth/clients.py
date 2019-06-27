@@ -279,10 +279,6 @@ class GethClient(Web3Client):
 
     def sign_transaction(self, transaction: dict) -> bytes:
 
-        # Do not include a 'to' field for contract creation.
-        if transaction['to'] == b'':
-            transaction = dissoc(transaction, 'to')
-
         # Sign
         result = self.w3.eth.signTransaction(transaction=transaction)
 

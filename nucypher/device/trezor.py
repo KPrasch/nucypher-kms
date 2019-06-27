@@ -14,7 +14,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-
+import eth_abi
 import rlp
 from functools import wraps
 from typing import Tuple
@@ -124,6 +124,10 @@ class Trezor(TrustedDevice):
             raise InvalidSignature("Signature verification failed.")
         return True
 
+    @property
+    def accounts(self) -> list:
+        return list(self.__addresses.keys())
+
     @_handle_device_call
     def get_address(self, address_index: int = None, hd_path: str = None):
         """
@@ -142,7 +146,7 @@ class Trezor(TrustedDevice):
         return address
 
     @_handle_device_call
-    def sign_eth_transaction(self, checksum_address: str, transaction: dict) -> bytes:
+    def sign_eth_transaction(self, checksum_address: str, unsigned_transaction: dict) -> bytes:
         """
         Signs an Ethereum transaction via the Trezor ethereum sign_tx API
         and returns the signed, RLP encoded transaction.
@@ -155,24 +159,38 @@ class Trezor(TrustedDevice):
         except KeyError:
             raise self.DeviceError(f'{checksum_address} is not available as a cached address on this device.')
 
+        # TODO: use cytoolz
         # Handle Web3.py -> trezor API formatting
-        assert_valid_fields(transaction)
-        transaction['to'] = to_canonical_address(transaction['to'])
+
+        sender = unsigned_transaction.pop('from')
+        assert sender == checksum_address  # TODO
+
+        assert_valid_fields(unsigned_transaction)
+
+        if unsigned_transaction['to']:
+            unsigned_transaction['to'] = to_canonical_address(unsigned_transaction['to'])
+
+        if unsigned_transaction['data']:
+            unsigned_transaction['data'] = bytes.fromhex(unsigned_transaction['data'].replace("0x", ""))
+
         trezor_tx_keys = {'gas': 'gas_limit',
                           'gasPrice': 'gas_price',
                           'chainId': 'chain_id'}
-        trezor_format_tx = dict(apply_key_map(trezor_tx_keys, transaction))
 
+        trezor_format_tx = dict(apply_key_map(trezor_tx_keys, unsigned_transaction))
+
+        breakpoint()
         tx_v, tx_r, tx_s = trezor_eth.sign_tx(client=self.client, n=bip44_path,
                                               **trezor_format_tx)
 
         # The chain_id is not necessary to include, the Trezor API creates an
         # EIP-155 signature if needed.
-        del transaction['chainId']
+        # TODO: use cytoolz
+        del unsigned_transaction['chainId']
 
         signed_tx = Transaction(v=tx_v,
                                 r=int.from_bytes(tx_r, 'big'),
                                 s=int.from_bytes(tx_s, 'big'),
-                                **transaction)
+                                **unsigned_transaction)
         signed_rlp_tx = rlp.encode(signed_tx)
         return signed_rlp_tx

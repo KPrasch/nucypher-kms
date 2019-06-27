@@ -30,7 +30,9 @@ from constant_sorrow.constants import (
     NO_PROVIDER_PROCESS,
     READ_ONLY_INTERFACE
 )
+from cytoolz.dicttoolz import dissoc
 from eth_tester import EthereumTester
+from eth_utils import to_canonical_address, to_checksum_address
 from twisted.logger import Logger
 from web3 import Web3, WebsocketProvider, HTTPProvider, IPCProvider
 from web3.contract import Contract, ConciseContract, ContractFunction
@@ -322,6 +324,10 @@ class BlockchainInterface:
                         })
 
         unsigned_transaction = transaction_function.buildTransaction(payload)
+
+        # Do not include a 'to' field for contract creation.
+        # if unsigned_transaction['to'] == b'':
+        #     unsigned_transaction['to'] = '0x'.encode()
 
         #
         # Broadcast

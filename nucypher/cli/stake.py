@@ -74,6 +74,9 @@ def stake(click_config,
         click.secho(NU_BANNER)
 
     device = NO_STAKING_DEVICE
+    if trezor:
+        from nucypher.device.trezor import Trezor
+        device = Trezor(cached_index=5)
 
     if action == 'new-stakeholder':
 

@@ -248,9 +248,17 @@ class Deployer(NucypherTokenActor):
         """
 
         token_txs, token_deployer = self.deploy_contract(contract_name='NuCypherToken')
+        breakpoint()
+
         staking_txs, staking_deployer = self.deploy_contract(contract_name='StakingEscrow', plaintext_secret=staker_secret)
+        breakpoint()
+
         policy_txs, policy_deployer = self.deploy_contract(contract_name='PolicyManager', plaintext_secret=policy_secret)
+        breakpoint()
+
         adjudicator_txs, adjudicator_deployer = self.deploy_contract(contract_name='Adjudicator', plaintext_secret=adjudicator_secret)
+        breakpoint()
+
         user_escrow_proxy_txs, user_escrow_proxy_deployer = self.deploy_contract(contract_name='UserEscrowProxy', plaintext_secret=user_escrow_proxy_secret)
 
         deployers = (token_deployer,
@@ -675,7 +683,7 @@ class StakeHolder(BaseConfiguration):
         self.eth_funding = Web3.toWei('0.01', 'ether')  # TODO: How much ETH to use while funding new stakes.
 
         # Setup
-        if funding_account is not NO_FUNDING_ACCOUNT:
+        if funding_account is not NO_FUNDING_ACCOUNT and not device:
             if not is_checksum_address(funding_account):
                 raise ValueError(f"{funding_account} is not a valid EIP-55 checksum address.")
 

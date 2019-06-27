@@ -14,15 +14,17 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+
 import os
 import time
 
 import click
 import maya
+from constant_sorrow.constants import NO_STAKING_DEVICE
 
 from nucypher.blockchain.eth.actors import Deployer
 from nucypher.blockchain.eth.agents import NucypherTokenAgent
-from nucypher.blockchain.eth.clients import NuCypherGethDevnetProcess
 from nucypher.blockchain.eth.interfaces import BlockchainDeployerInterface
 from nucypher.blockchain.eth.registry import EthereumContractRegistry
 from nucypher.blockchain.eth.sol.compile import SolidityCompiler
@@ -30,17 +32,15 @@ from nucypher.characters.banners import NU_BANNER
 from nucypher.cli.config import nucypher_deployer_config
 from nucypher.cli.types import EIP55_CHECKSUM_ADDRESS, EXISTING_READABLE_FILE
 from nucypher.config.constants import DEFAULT_CONFIG_ROOT
-from nucypher.crypto.powers import TransactingPower
 
 
 @click.command()
 @click.argument('action')
 @click.option('--force', is_flag=True)
 @click.option('--poa', help="Inject POA middleware", is_flag=True)
-@click.option('--no-compile', help="Disables solidity contract compilation", is_flag=True)
 @click.option('--provider-uri', help="Blockchain provider's URI", type=click.STRING)
-@click.option('--geth', '-G', help="Run using the built-in geth node", is_flag=True)
-@click.option('--sync/--no-sync', default=True)
+@click.option('--sync/--no-sync', default=True, is_flag=True)
+@click.option('--trezor/--no-trezor', default=True, is_flag=True)
 @click.option('--enode', help="An ethereum bootnode enode address to start learning from", type=click.STRING)
 @click.option('--config-root', help="Custom configuration directory", type=click.Path())
 @click.option('--contract-name', help="Deploy a single contract by name", type=click.STRING)
@@ -56,7 +56,6 @@ def deploy(click_config,
            action,
            poa,
            provider_uri,
-           geth,
            enode,
            deployer_address,
            contract_name,
@@ -64,15 +63,19 @@ def deploy(click_config,
            allocation_outfile,
            registry_infile,
            registry_outfile,
-           no_compile,
            amount,
            recipient_address,
            config_root,
            sync,
-           force):
+           force,
+           trezor):
     """Manage contract and registry deployment"""
 
     ETH_NODE = None
+    DEVICE = NO_STAKING_DEVICE
+    if trezor:
+        from nucypher.device.trezor import Trezor
+        DEVICE = Trezor()
 
     #
     # Validate
@@ -82,17 +85,6 @@ def deploy(click_config,
     config_root = config_root or DEFAULT_CONFIG_ROOT
     if not os.path.exists(config_root):
         os.makedirs(config_root)
-
-    #
-    # Connect to Blockchain
-    #
-
-    if geth:
-        # Spawn geth child process
-        ETH_NODE = NuCypherGethDevnetProcess(config_root=config_root)
-        ETH_NODE.ensure_account_exists(password=click_config.get_password(confirm=True))
-        ETH_NODE.start()  # TODO: Graceful shutdown
-        provider_uri = ETH_NODE.provider_uri
 
     # Establish a contract registry from disk if specified
     registry_filepath = registry_outfile or registry_infile
@@ -113,22 +105,28 @@ def deploy(click_config,
     #
 
     if not deployer_address:
-        for index, address in enumerate(blockchain.client.accounts):
+        if trezor:
+            accounts = DEVICE.accounts
+        else:
+            accounts = blockchain.client.accounts
+
+        for index, address in enumerate(accounts):
             click.secho(f"{index} --- {address}")
         choices = click.IntRange(0, len(blockchain.client.accounts))
-        deployer_address_index = click.prompt("Select deployer address", default=0, type=choices)
-        deployer_address = blockchain.client.accounts[deployer_address_index]
+        deployer_address_index = click.prompt("Select Address", default=0, type=choices)
+        deployer_address = accounts[deployer_address_index]
 
     # Verify Address
     if not force:
         click.confirm("Selected {} - Continue?".format(deployer_address), abort=True)
 
-    # TODO: Integrate with Deployer Actor (Character)
-    blockchain.transacting_power = TransactingPower(blockchain=blockchain,
-                                                    account=deployer_address,
-                                                    password=click.prompt("Enter ETH node password", hide_input=True))
-    blockchain.transacting_power.activate()
-    deployer = Deployer(blockchain=blockchain, deployer_address=deployer_address)
+    password = None
+    if not trezor:
+        password = click.prompt("Enter ETH node password", hide_input=True)
+    deployer = Deployer(blockchain=blockchain,
+                        device=DEVICE,
+                        client_password=password,
+                        deployer_address=deployer_address)
 
     # Verify ETH Balance
     click.secho(f"\n\nDeployer ETH balance: {deployer.eth_balance}")
@@ -136,13 +134,6 @@ def deploy(click_config,
         click.secho("Deployer address has no ETH.", fg='red', bold=True)
         raise click.Abort()
 
-    # Add ETH Bootnode or Peer
-    if enode:
-        if geth:
-            blockchain.w3.geth.admin.addPeer(enode)
-            click.secho(f"Added ethereum peer {enode}")
-        else:
-            raise NotImplemented  # TODO: other backends
 
     #
     # Action switch
