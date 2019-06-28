@@ -242,23 +242,31 @@ class Deployer(NucypherTokenActor):
                                  policy_secret: str,
                                  adjudicator_secret: str,
                                  user_escrow_proxy_secret: str,
+                                 interactive: bool = True
                                  ) -> Tuple[dict, dict]:
         """
         Musketeers, if you will; Deploy the "big three" contracts to the blockchain.
         """
+        import click
 
+        click.secho("Deploying NuCypherToken...", fg='blue')
+        click.pause()
         token_txs, token_deployer = self.deploy_contract(contract_name='NuCypherToken')
-        breakpoint()
 
+        click.secho("Deploying StakingEscrow, Dispatcher, Initialize, and Transfer Reward...", fg='blue')
+        click.pause()
         staking_txs, staking_deployer = self.deploy_contract(contract_name='StakingEscrow', plaintext_secret=staker_secret)
-        breakpoint()
 
+        click.secho("Deploying PolicyManager, Dispatcher, and Setting StakingEscrow...", fg='blue')
+        click.pause()
         policy_txs, policy_deployer = self.deploy_contract(contract_name='PolicyManager', plaintext_secret=policy_secret)
-        breakpoint()
 
+        click.secho("Deploying Adjudicator and Dispatcher...", fg='blue')
+        click.pause()
         adjudicator_txs, adjudicator_deployer = self.deploy_contract(contract_name='Adjudicator', plaintext_secret=adjudicator_secret)
-        breakpoint()
 
+        click.secho("Deploying UserEscrowProxy...", fg='blue')
+        click.pause()
         user_escrow_proxy_txs, user_escrow_proxy_deployer = self.deploy_contract(contract_name='UserEscrowProxy', plaintext_secret=user_escrow_proxy_secret)
 
         deployers = (token_deployer,

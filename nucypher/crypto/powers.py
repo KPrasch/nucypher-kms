@@ -204,8 +204,7 @@ class TransactingPower(CryptoPowerUp):
         # HW Signer
         if self.device is not NO_STAKING_DEVICE:
             # TODO: Use a common tx_sign return type from clients and devices
-            signed_raw_transaction = self.device.sign_eth_transaction(unsigned_transaction=unsigned_transaction,
-                                                                      checksum_address=self.account)
+            signed_raw_transaction = self.device.sign_eth_transaction(unsigned_transaction=unsigned_transaction)
         # Web3 Signer
         else:
             signed_raw_transaction = self.blockchain.client.sign_transaction(transaction=unsigned_transaction)
