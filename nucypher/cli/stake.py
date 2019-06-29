@@ -73,20 +73,32 @@ def stake(click_config,
         click.clear()
         click.secho(NU_BANNER)
 
-    device = NO_STAKING_DEVICE
-    if trezor:
-        from nucypher.device.trezor import Trezor
-        device = Trezor(cached_index=5)
-
     if action == 'new-stakeholder':
 
         registry = None
         if registry_filepath:
             registry = EthereumContractRegistry(registry_filepath=registry_filepath)
 
+        device = NO_STAKING_DEVICE
+        if trezor:
+            from nucypher.device.trezor import Trezor
+            device = Trezor(cached_index=10)
+
         blockchain = BlockchainInterface(provider_uri=provider_uri,
                                          registry=registry,
                                          poa=poa)
+
+        # Select Account
+        if not funding_address:
+            click.secho("Loading Wallet Accounts...")
+            accounts = device.accounts if trezor else blockchain.client.accounts
+            enumerated_accounts = dict(enumerate(accounts))
+            for index, account in enumerated_accounts.items():
+                click.secho(f"{index} | {account}")
+
+            choices = len(enumerated_accounts) - 1
+            choice = click.prompt("Select funding account", default=0, type=click.IntRange(min=0, max=choices))
+            funding_address = enumerated_accounts[int(choice)]
 
         new_stakeholder = StakeHolder(config_root=config_root,
                                       funding_account=funding_address,
@@ -102,8 +114,12 @@ def stake(click_config,
     # Make Staker
     #
 
+    if trezor:
+        click.secho("Loading Wallet Accounts...")
+
     STAKEHOLDER = StakeHolder.from_configuration_file(filepath=config_file,
                                                       offline=offline)
+
     #
     # Eager Actions
     #
@@ -152,14 +168,22 @@ def stake(click_config,
         password = None
         if not staking_address:
             enumerated_accounts = dict(enumerate(STAKEHOLDER.accounts))
+            account_balances = STAKEHOLDER.account_balances
             click.secho(f"c | CREATE NEW ACCOUNT ")
-            for index, account in enumerated_accounts.items():
-                click.secho(f"{index} | {account}")
+
+            for index, address in enumerated_accounts.items():
+                balances = account_balances[address]
+                row = f"{index} " \
+                      f"| {address} " \
+                      f"| {Web3.fromWei(balances['ETH'], 'ether')} ETH " \
+                      f"| {NU.from_nunits(balances['NU'])}"
+                click.secho(row)
 
             choice = click.prompt("Select staking account, or enter 'c' to derive a new one", default='c')
             if choice == 'c':
                 click.confirm("Create new ethereum account for staking?", abort=True)
-                password = click.prompt("Enter new account password", hide_input=True, confirmation_prompt=True)
+                if STAKEHOLDER.device is NO_STAKING_DEVICE:
+                    password = click.prompt("Enter new account password", hide_input=True, confirmation_prompt=True)
                 staking_address = None  # signals to create an account later
             else:
                 try:
@@ -167,7 +191,7 @@ def stake(click_config,
                 except KeyError:
                     raise click.BadParameter(f"'{choice}' is not a valid command.")
 
-        if not password:
+        if not password and STAKEHOLDER.device is NO_STAKING_DEVICE:
             password = click.prompt(f"Enter password to unlock {staking_address}",
                                     hide_input=True,
                                     confirmation_prompt=False)

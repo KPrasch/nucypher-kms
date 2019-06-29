@@ -75,7 +75,7 @@ def deploy(click_config,
     DEVICE = NO_STAKING_DEVICE
     if trezor:
         from nucypher.device.trezor import Trezor
-        DEVICE = Trezor()
+        DEVICE = Trezor(cached_index=10)
 
     #
     # Validate

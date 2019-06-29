@@ -44,7 +44,7 @@ class Trezor(TrustedDevice):
     An implementation of a Trezor device for staking on the NuCypher network.
     """
 
-    def __init__(self, cached_index: int = 1):
+    def __init__(self, cached_index: int = 10):
         """
         Initializes a Trezor device.
 
@@ -57,7 +57,7 @@ class Trezor(TrustedDevice):
         try:
             self.client = trezor_client.get_default_client()
         except TransportException:
-            raise RuntimeError("Could not find a TREZOR device to connect to. Have you unlocked it?")
+            raise TransportException("Could not find a TREZOR device to connect to. Have you unlocked it?")
 
         self.__addresses = {}
         for addr_idx in range(cached_index + 1):
@@ -170,9 +170,7 @@ class Trezor(TrustedDevice):
         #
 
         assert_valid_fields(unsigned_transaction)
-
-        if unsigned_transaction['data']:
-            unsigned_transaction['data'] = Web3.toBytes(hexstr=unsigned_transaction['data'])
+        unsigned_transaction['data'] = Web3.toBytes(hexstr=unsigned_transaction['data'])
 
         trezor_tx_keys = {'gas': 'gas_limit',
                           'gasPrice': 'gas_price',

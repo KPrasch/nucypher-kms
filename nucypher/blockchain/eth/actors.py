@@ -32,7 +32,7 @@ from constant_sorrow.constants import (
     NO_FUNDING_ACCOUNT
 )
 from eth_tester.exceptions import TransactionFailed
-from eth_utils import is_checksum_address
+from eth_utils import is_checksum_address, to_checksum_address
 from eth_utils import keccak
 from twisted.logger import Logger
 from web3 import Web3
@@ -62,6 +62,7 @@ from nucypher.blockchain.eth.utils import datetime_to_period, calculate_period_d
 from nucypher.config.base import BaseConfiguration
 from nucypher.config.constants import DEFAULT_CONFIG_ROOT
 from nucypher.crypto.powers import TransactingPower
+from nucypher.device.base import TrustedDevice
 from nucypher.utilities.sandbox.hardware import MockTrustedDevice
 
 
@@ -677,7 +678,7 @@ class StakeHolder(BaseConfiguration):
                  funding_account: str,
                  funding_password: str = None,
                  offline_mode: bool = False,
-                 device: MockTrustedDevice = NO_STAKING_DEVICE,  # TODO: Unmock device API
+                 device: TrustedDevice = NO_STAKING_DEVICE,
                  sync_now: bool = True,
                  *args, **kwargs):
 
@@ -686,7 +687,6 @@ class StakeHolder(BaseConfiguration):
         self.log = Logger(f"stakeholder")
         self.blockchain = blockchain
         self.offline_mode = offline_mode
-        self.trezor = False
         self.device = device
         self.eth_funding = Web3.toWei('0.01', 'ether')  # TODO: How much ETH to use while funding new stakes.
 
@@ -710,7 +710,6 @@ class StakeHolder(BaseConfiguration):
         self.__stakers = dict()
         self.__transacting_powers = dict()
 
-        self._setup_device()
         self.__get_accounts()
 
         if sync_now and not offline_mode:
@@ -730,7 +729,7 @@ class StakeHolder(BaseConfiguration):
 
     def static_payload(self) -> dict:
         """Values to read/write from stakeholder JSON configuration files"""
-        payload = dict(trezor=self.trezor,
+        payload = dict(device=False if self.device is NO_STAKING_DEVICE else True,
                        blockchain=self.blockchain.to_dict(),
                        funding_account=self.funding_account,
                        accounts=self.__accounts,
@@ -743,13 +742,27 @@ class StakeHolder(BaseConfiguration):
                                 blockchain = None,
                                 **overrides) -> 'StakeHolder':
 
+        # Read
         filepath = filepath or cls.default_filepath()
         payload = cls._read_configuration_file(filepath=filepath)
+
+        # Blockchain
         blockchain_payload = payload.pop('blockchain')
         if not blockchain:
             blockchain = BlockchainInterface.from_dict(payload=blockchain_payload)
+
+        # Device
+        # TODO: Support more devices entering here
+        device = NO_STAKING_DEVICE
+        use_device = payload.pop('device')
+        if use_device:
+            from nucypher.device.trezor import Trezor
+            device = Trezor(cached_index=10)
+
+        # Init
         instance = cls(filepath=filepath,
                        blockchain=blockchain,
+                       device=device,
                        **payload, **overrides)
 
         return instance
@@ -759,7 +772,9 @@ class StakeHolder(BaseConfiguration):
         try:
             transacting_power = self.__transacting_powers[checksum_address]
         except KeyError:
-            transacting_power = TransactingPower(blockchain=self.blockchain, account=checksum_address)
+            transacting_power = TransactingPower(blockchain=self.blockchain,
+                                                 device=self.device,
+                                                 account=checksum_address)
             self.__transacting_powers[checksum_address] = transacting_power
         transacting_power.activate(password=password)
 
@@ -789,12 +804,6 @@ class StakeHolder(BaseConfiguration):
         else:
             accounts = self.blockchain.client.accounts
         self.__accounts.extend(accounts)
-
-    def _setup_device(self) -> None:
-        device = NO_STAKING_DEVICE
-        if self.trezor:
-            device = NotImplemented  # TODO: Implement TrustedDevice
-        self.device = device
 
     def set_funding_account(self, address: str) -> None:
         self.__funding_account = address
@@ -874,6 +883,7 @@ class StakeHolder(BaseConfiguration):
                               'balances': staker_funds,
                               'worker': worker_address,
                               'stakes': stake_info}
+
             payload.append(staker_payload)
         return payload
 
@@ -885,17 +895,21 @@ class StakeHolder(BaseConfiguration):
         else:
             raise self.NoStakes(f"{address} does not have any stakes.")
 
-    def __create_staker(self, password: str = None) -> Staker:
+    def __create_staker(self, password: str = None, checksum_address: str = None) -> Staker:
         """Create a new account and return it as a Staker instance."""
-        if self.device is not NO_STAKING_DEVICE:
-            # TODO: Implement TrustedDevice
-            raise NotImplementedError
-        else:
-            if not password:
-                raise self.ConfigurationError("No password supplied to create new staking account.")
-            new_account = self.blockchain.client.new_account(password=password)
-        self.__accounts.append(new_account)
-        staker = Staker(blockchain=self.blockchain, is_me=True, checksum_address=new_account)
+
+        if not checksum_address:
+            if self.device is NO_STAKING_DEVICE:
+                if not password:
+                    raise self.ConfigurationError("No password supplied to create new staking account.")
+                checksum_address = self.blockchain.client.new_account(password=password)
+                self.__accounts.append(checksum_address)
+            else:
+                # TODO: Better way to get "next" address path.
+                checksum_address = self.device.get_address(address_index=len(self.accounts)+1)
+
+        checksum_address = to_checksum_address(checksum_address)
+        staker = Staker(is_me=True, checksum_address=checksum_address, blockchain=self.blockchain)
         return staker
 
     def create_worker_configuration(self,
@@ -931,19 +945,27 @@ class StakeHolder(BaseConfiguration):
     def __prepare_new_staker(self, staker: Staker, amount: NU):
         """Creates a new ethereum account, then transfers it ETH and NU for staking."""
         if self.funding_tokens < amount:
-            delta = amount - staker.token_balance
-            raise self.ConfigurationError(f"{self.funding_account} Insufficient NU (need {delta} more).")
+            shortfall = amount - staker.token_balance
+            raise self.ConfigurationError(f"{self.funding_account} Insufficient NU (need {shortfall} more).")
         if not self.funding_eth:
             raise self.ConfigurationError(f"{self.funding_account} has no ETH")
 
         # Transfer NU
         self.funding_power.activate()
 
+        # TODO: Integrate this functionality into Actors?
         # Send new staker account ETH
         tx = {'to': staker.checksum_address,
+              'gasPrice': self.blockchain.client.gas_price,
+              'gas': 30_000,  # TODO: Gas Management
+              'nonce': self.blockchain.client.w3.eth.getTransactionCount(self.funding_account),
               'from': self.funding_account,
-              'value': self.eth_funding}
-        _ether_transfer_receipt = self.blockchain.client.send_transaction(transaction=tx)
+              'value': self.eth_funding,
+              'data': ''}
+
+        signed_raw_transaction = self.funding_power.sign_transaction(tx)
+        txhash = self.blockchain.client.send_raw_transaction(signed_raw_transaction)
+        _receipt = self.blockchain.client.wait_for_receipt(txhash, timeout=120)
 
         # Send new staker account NU
         _result = self.token_agent.transfer(amount=amount.to_nunits(),
@@ -962,11 +984,8 @@ class StakeHolder(BaseConfiguration):
 
         if password and self.device is not NO_STAKING_DEVICE:
             raise ValueError("Cannot use passphrase account generation with device-based StakeHolder.")
-        elif password and not checksum_address:
-            staker = self.__create_staker(password=password)
-        else:
-            staker = Staker(is_me=True, checksum_address=checksum_address, blockchain=self.blockchain)
 
+        staker = self.__create_staker(checksum_address=checksum_address, password=password)
         if fund_now:
             self.__prepare_new_staker(staker=staker, amount=amount)
 
