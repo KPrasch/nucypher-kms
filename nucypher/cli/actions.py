@@ -30,11 +30,14 @@ from constant_sorrow.constants import (
     UNKNOWN_DEVELOPMENT_CHAIN_ID
 )
 from nacl.exceptions import CryptoError
+from twisted.internet import reactor
 from twisted.logger import Logger
 
-from nucypher.blockchain.eth.agents import NucypherTokenAgent
+from nucypher.blockchain.eth.actors import ContractAdministrator
+from nucypher.blockchain.eth.agents import NucypherTokenAgent, ContractAgency
 from nucypher.blockchain.eth.clients import NuCypherGethGoerliProcess
 from nucypher.blockchain.eth.decorators import validate_checksum_address
+from nucypher.blockchain.eth.deployers import NucypherTokenDeployer
 from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory
 from nucypher.blockchain.eth.registry import BaseContractRegistry, InMemoryContractRegistry, LocalContractRegistry
 from nucypher.blockchain.eth.token import NU
@@ -419,3 +422,29 @@ def establish_deployer_registry(emitter,
     emitter.message(f"Configured to registry filepath {registry_filepath}")
 
     return registry
+
+
+def listen_for_events(emitter, registry: BaseContractRegistry):
+    # TODO: Get agents from registry directly
+    deployers = (NucypherTokenDeployer,
+                 *ContractAdministrator.dispatched_upgradeable_deployer_classes)
+
+    total_events = 0
+    bullet = '* '
+    divider = '-' * 80
+    for deployer_class in deployers:
+        agent_class = deployer_class.agency
+        agent = ContractAgency.get_agent(agent_class, registry=registry)
+        agent.listen_for_events(sink=emitter.message)
+        agent_event_count = len(agent.event_types)
+        total_events += agent_event_count
+
+        emitter.message(
+            f"\nRegistered {len(agent.event_types)} Events for {agent.contract_name}@{agent.contract_address}",
+            color='green')
+        pretty_events = f'    \n{bullet}'.join(et.event_name for et in agent.event_types)
+        emitter.message(f"{divider}\n{bullet}{pretty_events}")
+    emitter.message(f"\nListening for {total_events} On-Chain Events on {len(deployers)} Contracts...",
+                    color='blue',
+                    bold=True)
+    reactor.run()

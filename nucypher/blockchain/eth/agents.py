@@ -14,14 +14,16 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-
+import time
 
 import math
 import random
-from typing import Generator, List, Tuple, Union
+from typing import Generator, List, Tuple, Union, Callable
 
 from constant_sorrow.constants import NO_CONTRACT_AVAILABLE
 from eth_utils.address import to_checksum_address
+from twisted.internet import reactor
+from twisted.internet.task import LoopingCall
 from twisted.logger import Logger
 from web3.contract import Contract
 
@@ -68,6 +70,7 @@ class EthereumContractAgent:
     registry_contract_name = NotImplemented
     _forward_address = True
     _proxy_name = None
+    _event_poll_rate = 1  # seconds
 
     # TODO
     DEFAULT_TRANSACTION_GAS_LIMITS = {}
@@ -78,7 +81,8 @@ class EthereumContractAgent:
     def __init__(self,
                  registry: BaseContractRegistry,
                  contract: Contract = None,
-                 transaction_gas: int = None
+                 transaction_gas: int = None,
+                 listen_for_events: bool = True
                  ) -> None:
 
         self.log = Logger(self.__class__.__name__)
@@ -87,13 +91,24 @@ class EthereumContractAgent:
 
         # NOTE: Entry-point for multi-provider support
         self.blockchain = BlockchainInterfaceFactory.get_interface()
-
         if contract is None:  # Fetch the contract
             contract = self.blockchain.get_contract_by_name(registry=self.registry,
                                                             name=self.registry_contract_name,
                                                             proxy_name=self._proxy_name,
                                                             use_proxy_address=self._forward_address)
         self.__contract = contract
+
+        #
+        # Events
+        #
+
+        # Gather on-chain event classes
+        self.event_task = LoopingCall(self.get_events)
+        self.event_sink = None
+        self.event_types = list(getattr(self.contract.events, event['name'])
+                                for event in self.contract.events._events)
+        if listen_for_events:
+            self.listen_for_events()
 
         if not transaction_gas:
             transaction_gas = EthereumContractAgent.DEFAULT_TRANSACTION_GAS_LIMITS
@@ -124,6 +139,40 @@ class EthereumContractAgent:
     @property
     def contract_name(self) -> str:
         return self.registry_contract_name
+
+    def get_events(self):
+        self.log.debug(f"Checking for new {self.contract_name} events")
+        snapshot = list()
+        for event_type in self.event_types:
+            logs = event_type.getLogs()
+            if logs:
+                snapshot.append(logs)
+        return snapshot
+
+    def handle_events(self, events: list):
+        if not events:
+            return
+        for entries in events:
+            if not entries:
+                continue
+            for entry in entries:
+                # event = # TODO: Extrapolate nucypher events here
+                # self.event_bus.emit(event)
+                self.log.info(f"[EVENT-{self.contract_name.upper()}-{entry.event.upper()}] "
+                              f"{entry['args']['from']} -> {entry['args']['to']}")
+                if self.event_sink:
+                    self.event_sink()
+
+    def handle_event_capture_failure(self, failure):
+        self.log.failure(failure)
+        failure.raiseTraceback()
+
+    def listen_for_events(self, sink: Callable = None, now: bool = True):
+        if not self.event_task.running:
+            self.event_sink = sink
+            d = self.event_task.start(interval=self._event_poll_rate, now=now)
+            d.addCallbacks(self.handle_events, self.handle_event_capture_failure)
+            self.log.debug(f"Started listening for {self.contract_name} events")
 
     @property
     def owner(self):

@@ -17,15 +17,20 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import click
+from twisted.internet import reactor
 
-from nucypher.blockchain.eth.agents import StakingEscrowAgent, ContractAgency
+from nucypher.blockchain.eth.actors import ContractAdministrator
+from nucypher.blockchain.eth.agents import StakingEscrowAgent, ContractAgency, NucypherTokenAgent, PolicyManagerAgent, \
+    AdjudicatorAgent, EthereumContractAgent
+from nucypher.blockchain.eth.deployers import NucypherTokenDeployer
 from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory, BlockchainInterface
 from nucypher.blockchain.eth.registry import InMemoryContractRegistry, LocalContractRegistry
 from nucypher.characters.banners import NU_BANNER
-from nucypher.cli.actions import get_provider_process
+from nucypher.cli.actions import get_provider_process, listen_for_events
 from nucypher.cli.config import nucypher_click_config
 from nucypher.cli.painting import paint_contract_status, paint_stakers, paint_locked_tokens_status
 from nucypher.cli.types import EIP55_CHECKSUM_ADDRESS, EXISTING_READABLE_FILE
+from nucypher.utilities.logging import GlobalLoggerSettings
 
 
 @click.command()
@@ -89,7 +94,11 @@ def status(click_config, action, provider_uri, sync, geth, poa, periods, staking
 
     staking_agent = ContractAgency.get_agent(StakingEscrowAgent, registry=registry)
 
-    if action == 'network':
+    if action == "logs":
+        listen_for_events(emitter=emitter, registry=registry)
+        return  # Exit
+
+    elif action == 'network':
         paint_contract_status(registry, emitter=emitter)
         return  # Exit
 

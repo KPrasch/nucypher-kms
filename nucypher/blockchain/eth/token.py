@@ -35,6 +35,8 @@ from nucypher.blockchain.eth.agents import StakingEscrowAgent, ContractAgency
 from nucypher.blockchain.eth.decorators import validate_checksum_address
 from nucypher.blockchain.eth.registry import BaseContractRegistry
 from nucypher.blockchain.eth.utils import datetime_at_period
+from nucypher.events.bus import EventBus
+from nucypher.events.events import MissedConfirmation, Started, Crash, NewPeriod, ConfirmActivity
 
 
 class NU:
@@ -479,7 +481,11 @@ class WorkTracker:
     CLOCK = reactor
     REFRESH_RATE = 60 * 15  # Fifteen minutes
 
-    def __init__(self, worker, refresh_rate: int = None, *args, **kwargs):
+    def __init__(self,
+                 worker,
+                 refresh_rate: int = None,
+                 event_bus: EventBus = None,
+                 *args, **kwargs):
 
         super().__init__(*args, **kwargs)
         self.log = Logger('stake-tracker')
@@ -495,6 +501,8 @@ class WorkTracker:
         self.__start_time = NOT_STAKING
         self.__uptime_period = NOT_STAKING
         self._abort_on_error = True
+
+        self.event_bus = event_bus or EventBus()
 
     @property
     def current_period(self):
@@ -521,6 +529,7 @@ class WorkTracker:
         d = self._tracking_task.start(interval=self._refresh_rate)
         d.addErrback(self.handle_working_errors)
         self.log.info(f"STARTED WORK TRACKING")
+        self.event_bus.emit(Started())
 
         if act_now:
             self._do_work()
@@ -531,6 +540,7 @@ class WorkTracker:
         an exception is unhandled in a different thread.
         """
         self._crashed = failure
+        self.event_bus.emit(Crash(reason=str(failure), traceback=failure.tb))
         failure.raiseException()
 
     def handle_working_errors(self, *args, **kwargs) -> None:
@@ -551,6 +561,7 @@ class WorkTracker:
         if self.current_period != onchain_period:
             self.__current_period = onchain_period
             # self.worker.stakes.refresh()  # TODO: Track stakes
+            self.event_bus.emit(NewPeriod(period=self.__current_period))
 
         # Measure working interval
         interval = onchain_period - self.worker.last_active_period
@@ -558,12 +569,15 @@ class WorkTracker:
             return  # No need to confirm this period.  Save the gas.
         if interval > 0:
             self.log.warn(f"MISSED CONFIRMATIONS - {interval} missed staking confirmations detected.")
+            self.event_bus.emit(MissedConfirmation(periods=interval))
 
         # Confirm Activity
         self.log.info("Confirmed activity for period {}".format(self.current_period))
         transacting_power = self.worker.transacting_power
         with transacting_power:
-            self.worker.confirm_activity()  # < --- blockchain WRITE
+            receipt = self.worker.confirm_activity()  # < --- blockchain WRITE
+            self.event_bus.emit(ConfirmActivity(success=True, receipt=receipt))
+            # TODO: Handle Transaction Failed and Continue
 
 
 class StakeList(UserList):
