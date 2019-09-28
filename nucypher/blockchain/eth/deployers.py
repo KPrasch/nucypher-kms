@@ -166,7 +166,6 @@ class BaseContractDeployer:
         return agent
 
 
-
 class OwnableContractMixin:
 
     _ownable = True
