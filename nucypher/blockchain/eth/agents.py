@@ -477,6 +477,7 @@ class PolicyManagerAgent(EthereumContractAgent):
 
     registry_contract_name = POLICY_MANAGER_CONTRACT_NAME
     _proxy_name = DISPATCHER_CONTRACT_NAME
+    _onchain_policy_id_length = 16
 
     def create_policy(self,
                       policy_id: str,
@@ -493,8 +494,10 @@ class PolicyManagerAgent(EthereumContractAgent):
                                                    sender_address=author_address)
         return receipt
 
-    def fetch_policy(self, policy_id: str) -> list:
+    def fetch_policy(self, policy_id: bytes) -> list:
         """Fetch raw stored blockchain data regarding the policy with the given policy ID"""
+        if not len(policy_id) == self._onchain_policy_id_length:
+            raise ValueError(f"Invalid policy ID lengtth.  Expected {self._onchain_policy_id_length} got length {len(policy_id)}")
         blockchain_record = self.contract.functions.policies(policy_id).call()
         return blockchain_record
 

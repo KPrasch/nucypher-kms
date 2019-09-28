@@ -18,6 +18,8 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 
 import binascii
 import json
+from typing import List, Optional, Tuple
+
 import maya
 import msgpack
 from bytestring_splitter import BytestringSplitter, VariableLengthBytestring
@@ -25,16 +27,13 @@ from constant_sorrow.constants import NO_DECRYPTION_PERFORMED
 from cryptography.hazmat.backends.openssl import backend
 from cryptography.hazmat.primitives import hashes
 from eth_utils import to_canonical_address, to_checksum_address
-from typing import List, Optional, Tuple
-
 from umbral.cfrags import CapsuleFrag
 from umbral.config import default_params
 from umbral.curvebn import CurveBN
 from umbral.keys import UmbralPublicKey
 from umbral.pre import Capsule
 
-from nucypher.characters.lawful import Bob, Character
-from nucypher.config.base import BaseConfiguration
+from nucypher.characters.lawful import Character
 from nucypher.crypto.api import keccak_digest, encrypt_and_sign
 from nucypher.crypto.constants import PUBLIC_ADDRESS_LENGTH, KECCAK_DIGEST_LENGTH
 from nucypher.crypto.kits import UmbralMessageKit
@@ -42,8 +41,10 @@ from nucypher.crypto.signing import Signature, InvalidSignature, signature_split
 from nucypher.crypto.splitters import key_splitter, capsule_splitter
 from nucypher.crypto.utils import (canonical_address_from_umbral_key,
                                    get_coordinates_as_bytes,
-                                   get_signature_recovery_value, construct_policy_id)
+                                   get_signature_recovery_value,
+                                   construct_policy_id)
 from nucypher.network.middleware import NotFound
+from nucypher.policy.policies import Policy
 
 
 class TreasureMap:
@@ -239,7 +240,9 @@ class PolicyCredential:
 
     @property
     def id(self) -> bytes:
-        return construct_policy_id(self.label, bytes(self.bob_verifying_key))
+        return construct_policy_id(self.label,
+                                   bytes(self.bob_verifying_key),
+                                   truncate=Policy.ID_LENGTH)
 
     def to_json(self) -> str:
         """
@@ -247,7 +250,9 @@ class PolicyCredential:
         """
         payload = {
             'label': self.label.hex(),
-            'policy_encrypting_key': bytes(self.policy_encrypting_key).hex()
+            'policy_encrypting_key': bytes(self.policy_encrypting_key).hex(),
+            'alice_verifying_key': bytes(self.alice_verifying_key).hex(),
+            'bob_verifying_key': bytes(self.bob_verifying_key).hex()
         }
         if self.treasure_map:
             payload['treasure_map'] = bytes(self.treasure_map).hex()
@@ -326,7 +331,7 @@ class WorkOrder:
             self.cfrag_signature = reencryption_signature
 
     def __init__(self,
-                 bob: Bob,
+                 bob: 'Bob',
                  arrangement_id,
                  alice_address: bytes,
                  tasks: List,
@@ -389,6 +394,7 @@ class WorkOrder:
 
     @classmethod
     def from_rest_payload(cls, arrangement_id, rest_payload, ursula, alice_address):
+        from nucypher.characters.lawful import Bob
 
         payload_splitter = BytestringSplitter(Signature) + key_splitter
         payload_elements = payload_splitter(rest_payload, msgpack_remainder=True)
@@ -501,7 +507,9 @@ class Revocation:
     REVOKE-<arrangement id to revoke><signature of the previous string>
     This is sent as a payload in a DELETE method to the /KFrag/ endpoint.
     """
-    revocation_splitter = BytestringSplitter((bytes, 7), (bytes, 32), Signature)
+    revocation_splitter = BytestringSplitter((bytes, 7),
+                                             (bytes, Policy.ID_LENGTH),
+                                             Signature)
 
     def __init__(self, arrangement_id: bytes,
                        signer: 'SignatureStamp' = None,
