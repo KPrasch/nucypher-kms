@@ -1,25 +1,21 @@
-import math
 import random
 from abc import abstractmethod, ABC
 from collections import OrderedDict, deque
-from random import SystemRandom
 from typing import Generator, Set, List
 
 import maya
 from bytestring_splitter import BytestringSplitter, VariableLengthBytestring
-from constant_sorrow.constants import NOT_SIGNED, UNKNOWN_KFRAG, FEDERATED_POLICY, UNKNOWN_ARRANGEMENTS, UNKNOWN_KFRAGS
-from nacl.hashlib import blake2b
+from constant_sorrow.constants import NOT_SIGNED, UNKNOWN_KFRAG, UNKNOWN_KFRAGS
 from umbral.keys import UmbralPublicKey
 from umbral.kfrags import KFrag
 
-from nucypher.blockchain.eth.actors import BlockchainPolicyAuthor, Staker
+from nucypher.blockchain.eth.actors import BlockchainPolicyAuthor
 from nucypher.blockchain.eth.agents import StakingEscrowAgent, PolicyManagerAgent
 from nucypher.blockchain.eth.interfaces import BlockchainInterface
-from nucypher.blockchain.eth.utils import calculate_period_duration, datetime_at_period
+from nucypher.blockchain.eth.utils import datetime_at_period
 from nucypher.characters.lawful import Alice, Ursula
 from nucypher.crypto.api import secure_random, keccak_digest
-from nucypher.crypto.constants import PUBLIC_KEY_LENGTH, BLAKE2B
-from nucypher.crypto.kits import RevocationKit
+from nucypher.crypto.constants import PUBLIC_KEY_LENGTH
 from nucypher.crypto.powers import DecryptingPower, SigningPower
 from nucypher.crypto.utils import construct_policy_id
 from nucypher.network.exceptions import NodeSeemsToBeDown
@@ -365,10 +361,6 @@ class Policy(ABC):
             self.treasure_map.add_arrangement(arrangement)
 
         else:  # ...After *all* the policies are enacted
-            # Create Alice's revocation kit
-            self.revocation_kit = RevocationKit(self, self.alice.stamp)
-            self.alice.add_active_policy(self)
-
             if publish is True:
                 return self.publish(network_middleware=network_middleware)
 
