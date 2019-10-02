@@ -29,8 +29,8 @@ from nucypher.cli import actions, painting
 from nucypher.cli.actions import (
     get_nucypher_password,
     select_client_account,
-    get_client_password
-)
+    get_client_password,
+    get_client_account)
 from nucypher.cli.config import nucypher_click_config
 from nucypher.cli.processes import UrsulaCommandProtocol
 from nucypher.cli.types import (
@@ -60,6 +60,7 @@ from nucypher.utilities.sandbox.constants import (
 @click.option('--db-filepath', help="The database filepath to connect to", type=click.STRING)
 @click.option('--staker-address', help="Run on behalf of a specified staking account", type=EIP55_CHECKSUM_ADDRESS)
 @click.option('--worker-address', help="Run the worker-ursula with a specified address", type=EIP55_CHECKSUM_ADDRESS)
+@click.option('--worker-address-index', help="Run the worker-ursula with a specified address index", type=click.INT, default=None)
 @click.option('--federated-only', '-F', help="Connect only to federated nodes", is_flag=True, default=None)
 @click.option('--interactive', '-I', help="Launch command interface after connecting to seednodes.", is_flag=True, default=False)
 @click.option('--config-root', help="Custom configuration directory", type=click.Path())
@@ -84,6 +85,7 @@ def ursula(click_config,
            db_filepath,
            staker_address,
            worker_address,
+           worker_address_index,
            federated_only,
            poa,
            config_root,
@@ -168,9 +170,11 @@ def ursula(click_config,
                 prompt = "Select staker account"
                 staker_address = select_client_account(emitter=emitter, prompt=prompt, provider_uri=provider_uri)
 
-            if not worker_address:
+            if not worker_address and not worker_address_index is not None:
                 prompt = "Select worker account"
                 worker_address = select_client_account(emitter=emitter, prompt=prompt, provider_uri=provider_uri)
+            elif worker_address_index is not None:
+                worer_address = get_client_account(provider_uri=provider_uri, index=worker_address_index)
 
         if not config_root:                         # Flag
             config_root = click_config.config_file  # Envvar

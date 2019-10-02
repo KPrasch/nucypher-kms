@@ -313,6 +313,18 @@ def select_stake(stakeholder, emitter) -> Stake:
     return chosen_stake
 
 
+def get_client_account(index: int, provider_uri: str = None) -> str:
+    # Lazy connect the blockchain interface
+    if not BlockchainInterfaceFactory.is_interface_initialized(provider_uri=provider_uri):
+        BlockchainInterfaceFactory.initialize_interface(provider_uri=provider_uri)
+    blockchain = BlockchainInterfaceFactory.get_interface(provider_uri=provider_uri)
+    try:
+        account = blockchain.client.accounts[index]
+    except IndexError:
+        raise IndexError(f"No account available for index '{index}'")
+    return account
+
+
 def select_client_account(emitter,
                           provider_uri: str,
                           prompt: str = None,

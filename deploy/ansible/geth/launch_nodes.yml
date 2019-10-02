@@ -1,12 +1,7 @@
 ---
 
-- hosts: "{{ 'tag_Role_' + lookup('env', 'NUCYPHER_NETWORK_NAME') + '_bootnodes' }}"
-  name: "GatherBootnode Facts"
-  user: ubuntu
-  tasks: [ ]
-
 - name: "Launch Geth Nodes"
-  hosts: "{{ 'tag_Role_' + lookup('env', 'NUCYPHER_NETWORK_NAME') + '_miners' }}"
+  hosts: "{{ 'tag_Role_' + lookup('env', 'NUCYPHER_NETWORK_NAME') + '_ursulas' }}"
   user: ubuntu
   gather_facts: false
 
@@ -39,14 +34,6 @@
         - libffi-dev
         - software-properties-common
         - ethereum
-        - npm
-
-    - name: Install "PM2" node.js package globally
-      become: yes
-      become_flags: "-H -S"
-      npm:
-        name: pm2
-        global: yes
 
     - name: "Render Geth Node Service"
       become: yes
@@ -55,16 +42,6 @@
         src: ../../services/geth_miner.j2
         dest: /etc/systemd/system/geth_miner.service
         mode: 0755
-      vars:
-        datadir: "/home/ubuntu/chaindata"
-        networkid: "112358"
-        rpchost: "localhost"
-        syncmode: "full"
-        nickname: "NuCypher-Testnet-{{ hostvars[inventory_hostname].ec2_tag_Name }}"
-        eth_netstats_secret: "{{ lookup('env', 'ETH_NETSTATS_SECRET') }}"
-        eth_netstats_ip: "{{ hostvars[groups['tag_Role_' + lookup('env', 'NUCYPHER_NETWORK_NAME') + '_eth_netstats'][0]].ansible_host }}"
-        eth_netstats_port: "3000"
-        bootnode_uri: "{{ lookup('file', './files/bootnodes.txt') }}"
 
     - name: "Enable and Start Geth Node Service"
       become: yes
