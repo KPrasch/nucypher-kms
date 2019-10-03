@@ -89,11 +89,17 @@ class UmbralMessageKit(MessageKit):
 
 class RevocationKit:
 
-    def __init__(self, treasure_map: 'TreasureMap', signer: 'SignatureStamp'):
+    def __init__(self,
+                 arrangements: list,
+                 signer: 'SignatureStamp',
+                 threshold: int = None):
+
         from nucypher.policy.collections import Revocation
+        self.threshold = threshold
         self.revocations = dict()
-        for node_id, arrangement_id in treasure_map:
-            self.revocations[node_id] = Revocation(arrangement_id, signer=signer)
+        for arrangement in arrangements:
+            revocation = Revocation(arrangement_id=arrangement.id, signer=signer)
+            self.revocations[arrangement.ursula.checksum_address] = revocation
 
     def __iter__(self):
         return iter(self.revocations.values())
@@ -106,6 +112,17 @@ class RevocationKit:
 
     def __eq__(self, other):
         return self.revocations == other.revocations
+
+    @classmethod
+    def from_policy(cls, policy) -> 'RevocationKit':
+        threshold = None
+        if policy.treasure_map:
+            threshold = policy.treasure_map.m
+            arrangements = policy.treasure_map.arrangements
+        instance = cls(arrangements=policy._published_arrangements,
+                       signer=policy.alice.stamp,
+                       threshold=threshold)
+        return instance
 
     @property
     def revokable_addresses(self):

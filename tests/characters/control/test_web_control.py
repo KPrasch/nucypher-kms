@@ -99,13 +99,8 @@ def test_alice_character_control_revoke(alice_web_controller_test_client, federa
     response = alice_web_controller_test_client.put('/grant', data=json.dumps(grant_request_data))
     assert response.status_code == 200
 
-    policy_credential = PolicyCredential.from_json(
-                                response.json['result']['policy_credential'])
-
-    treasure_map_b64 = b64encode(policy_credential.treasure_map._TreasureMap__serialize())
-    revoke_request_data = {
-        'treasure_map': treasure_map_b64.decode(),
-    }
+    policy_credential = PolicyCredential.from_json(response.json['result']['policy_credential'])
+    revoke_request_data = {'policy_id': policy_credential.id.hex()}
 
     response = alice_web_controller_test_client.delete('/revoke', data=json.dumps(revoke_request_data))
     assert response.status_code == 200

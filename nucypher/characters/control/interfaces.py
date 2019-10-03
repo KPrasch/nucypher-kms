@@ -117,11 +117,18 @@ class AliceInterface(CharacterPublicInterface, AliceSpecification):
                          'policy_credential': new_policy.credential()}
         return response_data
 
-    def revoke(self, label: bytes, bob_verifying_key: bytes) -> dict:
-        from nucypher.policy.policies import Policy
-        policy_id = construct_policy_id(label=label, stamp=bob_verifying_key, truncate=Policy.ID_LENGTH)
+    def revoke(self, policy_id: bytes) -> dict:
         policy = self.character.active_policies[policy_id]
-        receipt, failed_revocations = self.character.revoke(policy=policy)
+        result = self.character.revoke(policy=policy)
+        if not self.character.federated_only:
+            receipt, failed_revocations = result
+        else:
+            failed_revocations = result
+
+        #
+        # Handle Failed Revocations
+        #
+
         if len(failed_revocations) > 0:
             for node_id, attempt in failed_revocations.items():
                 revocation, fail_reason = attempt

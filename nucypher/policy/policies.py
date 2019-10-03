@@ -52,7 +52,7 @@ class Arrangement:
                 raise ValueError(f"Arrangement ID must be of length {self.ID_LENGTH}.")
             self.id = arrangement_id
         else:
-            self.id = secure_random(self.ID_LENGTH)
+            self.id = secure_random(self.ID_LENGTH)  # TODO: Something better?
         self.expiration = expiration
         self.alice = alice
 
@@ -701,7 +701,7 @@ class BlockchainPolicy(Policy):
                                                           f"{ursula_address} is not a known node.")
                 else:
                     ursula = BlockchainInterface.NULL_ADDRESS
-            arrangement = self._make_arrangement(ursula=ursula)
+            arrangement = self._make_arrangement(ursula=ursula, arrangement_id= )  # TODO: Need a way to access AID.
             arrangements.append(arrangement)
         return arrangements
 

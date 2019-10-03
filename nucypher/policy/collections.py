@@ -538,9 +538,10 @@ class Revocation:
                                              (bytes, Policy.ID_LENGTH),
                                              Signature)
 
-    def __init__(self, arrangement_id: bytes,
-                       signer: 'SignatureStamp' = None,
-                       signature: Signature = None):
+    def __init__(self,
+                 arrangement_id: bytes,
+                 signer: 'SignatureStamp' = None,
+                 signature: Signature = None):
 
         self.prefix = b'REVOKE-'
         self.arrangement_id = arrangement_id
@@ -556,7 +557,7 @@ class Revocation:
         return self.prefix + self.arrangement_id + bytes(self.signature)
 
     def __repr__(self):
-        return bytes(self)
+        return f'{self.__class__.__name__}({bytes(self).hex()})'
 
     def __len__(self):
         return len(bytes(self))

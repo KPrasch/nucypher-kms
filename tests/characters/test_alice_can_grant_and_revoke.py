@@ -164,7 +164,7 @@ def test_restore_policy_from_credential_storage(blockchain_alice):
 
 def test_decentralized_revoke(testerchain, blockchain_alice):
     policy = list(blockchain_alice.active_policies.values())[0]
-    receipt, failed_revocations = blockchain_alice.revoke(policy)
+    receipt, failed_revocations = blockchain_alice.revoke(policy=policy)
     assert failed_revocations == {}  # No Failed Revocations  # TODO ... What if there *are* failed revocations?
     assert receipt['status'] == 1
     assert policy._is_revoked
@@ -251,7 +251,7 @@ def test_federated_revocation(federated_alice, federated_bob):
     policy = federated_alice.grant(federated_bob, label, m=m, n=n, expiration=policy_end_datetime)
 
     # Test that all arrangements are included in the RevocationKit
-    revocation_kit = RevocationKit(policy.treasure_map, federated_alice.stamp)
+    revocation_kit = RevocationKit.from_policy(policy=policy)
     for node_id, arrangement_id in policy.treasure_map:
         assert revocation_kit[node_id].arrangement_id == arrangement_id
 

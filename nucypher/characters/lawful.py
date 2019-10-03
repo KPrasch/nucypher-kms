@@ -337,14 +337,24 @@ class Alice(Character, BlockchainPolicyAuthor):
         policy_pubkey = alice_delegating_power.get_pubkey_from_label(label)
         return policy_pubkey
 
-    def revoke(self, policy) -> Union[Dict, Tuple[Dict, Dict]]:
+    def revoke(self, policy=None, policy_id: bytes = None) -> Union[Dict, Tuple[Dict, Dict]]:
         """
         Parses the treasure map and revokes arrangements in it.
         If any arrangements can't be revoked, then the node_id is added to a
         dict as a key, and the revocation and Ursula's response is added as
         a value.
         """
-        revocation_kit = RevocationKit(policy.treasure_map, self.stamp)
+        if not bool(policy_id) ^ bool(policy):
+            raise ValueError(f"Pass policy ID or policy, Got '{policy_id}', '{policy}'.")
+
+        if policy_id:
+            # Use a cached or restored policy
+            try:
+                policy = self.active_policies[policy_id]
+            except KeyError:
+                raise  # TODO: Retry with refresh?
+
+        revocation_kit = RevocationKit.from_policy(policy=policy)
 
         try:
             # Wait for a revocation threshold of nodes to be known ((n - m) + 1)
