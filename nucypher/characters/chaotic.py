@@ -8,17 +8,18 @@ from decimal import Decimal
 import eth_utils
 import maya
 from constant_sorrow.constants import NOT_RUNNING, NO_DATABASE_AVAILABLE
+from cryptography.hazmat.primitives.asymmetric import ec
 from flask import Flask, render_template, Response
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from hendrix.deploy.base import HendrixDeploy
 from hendrix.experience import hey_joe
 from nacl.hash import sha256
-from nucypher.network.status_app.moe import MoeStatusApp
 from sqlalchemy import create_engine, or_
 from twisted.internet import threads, reactor
 from twisted.internet.task import LoopingCall
 from twisted.logger import Logger
+from umbral.keys import UmbralPrivateKey
 
 from nucypher.blockchain.economics import TokenEconomicsFactory
 from nucypher.blockchain.eth.actors import NucypherTokenActor
@@ -36,8 +37,11 @@ from nucypher.characters.banners import MOE_BANNER, FELIX_BANNER, NU_BANNER
 from nucypher.characters.base import Character
 from nucypher.config.constants import TEMPLATES_DIR
 from nucypher.crypto.powers import SigningPower, TransactingPower
+from nucypher.keystore.keypairs import HostingKeypair
 from nucypher.keystore.threading import ThreadedSession
 from nucypher.network.nodes import FleetStateTracker
+from nucypher.network.server import TLSHostingPower
+from nucypher.network.status_app.moe import MoeStatusApp
 
 
 class Moe(Character):
@@ -47,8 +51,36 @@ class Moe(Character):
     """
     banner = MOE_BANNER
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self,
+                 host: str,
+                 http_port: int,
+                 websocket_port: int,
+                 tls_certificate_filepath: str = None,
+                 tls_private_key_filepath: str = None,
+                 *args, **kwargs):
+
+        self.rest_app = None
+        self.host = host
+        self.http_port = http_port
+        self.websocket_port = websocket_port
+
+        # Pre-Signed
+        if tls_certificate_filepath and tls_private_key_filepath:
+            with open(tls_private_key_filepath, 'rb') as file:
+                tls_private_key = UmbralPrivateKey.from_bytes(file.read())
+            tls_hosting_keypair = HostingKeypair(curve=ec.SECP384R1,
+                                                 host=self.host,
+                                                 certificate_filepath=tls_certificate_filepath,
+                                                 private_key=tls_private_key)
+
+        # Self-Sign
+        else:
+            tls_hosting_keypair = HostingKeypair(curve=ec.SECP384R1, host=self.host)
+
+        tls_hosting_power = TLSHostingPower(keypair=tls_hosting_keypair, host=self.host)
+        super().__init__(*args, crypto_power_ups=[tls_hosting_power], **kwargs)
+
+        self._crypto_power.consume_power_up(tls_hosting_power)  # Consume!
         self.log.info(self.banner)
         self.staking_agent = ContractAgency.get_agent(StakingEscrowAgent, registry=self.registry)
         self.token_agent = ContractAgency.get_agent(NucypherTokenAgent, registry=self.registry)
@@ -79,7 +111,7 @@ class Moe(Character):
         hey_joe.send(None, topic="nodes")
         return new_nodes
 
-    def start(self, ws_port: int, http_port: int, dry_run: bool = False):
+    def start(self, dry_run: bool = False):
 
         #
         # Websocket Service
@@ -93,28 +125,29 @@ class Moe(Character):
             message = ["nodes", None]
             subscriber.sendMessage(json.dumps(message).encode())
 
-        websocket_service = hey_joe.WebSocketService("127.0.0.1", ws_port)
+        websocket_service = hey_joe.WebSocketService(self.host, self.websocket_port)
         websocket_service.register_followup("states", send_states)
         websocket_service.register_followup("nodes", send_nodes)
 
         #
         # WSGI Service
         #
+
         self.rest_app = Flask("fleet-monitor")
         rest_app = self.rest_app
-        # attach status app to rest_app
         MoeStatusApp(moe=self,
                      title='Moe Monitoring Application',
                      flask_server=self.rest_app,
-                     route_url='/',
-                     ws_port=ws_port)
+                     route_url='/')
 
         #
         # Server
         #
 
-        deployer = HendrixDeploy(action="start", options={"wsgi": rest_app, "http_port": http_port})
-        deployer.add_non_tls_websocket_service(websocket_service)
+        deployer = self._crypto_power.power_ups(TLSHostingPower).get_deployer(rest_app=rest_app, port=self.http_port)
+        origins = [f"https://{self.host}:{self.http_port}"]
+        wss_service = hey_joe.WSSWebSocketService(host_address=self.host, port=self.websocket_port, allowedOrigins=origins)
+        deployer.add_tls_websocket_service(wss_service)
 
         if not dry_run:
             deployer.run()

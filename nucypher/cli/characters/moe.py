@@ -15,8 +15,11 @@ from nucypher.network.middleware import RestMiddleware
 @click.option('--registry-filepath', help="Custom contract registry filepath", type=EXISTING_READABLE_FILE)
 @click.option('--min-stake', help="The minimum stake the teacher must have to be a teacher", type=click.INT, default=0)
 @click.option('--network', help="Network Domain Name", type=click.STRING)
-@click.option('--http-port', help="The host port to run Moe HTTP services on", type=NETWORK_PORT, default=12500)
+@click.option('--host', help="The host to run Moe services on", type=click.STRING, default='0.0.0.0')
+@click.option('--http-port', help="The network port to run Moe services on", type=NETWORK_PORT, default=12500)
 @click.option('--ws-port', help="The host port to run websocket network services on", type=NETWORK_PORT, default=9000)
+@click.option('--certificate-filepath', help="Pre-signed TLS certificate filepath")
+@click.option('--tls-key-filepath', help="TLS private key filepath")
 @click.option('--dry-run', '-x', help="Execute normally without actually starting the node", is_flag=True)
 @click.option('--learn-on-launch', help="Conduct first learning loop on main thread at launch.", is_flag=True)
 @click.option('--federated-only', '-F', help="Connect only to federated nodes", is_flag=True, default=False)
@@ -26,7 +29,10 @@ def moe(click_config,
         teacher_uri,
         min_stake,
         network,
+        host,
         ws_port,
+        certificate_filepath,
+        tls_key_filepath,
         dry_run,
         http_port,
         learn_on_launch,
@@ -64,10 +70,15 @@ def moe(click_config,
               network_middleware=RestMiddleware(),
               known_nodes=teacher_nodes,
               registry=registry,
-              federated_only=federated_only)
+              federated_only=federated_only,
+              host=host,
+              http_port=http_port,
+              websocket_port=ws_port,
+              tls_certificate_filepath=certificate_filepath,
+              tls_private_key_filepath=tls_key_filepath)
 
     # Run
 
     MOE.start_learning_loop(now=learn_on_launch)
-    emitter.message(f"Running Moe on 127.0.0.1:{http_port}")
-    MOE.start(http_port=http_port, ws_port=ws_port, dry_run=dry_run)
+    emitter.message(f"Running Moe - https://{MOE.host}:{MOE.http_port}")
+    MOE.start(dry_run=dry_run)
