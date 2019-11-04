@@ -4,12 +4,16 @@
 Ursula Configuration Guide
 ==========================
 
-1. Install NuCypher and geth
+1. Install geth Ethereum node
 ------------------------------
 
 If you want to run a NuCypher node that participates in the decentralized network,
 you need to install it first. The installation procedure for the Ursula (Worker)
 node is exactly the same as for Staker.
+
+You will need a machine (could be a physical computer or a cloud instance) which
+can be externally accessed via a TCP port 9151 (make sure it can be accessed
+from the outside).
 
 First, you install geth. You'll need to run it in the background and sync up.
 For testnet, it is:
@@ -29,6 +33,17 @@ You need to create a software-controlled account in geth:
 
 So, your worker account is ``0xc080708026a3a280894365efd51bb64521c45147`` in
 this case.
+
+Fund this account with Görli testnet ETH! To do it, go to
+https://goerli-faucet.slock.it/.
+
+2. Install NuCypher
+--------------------------------
+
+Install ``nucypher`` with ``docker`` (See :doc:`/guides/installation_guide`) or ``pip`` (below).
+
+Standard Pip Install
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before installing ``nucypher``, you may need to install necessary developer
 tools and headers, if you don't have them already. In Ubuntu, Debian, Linux Mint
@@ -67,8 +82,33 @@ If your installation is non-functional, be sure you have the latest version inst
 
 
 
-2. Configure a new Ursula node
+3. Configure a new Ursula node
 --------------------------------
+
+With Docker
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Recall the volume mounts: `-v <path to a directory on your computer>:/root/.local/share/` which is where your Nucypher node stores persistent data as well as accesses ipc with your locally running geth node.
+
+Execute the following commands (Ubuntu):
+
+.. code:: bash
+
+    export NUCYPHER_KEYRING_PASSWORD=<your keyring password>
+    export MY_IP=$(wget -q -O - ifconfig.me);
+    export NUCYPHER_WORKER_ADDRESS=<eth account checksum of your worker>
+    export NUCYPHER_STAKER_ADDRESS=<eth account checksum of your staker>
+    export NUCYPHER_WORKER_ETH_PASSWORD=<your eth account password>
+
+    # init your worker
+    docker run -v /home/ubuntu:/root/.local/share/ -e NUCYPHER_KEYRING_PASSWORD -it nucypher/nucypher:latest nucypher ursula init --provider /root/.local/share/geth/.ethereum/goerli/geth.ipc --poa --worker-address $NUCYPHER_WORKER_ADDRESS --staker-address $NUCYPHER_STAKER_ADDRESS --rest-host $MY_IP
+
+    # and then run the worker in the background
+    docker run -v /home/ubuntu:/root/.local/share/ -dit --restart unless-stopped -p 9151:9151  -e NUCYPHER_KEYRING_PASSWORD -e NUCYPHER_WORKER_ETH_PASSWORD  nucypher/nucypher:latest nucypher ursula run --teacher discover.nucypher.network:9151 --poa
+
+
+Without Docker
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
@@ -93,6 +133,8 @@ Replace ``<YOUR PROVIDER URI>`` with a valid node web3 node provider string, for
 
     Enter Nodes Public IPv4 Address: <YOUR NODE IP HERE>
 
+Additionally, make sure that your port 9151 is open.
+
 
 4. Create a password when prompted
 -----------------------------------------
@@ -113,11 +155,7 @@ Replace ``<YOUR PROVIDER URI>`` with a valid node web3 node provider string, for
 
 .. code:: bash
 
-    (nucypher)$ nucypher ursula run --teacher <SEEDNODE_URI> --interactive
-
-The teacher ``SEEDNODE_URI`` is given in a form ``ip_address:port``, for example
-``13.48.124.134:9151``. Choose from any of the available teacher nodes listed
-on https://status.nucypher.network:12500/ - clicking on a node's name will show its IP address.
+    (nucypher)$ nucypher ursula run --teacher discover.nucypher.network:9151 --interactive
 
 
 6. Verify Ursula Blockchain Connection (Interactive)
@@ -140,6 +178,8 @@ Verify that the node setup was successful by running the ``status`` command.
 
 
 You can also view your node’s network status webpage by navigating your web browser to ``https://<your-node-ip-address>:9151/status``.
+It's a good idea to ensure that this URL can be accessed publicly: it means that
+your node can be seen by other NuCypher nodes.
 
 .. NOTE::
     Since Ursulas self-sign TLS certificates, you may receive a warning from your web browser.

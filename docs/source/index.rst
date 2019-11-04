@@ -122,8 +122,8 @@ Whitepapers
    :maxdepth: 1
    :caption: Guides
 
-   guides/quickstart
    guides/installation_guide
+   guides/getting_started
    guides/staking_guide
    guides/ursula_configuration_guide
    guides/character_control_guide
@@ -163,6 +163,7 @@ Whitepapers
    :caption: Release Notes
 
    release_notes/genesis_release
+   release_notes/pre_release_epics
 
 .. toctree::
    :maxdepth: 1

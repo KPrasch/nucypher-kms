@@ -83,7 +83,7 @@ Most stakers on the Goerli testnet will complete the following steps:
 
 1) Install ``nucypher`` on StakeHolder node (See :doc:`/guides/installation_guide`)
 2) Install and run Geth, Parity or another ethereum node (can be used with software or hardware Ethereum wallet)
-3) Request testnet tokens by joining the `Discord server <https://discord.gg/7rmXa3S>` and following the instructions in the #testnet-faucet channel
+3) Request testnet tokens by joining the `Discord server <https://discord.gg/7rmXa3S>`_ and type ``.getfunded <YOUR_CHECKSUM_ETH_ADDRESS>`` in the #testnet-faucet channel
 4) Stake tokens (See Below)
 5) Install another Ethereum node at the Worker instance
 6) Initialize a Worker node [:ref:`ursula-config-guide`] and bond it to your Staker (``set-worker``)
@@ -377,6 +377,46 @@ Divide an existing stake
     | 1 | 0xbb01 | 0xbb02 | 1 | 15000 NU | 30 periods . | Aug 20 12:29:44 CEST - Sep 18 12:29:44 CEST
     | 2 | 0xbb03 | 0xbb04 | 0 | 15000 NU | 39 periods . | Aug 09 12:30:38 CEST - Sep 16 12:30:38 CEST
     | 3 | 0xbb03 | 0xbb04 | 1 | 15000 NU | 40 periods . | Aug 09 12:30:38 CEST - Sep 17 12:30:38 CEST
+
+
+Staking using a preallocation contract
+---------------------------------------
+
+Each NuCypher staker with a preallocation will have some amount of tokens locked
+in a preallocation contract named ``PreallocationEscrow``, which is used to stake and
+perform other staker-related operations.
+From the perspective of the main NuCypher contracts, each ``PreallocationEscrow``
+contract represents a staker, no different from "regular" stakers.
+However, from the perspective of the preallocation user, things are different
+since the contract can't perform transactions, and it's the preallocation user
+(also known as the "`beneficiary`" of the contract)
+who has to perform staking operations.
+
+As part of the preallocation process, beneficiaries receive an allocation file,
+containing the ETH addresses of their beneficiary account and corresponding
+preallocation contract.
+
+In general, preallocation users can use all staking-related operations offered
+by the CLI in the same way as described above, except that they have to specify
+the path to the allocation file using the option ``--allocation-filepath PATH``.
+
+For example, to create a stake:
+
+.. code:: bash
+
+    (nucypher)$ nucypher stake create --hw-wallet --allocation-filepath PATH
+
+
+Or to set a worker:
+
+.. code:: bash
+
+    (nucypher)$ nucypher stake set-worker --hw-wallet --allocation-filepath PATH
+
+
+As an alternative to the ``--allocation-filepath`` flag, preallocation users
+can directly specify their beneficiary and staking contract addresses with the
+``--beneficiary-address ADDRESS`` and ``--staking-address ADDRESS``, respectively.
 
 
 Inline Method

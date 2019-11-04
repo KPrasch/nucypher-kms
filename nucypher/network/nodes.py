@@ -45,6 +45,7 @@ from twisted.internet import task
 from twisted.internet.threads import deferToThread
 from twisted.logger import Logger
 
+from nucypher.blockchain.economics import TokenEconomicsFactory
 from nucypher.blockchain.eth.agents import ContractAgency, StakingEscrowAgent
 from nucypher.blockchain.eth.interfaces import BlockchainInterface
 from nucypher.blockchain.eth.registry import BaseContractRegistry
@@ -716,7 +717,6 @@ class Learner:
         #
 
         try:
-
             response = self.network_middleware.get_nodes_via_rest(node=current_teacher,
                                                                   nodes_i_need=self._node_ids_to_learn_about_immediately,
                                                                   announce_nodes=announce_nodes,
@@ -1020,9 +1020,19 @@ class Teacher:
         As a follow-up, this checks that the staker is, indeed, staking.
         """
         # Lazy agent get or create
-        staking_agent = ContractAgency.get_agent(StakingEscrowAgent, registry=registry)
-        locked_tokens = staking_agent.get_locked_tokens(staker_address=self.checksum_address)
-        return locked_tokens > 0  # TODO: Consider min stake size #1115
+        staking_agent = ContractAgency.get_agent(StakingEscrowAgent, registry=registry)  # type: StakingEscrowAgent
+
+        try:
+            economics = TokenEconomicsFactory.get_economics(registry=registry)
+        except Exception:
+            raise  # TODO: Get StandardEconomics
+
+        min_stake = economics.minimum_allowed_locked
+
+        stake_current_period = staking_agent.get_locked_tokens(staker_address=self.checksum_address, periods=0)
+        stake_next_period = staking_agent.get_locked_tokens(staker_address=self.checksum_address, periods=1)
+        is_staking = max(stake_current_period, stake_next_period) >= min_stake
+        return is_staking
 
     def validate_worker(self, registry: BaseContractRegistry = None) -> None:
 

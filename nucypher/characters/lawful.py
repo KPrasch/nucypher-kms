@@ -42,10 +42,10 @@ from umbral.signing import Signature
 
 import nucypher
 from nucypher.blockchain.eth.actors import BlockchainPolicyAuthor, Worker, Staker
-from nucypher.blockchain.eth.agents import StakingEscrowAgent, NucypherTokenAgent, ContractAgency
+from nucypher.blockchain.eth.agents import StakingEscrowAgent, NucypherTokenAgent, ContractAgency, PreallocationEscrowAgent
 from nucypher.blockchain.eth.decorators import validate_checksum_address
 from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory
-from nucypher.blockchain.eth.registry import BaseContractRegistry
+from nucypher.blockchain.eth.registry import BaseContractRegistry, AllocationRegistry, InMemoryAllocationRegistry
 from nucypher.blockchain.eth.token import StakeList, WorkTracker, NU
 from nucypher.characters.banners import ALICE_BANNER, BOB_BANNER, ENRICO_BANNER, URSULA_BANNER, STAKEHOLDER_BANNER
 from nucypher.characters.base import Character, Learner
@@ -124,7 +124,9 @@ class Alice(Character, BlockchainPolicyAuthor):
                            *args, **kwargs)
 
         if is_me and not federated_only:  # TODO: #289
-            transacting_power = TransactingPower(account=self.checksum_address, password=client_password)
+            transacting_power = TransactingPower(account=self.checksum_address,
+                                                 password=client_password,
+                                                 provider_uri=self.provider_uri)
             self._crypto_power.consume_power_up(transacting_power)
             BlockchainPolicyAuthor.__init__(self,
                                             registry=self.registry,
@@ -795,6 +797,7 @@ class Ursula(Teacher, Character, Worker):
                  checksum_address: str = None,  # Staker address
                  worker_address: str = None,
                  work_tracker: WorkTracker = None,
+                 start_working_now: bool = True,
                  client_password: str = None,
 
                  # Character
@@ -855,7 +858,8 @@ class Ursula(Teacher, Character, Worker):
                                 registry=self.registry,
                                 checksum_address=checksum_address,
                                 worker_address=worker_address,
-                                work_tracker=work_tracker)
+                                work_tracker=work_tracker,
+                                start_working_now=start_working_now)
 
         #
         # ProxyRESTServer and TLSHostingPower #
@@ -1054,7 +1058,7 @@ class Ursula(Teacher, Character, Worker):
     @classmethod
     def from_seed_and_stake_info(cls,
                                  seed_uri: str,
-                                 federated_only: bool,
+                                 federated_only: bool = False,
                                  minimum_stake: int = 0,
                                  registry: BaseContractRegistry = None,
                                  network_middleware: RestMiddleware = None,
@@ -1404,7 +1408,7 @@ class StakeHolder(Staker):
         @property
         def balances(self) -> Dict[str, int]:
             balances = dict()
-            for account in self.__accounts:
+            for account in self.accounts:
                 funds = {'ETH': self.blockchain.client.get_balance(account),  # TODO: EthAgent or something?
                          'NU': self.token_agent.get_balance(account)}
                 balances.update({account: funds})
@@ -1420,6 +1424,9 @@ class StakeHolder(Staker):
                  checksum_addresses: set = None,
                  password: str = None,
                  *args, **kwargs):
+
+        self.staking_interface_agent = None
+
         super().__init__(is_me=is_me, checksum_address=initial_address, *args, **kwargs)
         self.log = Logger(f"stakeholder")
 
@@ -1434,12 +1441,37 @@ class StakeHolder(Staker):
 
     @validate_checksum_address
     def assimilate(self, checksum_address: str, password: str = None) -> None:
+        if self.is_contract:
+            original_form = f"{self.beneficiary_address[0:8]} (contract {self.checksum_address[0:8]})"
+        else:
+            original_form = self.checksum_address
+
+        # This handles both regular staking and staking via a contract
+        if self.individual_allocation:
+            if checksum_address != self.individual_allocation.beneficiary_address:
+                raise ValueError(f"Beneficiary {self.individual_allocation.beneficiary_address} in individual "
+                                 f"allocation doesn't match this checksum address ({checksum_address})")
+            staking_address = self.individual_allocation.contract_address
+            self.beneficiary_address = self.individual_allocation.beneficiary_address
+            self.preallocation_escrow_agent = PreallocationEscrowAgent(registry=self.registry,
+                                                                       allocation_registry=self.individual_allocation,
+                                                                       beneficiary=self.beneficiary_address)
+        else:
+            staking_address = checksum_address
+            self.beneficiary_address = None
+            self.preallocation_escrow_agent = None
+
         self.wallet.activate_account(checksum_address=checksum_address, password=password)
-        original_form = self.checksum_address
-        self.checksum_address = checksum_address
-        self.stakes = StakeList(registry=self.registry, checksum_address=checksum_address)
+        self.checksum_address = staking_address
+        self.stakes = StakeList(registry=self.registry, checksum_address=staking_address)
         self.stakes.refresh()
-        self.log.info(f"Resistance is futile - Assimilating Staker {original_form} -> {checksum_address}.")
+
+        if self.is_contract:
+            new_form = f"{self.beneficiary_address[0:8]} (contract {self.checksum_address[0:8]})"
+        else:
+            new_form = self.checksum_address
+
+        self.log.info(f"Resistance is futile - Assimilating Staker {original_form} -> {new_form}.")
 
     @property
     def all_stakes(self) -> list:
