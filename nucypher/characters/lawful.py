@@ -890,7 +890,7 @@ class Ursula(Teacher, Character, Worker):
                 # TLSHostingPower (Ephemeral Self-Ursula)
                 #
                 tls_hosting_keypair = HostingKeypair(curve=tls_curve, host=rest_host,
-                                                     checksum_address=self.checksum_address)
+                                                     pseudonym=self.checksum_address)
                 tls_hosting_power = TLSHostingPower(keypair=tls_hosting_keypair, host=rest_host)
                 self.rest_server = ProxyRESTServer(rest_host=rest_host, rest_port=rest_port,
                                                    rest_app=rest_app, datastore=datastore,
