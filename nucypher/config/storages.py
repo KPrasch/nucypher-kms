@@ -286,8 +286,14 @@ class SQLiteForgetfulNodeStorage(ForgetfulNodeStorage):
     DEFAULT_DB_FILEPATH = os.path.join(DEFAULT_CONFIG_ROOT, DB_FILE_NAME)
 
     NODE_DB_NAME = 'node_info'
-    NODE_DB_SCHEMA = [('staker_address', 'text primary key'), ('rest_url', 'text'), ('nickname', 'text'),
-                      ('timestamp', 'text'), ('last_seen', 'text'), ('fleet_state_icon', 'text')]
+    NODE_DB_SCHEMA = [('staker_address', 'text primary key'),
+                      ('rest_url', 'text'),
+                      ('nickname', 'text'),
+                      ('timestamp', 'text'),
+                      ('last_seen', 'text'),
+                      ('fleet_state', 'text'),
+                      ('fleet_state_icon', 'text')]
+    NO_DB_FIELDS = (field[0] for field in NODE_DB_SCHEMA)
 
     def __init__(self, db_filepath: str = DEFAULT_DB_FILEPATH, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -344,15 +350,10 @@ class SQLiteForgetfulNodeStorage(ForgetfulNodeStorage):
 
     def __write_node_metadata(self, node):
         node.mature()
-        node_dict = node.abridged_node_details(node)
-        db_row = (node_dict['staker_address'],
-                  node_dict['rest_url'],
-                  node_dict['nickname'],
-                  node_dict['timestamp'],
-                  node_dict['last_seen'],
-                  node_dict['fleet_state_icon'])
+        details = node.abridged_node_details(node)
+        db_row = list(details[field] for field in self.NO_DB_FIELDS)
         with self.db_conn:
-            self.db_conn.execute(f'REPLACE INTO {self.NODE_DB_NAME} VALUES(?,?,?,?,?,?)', db_row)
+            self.db_conn.execute(f'REPLACE INTO {self.NODE_DB_NAME} VALUES(?,?,?,?,?,?,?)', db_row)
 
 
 class LocalFileBasedNodeStorage(NodeStorage):

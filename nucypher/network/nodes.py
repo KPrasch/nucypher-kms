@@ -1381,19 +1381,20 @@ class Teacher:
         except AttributeError:  # TODO: This logic belongs somewhere - anywhere - else.
             last_seen = str(node.last_seen)  # In case it's the constant NEVER_SEEN
 
-        fleet_icon = node.fleet_state_nickname_metadata
-        if fleet_icon is UNKNOWN_FLEET_STATE:
-            fleet_icon = "?"  # TODO
+        nickname_metadata = node.fleet_state_nickname_metadata
+        if nickname_metadata is UNKNOWN_FLEET_STATE:
+            color, fleet_icon = "?", "?"
         else:
-            fleet_icon = fleet_icon[0][1]
+            color, fleet_icon = nickname_metadata[0]
 
-        return {"icon_details": node.nickname_icon_details(),  # TODO: Mix this in better.
-                "rest_url": node.rest_url(),
-                "nickname": node.nickname,
-                "checksum_address": node.worker_address,
-                "staker_address": node.checksum_address,
-                "timestamp": node.timestamp.iso8601(),
-                "last_seen": last_seen,
-                "fleet_state_icon": fleet_icon,
-                }
+        payload = {"icon_details": node.nickname_icon_details(),  # TODO: Mix this in better.
+                   "rest_url": node.rest_url(),
+                   "nickname": node.nickname,
+                   "checksum_address": node.worker_address,
+                   "staker_address": node.checksum_address,
+                   "timestamp": node.timestamp.iso8601(),
+                   "last_seen": last_seen,
+                   "fleet_state": node.fleet_state_checksum or '?',
+                   "fleet_state_icon": fleet_icon}
+        return payload
 
