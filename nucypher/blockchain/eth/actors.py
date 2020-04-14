@@ -61,7 +61,6 @@ from nucypher.blockchain.eth.deployers import (
     AdjudicatorDeployer,
     BaseContractDeployer,
     WorklockDeployer,
-    SeederDeployer,
     MultiSigDeployer
 )
 from nucypher.blockchain.eth.interfaces import BlockchainDeployerInterface, BlockchainInterfaceFactory
@@ -172,7 +171,6 @@ class ContractAdministrator(NucypherTokenActor):
     aux_deployer_classes = (
         WorklockDeployer,
         MultiSigDeployer,
-        SeederDeployer
     )
 
     # For ownership relinquishment series.
