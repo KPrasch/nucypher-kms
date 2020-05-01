@@ -10,7 +10,7 @@ from nucypher.blockchain.eth.actors import StakeHolder
 from nucypher.characters.chaotic import Felix
 from nucypher.characters.lawful import Alice, Bob
 from nucypher.characters.lawful import Ursula
-from nucypher.cli.actions import handle_missing_configuration_file
+from nucypher.cli.actions.config import handle_missing_configuration_file
 from nucypher.config.characters import AliceConfiguration, BobConfiguration, \
     FelixConfiguration, StakeHolderConfiguration
 from nucypher.config.characters import UrsulaConfiguration

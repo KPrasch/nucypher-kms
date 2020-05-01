@@ -214,7 +214,8 @@ class BlockchainInterface:
 
         Provider Usage
         ---------------
-        https: // github.com / ethereum / eth - tester     # available-backends
+
+        https://github.com/ethereum/eth-tester     # available-backends
 
 
         * HTTP Provider - Web3 HTTP provider, typically JSON RPC 2.0 over HTTP

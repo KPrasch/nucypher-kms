@@ -18,6 +18,7 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 import click
 from web3 import Web3
 
+import nucypher.cli.actions.config
 from nucypher.blockchain.eth.actors import StakeHolder
 from nucypher.blockchain.eth.constants import MAX_UINT16
 from nucypher.blockchain.eth.events import EventRecord
@@ -27,14 +28,14 @@ from nucypher.blockchain.eth.token import NU, StakeList
 from nucypher.blockchain.eth.utils import datetime_at_period
 from nucypher.cli import painting, actions
 from nucypher.cli.actions import (
-    confirm_staged_stake,
-    get_client_password,
-    select_stake,
-    handle_client_account_for_staking,
     confirm_enable_restaking_lock,
     confirm_enable_restaking,
-    confirm_enable_winding_down,
-    get_or_update_configuration, issue_stake_suggestions)
+    confirm_enable_winding_down)
+from nucypher.cli.actions.utils import issue_stake_suggestions
+from nucypher.cli.actions.config import get_or_update_configuration
+from nucypher.cli.actions.auth import get_client_password
+from nucypher.cli.actions.confirm import confirm_staged_stake
+from nucypher.cli.actions.select import select_stake, select_client_account_for_staking
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
     group_options,
@@ -97,7 +98,7 @@ class StakeHolderConfigOptions:
                 registry_filepath=self.registry_filepath)
 
         except FileNotFoundError:
-            return actions.handle_missing_configuration_file(
+            return nucypher.cli.actions.config.handle_missing_configuration_file(
                 character_config_class=StakeHolderConfiguration,
                 init_command_hint=f"{stake.name} {init_stakeholder.name}",
                 config_file=config_file)
@@ -328,7 +329,7 @@ def set_worker(general_config, transacting_staker_options, config_file, force, w
 
     economics = STAKEHOLDER.economics
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -393,7 +394,7 @@ def detach_worker(general_config, transacting_staker_options, config_file, force
 
     economics = STAKEHOLDER.economics
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -439,7 +440,7 @@ def create(general_config, transacting_staker_options, config_file, force, value
 
     economics = STAKEHOLDER.economics
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -528,7 +529,7 @@ def restake(general_config, transacting_staker_options, config_file, enable, loc
     STAKEHOLDER = transacting_staker_options.create_character(emitter, config_file)
     blockchain = transacting_staker_options.get_blockchain()
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -578,7 +579,7 @@ def winddown(general_config, transacting_staker_options, config_file, enable, lo
     STAKEHOLDER = transacting_staker_options.create_character(emitter, config_file)
     blockchain = transacting_staker_options.get_blockchain()
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -625,7 +626,7 @@ def divide(general_config, transacting_staker_options, config_file, force, value
     economics = STAKEHOLDER.economics
     action_period = STAKEHOLDER.staking_agent.get_current_period()
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -718,7 +719,7 @@ def prolong(general_config, transacting_staker_options, config_file, force, lock
     economics = STAKEHOLDER.economics
 
     # Handle account selection
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -792,7 +793,7 @@ def collect_reward(general_config, transacting_staker_options, config_file,
     if not staking_reward and not policy_reward:
         raise click.BadArgumentUsage(f"Either --staking-reward or --policy-reward must be True to collect rewards.")
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -847,7 +848,7 @@ def preallocation(general_config, transacting_staker_options, config_file, actio
 
     # Authenticated actions: withdraw-tokens
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,
@@ -885,7 +886,7 @@ def events(general_config, staker_options, config_file, event_name):
     STAKEHOLDER = staker_options.create_character(emitter, config_file)
     blockchain = staker_options.get_blockchain()
 
-    _client_account, staking_address = handle_client_account_for_staking(
+    _client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=staker_options.staking_address,
@@ -926,7 +927,7 @@ def set_min_rate(general_config, transacting_staker_options, config_file, force,
     STAKEHOLDER = transacting_staker_options.create_character(emitter, config_file)
     blockchain = transacting_staker_options.get_blockchain()
 
-    client_account, staking_address = handle_client_account_for_staking(
+    client_account, staking_address = select_client_account_for_staking(
         emitter=emitter,
         stakeholder=STAKEHOLDER,
         staking_address=transacting_staker_options.staker_options.staking_address,

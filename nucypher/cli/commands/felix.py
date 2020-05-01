@@ -3,9 +3,12 @@ import os
 import click
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION
 
+import nucypher.cli.actions.config
+
+import nucypher.cli.actions.utils
 from nucypher.characters.banners import FELIX_BANNER
 from nucypher.cli import actions, painting
-from nucypher.cli.actions import get_nucypher_password, unlock_nucypher_keyring, get_client_password
+from nucypher.cli.actions.auth import get_nucypher_password, unlock_nucypher_keyring, get_client_password
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
     group_options,
@@ -43,7 +46,7 @@ class FelixConfigOptions:
 
         eth_node = NO_BLOCKCHAIN_CONNECTION
         if geth:
-            eth_node = actions.get_provider_process(dev)
+            eth_node = nucypher.cli.actions.utils.get_provider_process(dev)
             provider_uri = eth_node.provider_uri
 
         self.eth_node = eth_node
@@ -72,7 +75,7 @@ class FelixConfigOptions:
                 db_filepath=self.db_filepath,
                 poa=self.poa)
         except FileNotFoundError:
-            return actions.handle_missing_configuration_file(
+            return nucypher.cli.actions.config.handle_missing_configuration_file(
                 character_config_class=FelixConfiguration,
                 config_file=config_file)
 
@@ -197,7 +200,7 @@ def destroy(general_config, config_options, config_file, force):
     """
     emitter = _setup_emitter(general_config, config_options.checksum_address)
     felix_config = config_options.create_config(emitter, config_file)
-    actions.destroy_configuration(emitter, character_config=felix_config, force=force)
+    nucypher.cli.actions.config.destroy_configuration(emitter, character_config=felix_config, force=force)
 
 
 @felix.command()

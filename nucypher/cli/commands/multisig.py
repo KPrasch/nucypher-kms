@@ -21,16 +21,16 @@ import os
 
 import click
 
+import nucypher.cli.actions.utils
 from nucypher.blockchain.eth.actors import Trustee, Executive
 from nucypher.blockchain.eth.agents import NucypherTokenAgent, ContractAgency, MultiSigAgent
 from nucypher.blockchain.eth.interfaces import BlockchainDeployerInterface, BlockchainInterfaceFactory
 from nucypher.blockchain.eth.multisig import Proposal, Authorization
 from nucypher.blockchain.eth.registry import LocalContractRegistry, InMemoryContractRegistry
 from nucypher.blockchain.eth.signers import ClefSigner
-from nucypher.cli.actions import (
-    get_client_password,
-    select_client_account,
-    get_provider_process)
+from nucypher.cli.actions.utils import get_provider_process
+from nucypher.cli.actions.auth import get_client_password
+from nucypher.cli.actions.select import select_client_account
 from nucypher.cli.commands.stake import option_signer_uri
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
@@ -209,7 +209,7 @@ def inspect(general_config, blockchain_options):
     # Init
     emitter = general_config.emitter
     _blockchain = blockchain_options.connect_blockchain(emitter, general_config.debug)
-    registry = blockchain_options.get_registry()
+    registry = nucypher.cli.actions.utils.get_registry()
 
     multisig_agent = ContractAgency.get_agent(MultiSigAgent, registry=registry)
     token_agent = ContractAgency.get_agent(NucypherTokenAgent, registry=registry)
@@ -241,7 +241,7 @@ def propose(general_config, blockchain_options, multisig_options):
     emitter = general_config.emitter
     #_ensure_config_root(actor_options.config_root)
     blockchain = blockchain_options.connect_blockchain(emitter, general_config.debug)
-    registry = blockchain_options.get_registry()
+    registry = nucypher.cli.actions.utils.get_registry()
 
     if not multisig_options.checksum_address:
         multisig_options.checksum_address = select_client_account(emitter=emitter,
@@ -280,7 +280,7 @@ def sign(general_config, blockchain_options, multisig_options, proposal):
     emitter = general_config.emitter
     #_ensure_config_root(actor_options.config_root)
     blockchain = blockchain_options.connect_blockchain(emitter, general_config.debug)
-    registry = blockchain_options.get_registry()
+    registry = nucypher.cli.actions.utils.get_registry()
 
     proposal = Proposal.from_file(proposal)
 
@@ -322,7 +322,7 @@ def execute(general_config, blockchain_options, multisig_options, proposal):
     emitter = general_config.emitter
     #_ensure_config_root(actor_options.config_root)
     blockchain = blockchain_options.connect_blockchain(emitter, general_config.debug)
-    registry = blockchain_options.get_registry()
+    registry = nucypher.cli.actions.utils.get_registry()
 
     proposal = Proposal.from_file(proposal)
 

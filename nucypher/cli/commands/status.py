@@ -29,7 +29,7 @@ from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory
 from nucypher.blockchain.eth.registry import InMemoryContractRegistry, LocalContractRegistry
 from nucypher.blockchain.eth.utils import datetime_at_period
 from nucypher.characters.banners import NU_BANNER
-from nucypher.cli.actions import get_provider_process, connect_to_blockchain, get_registry
+from nucypher.cli.actions.utils import get_registry, connect_to_blockchain, get_provider_process
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
     group_options,

@@ -5,6 +5,7 @@ from unittest import mock
 
 from twisted.logger import Logger
 
+import nucypher.cli.actions.utils
 from nucypher.characters.control.emitters import JSONRPCStdoutEmitter
 from nucypher.characters.lawful import Ursula
 from nucypher.cli.main import nucypher_cli
@@ -178,11 +179,11 @@ def test_bob_retrieves_twice_via_cli(click_runner,
         this_fuckin_guy.controller.emitter = JSONRPCStdoutEmitter()
         return this_fuckin_guy
 
-    _old_make_character_function = actions.make_cli_character
+    _old_make_character_function = nucypher.cli.actions.utils.make_cli_character
     try:
 
         log.info("Patching make_cli_character with substitute_bob")
-        actions.make_cli_character = substitute_bob
+        nucypher.cli.actions.utils.make_cli_character = substitute_bob
 
         # Once...
         with GlobalLoggerSettings.pause_all_logging_while():
@@ -207,4 +208,4 @@ def test_bob_retrieves_twice_via_cli(click_runner,
             assert cleartext.encode() == capsule_side_channel.plaintexts[1]
     finally:
         log.info("un-patching make_cli_character")
-        actions.make_cli_character = _old_make_character_function
+        nucypher.cli.actions.utils.make_cli_character = _old_make_character_function

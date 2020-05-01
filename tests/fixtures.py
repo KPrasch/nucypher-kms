@@ -572,7 +572,7 @@ def _make_agency(testerchain, test_registry, token_economics):
     return token_agent, staking_agent, policy_agent
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope='module')
 def test_registry_source_manager(testerchain, test_registry):
 
     class MockRegistrySource(CanonicalRegistrySource):

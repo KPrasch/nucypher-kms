@@ -29,7 +29,8 @@ from nucypher.blockchain.eth.signers import Signer
 from nucypher.blockchain.eth.token import NU
 from nucypher.blockchain.eth.utils import prettify_eth_amount
 from nucypher.characters.banners import WORKLOCK_BANNER
-from nucypher.cli.actions import get_client_password, connect_to_blockchain, get_registry
+from nucypher.cli.actions.utils import get_registry, connect_to_blockchain
+from nucypher.cli.actions.auth import get_client_password
 from nucypher.cli.actions import select_client_account
 from nucypher.cli.commands.status import group_registry_options
 from nucypher.cli.config import group_general_config

@@ -20,17 +20,18 @@ import os
 import click
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION
 
+import nucypher.cli.actions.config
+
+import nucypher.cli.actions.utils
 from nucypher.blockchain.economics import EconomicsFactory
 from nucypher.blockchain.eth.utils import datetime_at_period
 from nucypher.characters.banners import URSULA_BANNER
 from nucypher.cli import actions, painting
 from nucypher.cli.actions import (
-    get_nucypher_password,
-    select_client_account,
-    get_client_password,
-    get_or_update_configuration,
-    select_config_file,
-    select_network)
+    select_client_account)
+from nucypher.cli.actions.config import get_or_update_configuration
+from nucypher.cli.actions.auth import get_nucypher_password, get_client_password
+from nucypher.cli.actions.select import select_config_file, select_network
 from nucypher.cli.commands.deploy import option_gas_strategy
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
@@ -79,7 +80,7 @@ class UrsulaConfigOptions:
         eth_node = NO_BLOCKCHAIN_CONNECTION
         provider_uri = provider_uri
         if geth:
-            eth_node = actions.get_provider_process()
+            eth_node = nucypher.cli.actions.utils.get_provider_process()
             provider_uri = eth_node.provider_uri(scheme='file')
 
         self.eth_node = eth_node
@@ -138,8 +139,8 @@ class UrsulaConfigOptions:
                     availability_check=self.availability_check
                 )
             except FileNotFoundError:
-                return actions.handle_missing_configuration_file(character_config_class=UrsulaConfiguration,
-                                                                 config_file=config_file)
+                return nucypher.cli.actions.config.handle_missing_configuration_file(character_config_class=UrsulaConfiguration,
+                                                                                     config_file=config_file)
             except NucypherKeyring.AuthenticationFailed as e:
                 emitter.echo(str(e), color='red', bold=True)
                 # TODO: Exit codes (not only for this, but for other exceptions)
@@ -161,7 +162,7 @@ class UrsulaConfigOptions:
             if not rest_host:
                 # TODO: Something less centralized... :-(
                 # TODO: Ask Ursulas instead
-                rest_host = actions.determine_external_ip_address(emitter, force=force)
+                rest_host = nucypher.cli.actions.config.determine_external_ip_address(emitter, force=force)
 
         return UrsulaConfiguration.generate(password=get_nucypher_password(confirm=True),
                                             config_root=config_root,
@@ -241,15 +242,15 @@ class UrsulaCharacterOptions:
                                                       envvar=NUCYPHER_ENVVAR_WORKER_ETH_PASSWORD)
 
         try:
-            URSULA = actions.make_cli_character(character_config=ursula_config,
-                                                emitter=emitter,
-                                                min_stake=self.min_stake,
-                                                teacher_uri=self.teacher_uri,
-                                                unlock_keyring=not self.config_options.dev,
-                                                lonely=self.lonely,
-                                                client_password=client_password,
-                                                load_preferred_teachers=load_seednodes and not self.lonely,
-                                                start_learning_now=load_seednodes)
+            URSULA = nucypher.cli.actions.utils.make_cli_character(character_config=ursula_config,
+                                                                   emitter=emitter,
+                                                                   min_stake=self.min_stake,
+                                                                   teacher_uri=self.teacher_uri,
+                                                                   unlock_keyring=not self.config_options.dev,
+                                                                   lonely=self.lonely,
+                                                                   client_password=client_password,
+                                                                   load_preferred_teachers=load_seednodes and not self.lonely,
+                                                                   start_learning_now=load_seednodes)
             return ursula_config, URSULA
 
         except NucypherKeyring.AuthenticationFailed as e:
@@ -308,7 +309,7 @@ def destroy(general_config, config_options, config_file, force):
                                          checksum_address=config_options.worker_address,
                                          config_class=UrsulaConfiguration)
     ursula_config = config_options.create_config(emitter, config_file)
-    actions.destroy_configuration(emitter, character_config=ursula_config, force=force)
+    nucypher.cli.actions.config.destroy_configuration(emitter, character_config=ursula_config, force=force)
 
 
 @ursula.command()
@@ -322,7 +323,7 @@ def forget(general_config, config_options, config_file):
     emitter = _setup_emitter(general_config, config_options.worker_address)
     _pre_launch_warnings(emitter, dev=config_options.dev, force=None)
     ursula_config = config_options.create_config(emitter, config_file)
-    actions.forget(emitter, configuration=ursula_config)
+    nucypher.cli.actions.config.forget(emitter, configuration=ursula_config)
 
 
 @ursula.command()

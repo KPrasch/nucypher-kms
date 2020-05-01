@@ -39,11 +39,11 @@ from nucypher.blockchain.eth.registry import (
 from nucypher.blockchain.eth.signers import Signer
 from nucypher.blockchain.eth.token import NU
 from nucypher.cli.actions import (
-    get_client_password,
-    select_client_account,
-    confirm_deployment,
-    establish_deployer_registry
+    confirm_deployment
 )
+from nucypher.cli.actions.utils import establish_deployer_registry
+from nucypher.cli.actions.auth import get_client_password
+from nucypher.cli.actions.select import select_client_account
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
     group_options,

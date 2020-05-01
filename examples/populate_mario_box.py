@@ -7,7 +7,7 @@ import os
 import click
 
 from nucypher.characters.lawful import Enrico
-from nucypher.cli.actions import make_cli_character
+from nucypher.cli.actions.utils import make_cli_character
 from nucypher.config.characters import AliceConfiguration
 from nucypher.crypto.powers import SigningPower
 

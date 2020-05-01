@@ -1,0 +1,2 @@
+NO_BLOCKCHAIN_CONNECTION.bool_value(False)
+

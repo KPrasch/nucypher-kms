@@ -20,11 +20,15 @@ import os
 import click
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION, NO_PASSWORD
 
+import nucypher.cli.actions.config
+
+import nucypher.cli.actions.utils
 from nucypher.characters.banners import ALICE_BANNER
 from nucypher.characters.control.interfaces import AliceInterface
 from nucypher.cli import actions, painting
-from nucypher.cli.actions import get_nucypher_password, select_client_account, get_client_password, \
-    get_or_update_configuration
+from nucypher.cli.actions import select_client_account
+from nucypher.cli.actions.config import get_or_update_configuration
+from nucypher.cli.actions.auth import get_nucypher_password, get_client_password
 from nucypher.cli.commands.deploy import option_gas_strategy
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
@@ -82,7 +86,7 @@ class AliceConfigOptions:
         # Managed Ethereum Client
         eth_node = NO_BLOCKCHAIN_CONNECTION
         if geth:
-            eth_node = actions.get_provider_process()
+            eth_node = nucypher.cli.actions.utils.get_provider_process()
             provider_uri = eth_node.provider_uri(scheme='file')
 
         self.dev = dev
@@ -135,7 +139,7 @@ class AliceConfigOptions:
                     checksum_address=self.pay_with,
                     registry_filepath=self.registry_filepath)
             except FileNotFoundError:
-                return actions.handle_missing_configuration_file(
+                return nucypher.cli.actions.config.handle_missing_configuration_file(
                     character_config_class=AliceConfiguration,
                     config_file=config_file
                 )
@@ -257,14 +261,14 @@ class AliceCharacterOptions:
                                                       envvar=NUCYPHER_ENVVAR_ALICE_ETH_PASSWORD)
 
         try:
-            ALICE = actions.make_cli_character(character_config=config,
-                                               emitter=emitter,
-                                               unlock_keyring=not config.dev_mode,
-                                               teacher_uri=self.teacher_uri,
-                                               min_stake=self.min_stake,
-                                               client_password=client_password,
-                                               load_preferred_teachers=load_seednodes,
-                                               start_learning_now=load_seednodes)
+            ALICE = nucypher.cli.actions.utils.make_cli_character(character_config=config,
+                                                                  emitter=emitter,
+                                                                  unlock_keyring=not config.dev_mode,
+                                                                  teacher_uri=self.teacher_uri,
+                                                                  min_stake=self.min_stake,
+                                                                  client_password=client_password,
+                                                                  load_preferred_teachers=load_seednodes,
+                                                                  start_learning_now=load_seednodes)
 
             return ALICE
         except NucypherKeyring.AuthenticationFailed as e:
@@ -332,7 +336,7 @@ def destroy(general_config, config_options, config_file, force):
     """
     emitter = _setup_emitter(general_config)
     alice_config = config_options.create_config(emitter, config_file)
-    return actions.destroy_configuration(emitter, character_config=alice_config, force=force)
+    return nucypher.cli.actions.config.destroy_configuration(emitter, character_config=alice_config, force=force)
 
 
 @alice.command()
