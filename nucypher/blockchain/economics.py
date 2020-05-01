@@ -305,7 +305,6 @@ class StandardTokenEconomics(BaseEconomics):
                  small_stake_multiplier: Decimal = __default_small_stake_multiplier,
                  **kwargs):
         """
-        :param initial_supply: Tokens at t=0
         :param initial_supply: Number of tokens in circulating supply at t=0
         :param first_phase_supply: Number of tokens in circulating supply at phase switch (variable t)
         :param first_phase_duration: Minimal duration of the first phase

@@ -51,7 +51,7 @@ abstract contract Issuer is Upgradeable {
     * @notice Constructor sets address of token contract and coefficients for minting
     * @dev Minting formula for one sub-stake in one period for the first phase
     maxFirstPhaseReward * (lockedValue / totalLockedValue) * (k1 + allLockedPeriods) / k3
-    * @dev Minting formula for one sub-stake in one period for the seconds phase
+    * @dev Minting formula for one sub-stake in one period for the second phase
     (totalSupply - currentSupply) / k2 * (lockedValue / totalLockedValue) * (k1 + allLockedPeriods) / k3
     if allLockedPeriods > maxRewardedPeriods then allLockedPeriods = maxRewardedPeriods
     * @param _token Token contract
