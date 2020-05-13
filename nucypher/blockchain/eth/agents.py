@@ -1361,14 +1361,20 @@ class WorkLockAgent(EthereumContractAgent):
 
     @property
     @contract_api(ContractInterfaces.CALL)
+    def estimate_verifying_correctness(self, gas_limit: int, gas_to_save_state: int = 30000) -> int:  # TODO - #842: Gas Management
+        """Returns how many bidders will be verified using specified gas limit"""
+        return self.contract.functions.verifyBiddingCorrectness(gas_to_save_state).call({'gas': gas_limit})
+
+    @contract_api(ContractInterfaces.CALL)
     def next_bidder_to_check(self) -> int:
         """Returns the index of the next bidder to check as part of the bids verification process"""
         return self.contract.functions.nextBidderToCheck().call()
 
+    @contract_api(ContractInterfaces.CALL)
     def bidders_checked(self) -> bool:
         """Returns True if bidders have been checked"""
         bidders_population = self.get_bidders_population()
-        return self.next_bidder_to_check == bidders_population
+        return self.next_bidder_to_check() == bidders_population
 
     @property
     @contract_api(ContractInterfaces.CALL)
