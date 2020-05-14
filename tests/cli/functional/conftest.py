@@ -29,7 +29,7 @@ from nucypher.blockchain.eth.interfaces import BlockchainInterface, BlockchainIn
 from nucypher.blockchain.eth.registry import InMemoryContractRegistry
 from nucypher.characters.control.emitters import StdoutEmitter
 from nucypher.config.characters import UrsulaConfiguration
-from tests.constants import KEYFILE_NAME_TEMPLATE, NUMBER_OF_MOCK_ACCOUNTS, MOCK_KEYSTORE_PATH
+from tests.constants import KEYFILE_NAME_TEMPLATE, NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS, MOCK_KEYSTORE_PATH
 from tests.fixtures import _make_testerchain, make_token_economics
 from tests.mock.agents import FAKE_RECEIPT, MockContractAgency, MockStakingAgent, MockWorkLockAgent, MockNucypherToken
 from tests.mock.interfaces import MockBlockchain, make_mock_registry_source_manager
@@ -131,7 +131,7 @@ def test_registry_source_manager(mock_testerchain, test_registry):
 @pytest.fixture(scope='module')
 def mock_accounts():
     accounts = dict()
-    for i in range(NUMBER_OF_MOCK_ACCOUNTS):
+    for i in range(NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS):
         account = Account.create()
         filename = KEYFILE_NAME_TEMPLATE.format(month=i+1, address=account.address)
         accounts[filename] = account
