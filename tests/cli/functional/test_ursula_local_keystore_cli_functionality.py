@@ -16,7 +16,6 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import json
-
 import pytest
 from eth_account import Account
 from pathlib import Path
@@ -25,23 +24,15 @@ from nucypher.blockchain.eth.signers import KeystoreSigner
 from nucypher.blockchain.eth.token import StakeList
 from nucypher.cli.main import nucypher_cli
 from nucypher.config.characters import UrsulaConfiguration
-from nucypher.config.constants import NUCYPHER_ENVVAR_KEYRING_PASSWORD, NUCYPHER_ENVVAR_WORKER_ETH_PASSWORD, \
-    TEMPORARY_DOMAIN
+from nucypher.config.constants import TEMPORARY_DOMAIN
 from tests.constants import (
-    INSECURE_DEVELOPMENT_PASSWORD,
+    CLI_ENV, INSECURE_DEVELOPMENT_PASSWORD,
     MOCK_IP_ADDRESS,
-    TEST_PROVIDER_URI
+    TEST_PROVIDER_URI,
+    MOCK_KEYSTORE_PATH,
+    MOCK_SIGNER_URI
 )
 from tests.utils.ursula import MOCK_URSULA_STARTING_PORT
-
-# TODO: Move to fixtures
-CLI_ENV = {NUCYPHER_ENVVAR_KEYRING_PASSWORD: INSECURE_DEVELOPMENT_PASSWORD,
-           NUCYPHER_ENVVAR_WORKER_ETH_PASSWORD: INSECURE_DEVELOPMENT_PASSWORD}
-
-KEYFILE_NAME_TEMPLATE = 'UTC--2020-{month}-21T03-42-07.869432648Z--{address}'
-MOCK_KEYSTORE_PATH = '/somewhere/fakeMcfakeson/.ethereum/llamanet/keystore/'
-MOCK_SIGNER_URI = f'keystore://{MOCK_KEYSTORE_PATH}'
-NUMBER_OF_MOCK_ACCOUNTS = 3
 
 
 @pytest.fixture(scope='function', autouse=True)
