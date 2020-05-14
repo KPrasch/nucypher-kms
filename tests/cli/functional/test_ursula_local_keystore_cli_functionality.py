@@ -16,7 +16,6 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import json
-import pytest
 from eth_account import Account
 from pathlib import Path
 
@@ -35,30 +34,8 @@ from tests.constants import (
 from tests.utils.ursula import MOCK_URSULA_STARTING_PORT
 
 
-@pytest.fixture(scope='function', autouse=True)
-def patch_keystore(mock_accounts, monkeypatch, mocker):
-
-    def successful_mock_keyfile_reader(_keystore, path):
-
-        # Ensure the absolute path is passed to the keyfile reader
-        assert MOCK_KEYSTORE_PATH in path
-        full_path = path
-        del path
-
-        for filename, account in mock_accounts.items():  # Walk the mock filesystem
-            if filename in full_path:
-                break
-        else:
-            raise FileNotFoundError(f"No such file {full_path}")
-        return account.address, dict(version=3, address=account.address)
-
-    mocker.patch('os.listdir', return_value=list(mock_accounts.keys()))
-    monkeypatch.setattr(KeystoreSigner, '_KeystoreSigner__read_keyfile', successful_mock_keyfile_reader)
-    yield
-    monkeypatch.delattr(KeystoreSigner, '_KeystoreSigner__read_keyfile')
-
-
 def test_ursula_init_with_local_keystore_signer(click_runner,
+                                                patch_keystore,
                                                 custom_filepath,
                                                 custom_config_filepath,
                                                 mocker,
