@@ -30,7 +30,7 @@ from nucypher.config.constants import TEMPORARY_DOMAIN
 
 
 @pytest.fixture(scope='module')
-def surrogate_bidder(mock_testerchain, test_registry):
+def surrogate_bidder(mock_testerchain, test_registry, mock_worklock_agent):
     address = mock_testerchain.etherbase_account
     bidder = Bidder(checksum_address=address, registry=test_registry)
     return bidder
