@@ -29,13 +29,6 @@ from tests.constants import (CLI_ENV, MOCK_PROVIDER_URI, YES)
 from nucypher.config.constants import TEMPORARY_DOMAIN
 
 
-@pytest.fixture(scope='function')
-def mock_worklock_agent(mock_testerchain, token_economics):
-    mock_agent = MockWorkLockAgent()
-    yield mock_agent
-    mock_agent.reset()
-
-
 @pytest.fixture(scope='module')
 def surrogate_bidder(mock_testerchain, test_registry):
     address = mock_testerchain.etherbase_account

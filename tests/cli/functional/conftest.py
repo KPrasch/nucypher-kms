@@ -23,6 +23,7 @@ from eth_account import Account
 from io import StringIO
 
 from nucypher.blockchain.economics import EconomicsFactory
+from nucypher.blockchain.eth import agents
 from nucypher.blockchain.eth.agents import ContractAgency
 from nucypher.blockchain.eth.interfaces import BlockchainInterface, BlockchainInterfaceFactory
 from nucypher.blockchain.eth.registry import InMemoryContractRegistry
@@ -30,8 +31,30 @@ from nucypher.characters.control.emitters import StdoutEmitter
 from nucypher.config.characters import UrsulaConfiguration
 from tests.constants import KEYFILE_NAME_TEMPLATE, NUMBER_OF_MOCK_ACCOUNTS
 from tests.fixtures import _make_testerchain, make_token_economics
-from tests.mock.agents import FAKE_RECEIPT, MockContractAgency
+from tests.mock.agents import FAKE_RECEIPT, MockContractAgency, MockStakingAgent, MockWorkLockAgent
 from tests.mock.interfaces import MockBlockchain, make_mock_registry_source_manager
+
+
+@pytest.fixture(scope='function', autouse=True)
+def mock_contract_agency(monkeypatch, mocker, token_economics):
+    monkeypatch.setattr(ContractAgency, 'get_agent', MockContractAgency.get_agent)
+    mocker.patch.object(EconomicsFactory, 'get_economics', return_value=token_economics)
+    yield MockContractAgency()
+    monkeypatch.delattr(ContractAgency, 'get_agent')
+
+
+@pytest.fixture(scope='function', autouse=True)
+def mock_worklock_agent(mock_testerchain, token_economics, mock_contract_agency):
+    mock_agent = mock_contract_agency.get_agent(MockWorkLockAgent)
+    yield mock_agent
+    mock_agent.reset()
+
+
+@pytest.fixture(scope='function', autouse=True)
+def mock_staking_agent(mock_testerchain, token_economics, mock_contract_agency):
+    mock_agent = mock_contract_agency.get_agent(MockStakingAgent)
+    yield mock_agent
+    mock_agent.reset()
 
 
 @pytest.fixture()
@@ -87,26 +110,6 @@ def test_registry_source_manager(mock_testerchain, test_registry):
     return make_mock_registry_source_manager(blockchain=mock_testerchain,
                                              test_registry=test_registry,
                                              mock_backend=True)
-
-
-@pytest.fixture(scope='module', autouse=True)
-def mock_contract_agency(module_mocker, token_economics):
-
-    # Patch
-    module_mocker.patch.object(EconomicsFactory, 'get_economics', return_value=token_economics)
-
-    # Monkeypatch # TODO: Use better tooling for this monkeypatch?
-    get_agent = ContractAgency.get_agent
-    get_agent_by_name = ContractAgency.get_agent_by_contract_name
-    ContractAgency.get_agent = MockContractAgency.get_agent
-    ContractAgency.get_agent_by_contract_name = MockContractAgency.get_agent_by_contract_name
-
-    # Test
-    yield MockContractAgency()
-
-    # Restore the monkey patching
-    ContractAgency.get_agent = get_agent
-    ContractAgency.get_agent_by_contract_name = get_agent_by_name
 
 
 @pytest.fixture(scope='module')
