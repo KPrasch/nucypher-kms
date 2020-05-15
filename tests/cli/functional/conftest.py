@@ -26,12 +26,17 @@ from nucypher.blockchain.economics import EconomicsFactory
 from nucypher.blockchain.eth import agents, KeystoreSigner
 from nucypher.blockchain.eth.agents import ContractAgency
 from nucypher.blockchain.eth.interfaces import BlockchainInterface, BlockchainInterfaceFactory
+from nucypher.blockchain.eth.networks import NetworksInventory
 from nucypher.blockchain.eth.registry import InMemoryContractRegistry
 from nucypher.characters.control.emitters import StdoutEmitter
 from nucypher.config.characters import UrsulaConfiguration, AliceConfiguration
 from nucypher.config.constants import TEMPORARY_DOMAIN
-from tests.constants import KEYFILE_NAME_TEMPLATE, NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS, MOCK_KEYSTORE_PATH, \
+from tests.constants import (
+    KEYFILE_NAME_TEMPLATE,
+    NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS,
+    MOCK_KEYSTORE_PATH,
     MOCK_PROVIDER_URI
+)
 from tests.fixtures import _make_testerchain, make_token_economics
 from tests.mock.agents import FAKE_RECEIPT, MockContractAgency, MockStakingAgent, MockWorkLockAgent, MockNucypherToken
 from tests.mock.interfaces import MockBlockchain, make_mock_registry_source_manager
@@ -125,9 +130,12 @@ def test_registry():
 
 @pytest.fixture(scope='module')
 def test_registry_source_manager(mock_testerchain, test_registry):
-    return make_mock_registry_source_manager(blockchain=mock_testerchain,
-                                             test_registry=test_registry,
-                                             mock_backend=True)
+    real_inventory = make_mock_registry_source_manager(blockchain=mock_testerchain,
+                                                       test_registry=test_registry,
+                                                       mock_backend=True)
+    yield
+    # restore the original state
+    NetworksInventory.NETWORKS = real_inventory
 
 
 @pytest.fixture(scope='module')
@@ -188,6 +196,7 @@ def patch_keystore(mock_accounts, monkeypatch, mocker):
 
 @pytest.fixture(scope="module")
 def alice_blockchain_test_config(mock_account, test_registry):
+    # TODO: Combine with larger scoped fixture via factory function
     config = AliceConfiguration(dev_mode=True,
                                 domains={TEMPORARY_DOMAIN},
                                 provider_uri=MOCK_PROVIDER_URI,
