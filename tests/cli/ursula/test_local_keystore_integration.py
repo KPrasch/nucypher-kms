@@ -14,6 +14,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+
 import json
 
 import os
@@ -26,10 +28,15 @@ from nucypher.blockchain.eth.signers import KeystoreSigner
 from nucypher.blockchain.eth.token import StakeList
 from nucypher.cli.main import nucypher_cli
 from nucypher.config.characters import UrsulaConfiguration
-from tests.cli.functional.test_ursula_local_keystore_cli_functionality import (CLI_ENV, KEYFILE_NAME_TEMPLATE,
-                                                                               MOCK_KEYSTORE_PATH, MOCK_SIGNER_URI,
-                                                                               NUMBER_OF_MOCK_ACCOUNTS)
-from tests.constants import (INSECURE_DEVELOPMENT_PASSWORD, MOCK_IP_ADDRESS, TEST_PROVIDER_URI)
+from tests.constants import (
+    CLI_ENV, INSECURE_DEVELOPMENT_PASSWORD,
+    KEYFILE_NAME_TEMPLATE,
+    MOCK_IP_ADDRESS,
+    MOCK_KEYSTORE_PATH,
+    MOCK_SIGNER_URI,
+    NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS,
+    TEST_PROVIDER_URI
+)
 from tests.utils.ursula import MOCK_URSULA_STARTING_PORT
 from nucypher.config.constants import TEMPORARY_DOMAIN
 
@@ -37,7 +44,7 @@ from nucypher.config.constants import TEMPORARY_DOMAIN
 @pytest.fixture(scope='module')
 def mock_accounts():
     accounts = dict()
-    for i in range(NUMBER_OF_MOCK_ACCOUNTS):
+    for i in range(NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS):
         account = Account.create()
         filename = KEYFILE_NAME_TEMPLATE.format(month=i+1, address=account.address)
         accounts[filename] = account
