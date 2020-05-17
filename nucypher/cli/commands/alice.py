@@ -22,7 +22,7 @@ from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION, NO_PASSWORD
 from nucypher.characters.control.emitters import StdoutEmitter
 from nucypher.characters.control.interfaces import AliceInterface
 from nucypher.cli.actions.auth import get_client_password, get_nucypher_password
-from nucypher.cli.actions.config import (
+from nucypher.cli.actions.configure import (
     destroy_configuration,
     handle_missing_configuration_file, get_or_update_configuration
 )
