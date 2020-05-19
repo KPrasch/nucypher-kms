@@ -35,7 +35,7 @@ from tests.constants import (
     NUMBER_OF_MOCK_KEYSTORE_ACCOUNTS
 )
 from tests.fixtures import _make_testerchain, make_token_economics
-from tests.mock.agents import FAKE_RECEIPT, MockContractAgency
+from tests.mock.agents import MockContractAgency, MockContractAgent
 from tests.mock.interfaces import MockBlockchain, make_mock_registry_source_manager
 from tests.utils.config import (
     make_alice_test_configuration,
@@ -111,7 +111,7 @@ def token_economics(mock_testerchain):
 @pytest.fixture(scope='module', autouse=True)
 def mock_interface(module_mocker):
     mock_transaction_sender = module_mocker.patch.object(BlockchainInterface, 'sign_and_broadcast_transaction')
-    mock_transaction_sender.return_value = FAKE_RECEIPT
+    mock_transaction_sender.return_value = MockContractAgent.FAKE_RECEIPT
     return mock_transaction_sender
 
 
