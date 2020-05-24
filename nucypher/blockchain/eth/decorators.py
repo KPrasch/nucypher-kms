@@ -29,6 +29,8 @@ from twisted.logger import Logger
 from typing import Callable, Optional, Union
 from web3.types import TxReceipt, Wei
 
+from tests.utils.solidity import COLLECTION_MARKER
+
 ContractInterfaces = Union[
     CONTRACT_CALL,
     TRANSACTION,
@@ -133,11 +135,13 @@ def save_receipt(actor_method) -> Callable:
 # TODO: Auto disable collection in prod (detect test package?)
 COLLECT_CONTRACT_API = True
 
+AnyContractReturn = Callable[..., Union[TxReceipt, Wei, int, str, bool]]
+
 
 def contract_api(interface: Optional[ContractInterfaces] = UNKNOWN_CONTRACT_INTERFACE) -> Callable:
-    """Decorator factory for contract API markers"""
+    """Decorator factory for contract API collection markers"""
 
-    def decorator(agent_method: Callable) -> Callable[..., Union[TxReceipt, Wei, int, str, bool]]:
+    def decorator(agent_method: Callable) -> AnyContractReturn:
         """
         Marks an agent method as containing contract interactions (transaction or call)
         and validates outbound checksum addresses for EIP-55 compliance.
@@ -147,7 +151,7 @@ def contract_api(interface: Optional[ContractInterfaces] = UNKNOWN_CONTRACT_INTE
         and integration with pytest fixtures.
         """
         if COLLECT_CONTRACT_API:
-            agent_method.contract_api = interface
+            setattr(agent_method, COLLECTION_MARKER, interface)
         agent_method = validate_checksum_address(func=agent_method)
         return agent_method
 

@@ -19,7 +19,7 @@ from enum import Enum
 
 from constant_sorrow.constants import (CONTRACT_ATTRIBUTE, CONTRACT_CALL, TRANSACTION)
 from hexbytes import HexBytes
-from typing import Callable, Generator, Iterable, List, Type, Union
+from typing import Callable, Iterable, List, Type, Union
 from unittest.mock import Mock
 
 from nucypher.blockchain.eth import agents
@@ -27,6 +27,8 @@ from nucypher.blockchain.eth.agents import Agent, ContractAgency, EthereumContra
 from nucypher.blockchain.eth.constants import NULL_ADDRESS
 from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory
 from tests.constants import MOCK_PROVIDER_URI
+from tests.mock.interfaces import MockBlockchain
+from tests.utils.solidity import collect_contract_api, COLLECTION_MARKER
 
 MOCK_TESTERCHAIN = BlockchainInterfaceFactory.get_or_create_interface(provider_uri=MOCK_PROVIDER_URI)
 CURRENT_BLOCK = MOCK_TESTERCHAIN.w3.eth.getBlock(block_identifier='latest')
@@ -34,15 +36,16 @@ CURRENT_BLOCK = MOCK_TESTERCHAIN.w3.eth.getBlock(block_identifier='latest')
 
 class MockContractAgent:
 
-    FAKE_RECEIPT = {'transactionHash': HexBytes(b'FAKE29890FAKE8349804'),
-                    'gasUsed': 1,
-                    'blockNumber': CURRENT_BLOCK.number,
-                    'blockHash': HexBytes(b'FAKE43434343FAKE43443434')}
+    FAKE_RECEIPT = {
+        'gasUsed': 1,
+        'blockNumber': CURRENT_BLOCK.number,
+        'blockHash': HexBytes(b'FAKE43434343FAKE43443434'),
+        'transactionHash': HexBytes(b'FAKE29890FAKE8349804')
+    }
 
     FAKE_CALL_RESULT = 1
 
     # Internal
-    __COLLECTION_MARKER = "contract_api"  # decorator attribute
     __DEFAULTS = {
         CONTRACT_CALL: FAKE_CALL_RESULT,
         CONTRACT_ATTRIBUTE: FAKE_CALL_RESULT,
@@ -54,11 +57,11 @@ class MockContractAgent:
 
     # Mock Nucypher Contract API
     contract = Mock()
-    contract_address = NULL_ADDRESS
+    contract_address: str = NULL_ADDRESS
 
     # Mock Blockchain Interfaces
     registry = Mock()
-    blockchain = MOCK_TESTERCHAIN
+    blockchain: MockBlockchain = MOCK_TESTERCHAIN
 
     def __init__(self, agent_class: Type[EthereumContractAgent]):
         """Bind mock agent attributes to the *subclass* with default values"""
@@ -71,8 +74,7 @@ class MockContractAgent:
 
     @classmethod
     def __setup_mock(cls, agent_class: Type[Agent]) -> None:
-
-        api_methods: Iterable[Callable] = list(cls.__collect_contract_api(agent_class=agent_class))
+        api_methods: Iterable[Callable] = list(collect_contract_api(agent_class=agent_class))
         mock_methods, mock_properties = list(), dict()
 
         for agent_interface in api_methods:
@@ -86,7 +88,7 @@ class MockContractAgent:
                 real_method = agent_interface
 
             # Get
-            interface = getattr(real_method, cls.__COLLECTION_MARKER)
+            interface = getattr(real_method, COLLECTION_MARKER)
             default_return = cls.__DEFAULTS.get(interface)
 
             # TODO: #2022 Special handling of PropertyMocks?
@@ -98,7 +100,7 @@ class MockContractAgent:
             mock = Mock(return_value=default_return)
 
             # Mark
-            setattr(mock, cls.__COLLECTION_MARKER, interface)
+            setattr(mock, COLLECTION_MARKER, interface)
             mock_methods.append(mock)
 
             # Bind
@@ -113,22 +115,6 @@ class MockContractAgent:
         interface_calls = list(filter(predicate, cls._MOCK_METHODS))
         return interface_calls
 
-    @classmethod
-    def __is_contract_method(cls, agent_class: Type[Agent], method_name: str) -> bool:
-        method_or_property = getattr(agent_class, method_name)
-        try:
-            real_method: Callable = method_or_property.fget  # Property (getter)
-        except AttributeError:
-            real_method: Callable = method_or_property       # Method
-        contract_api: bool = hasattr(real_method, cls.__COLLECTION_MARKER)
-        return contract_api
-
-    @classmethod
-    def __collect_contract_api(cls, agent_class: Type[Agent]) -> Generator[Callable, None, None]:
-        agent_attrs = dir(agent_class)
-        predicate = cls.__is_contract_method
-        methods = (getattr(agent_class, name) for name in agent_attrs if predicate(agent_class, name))
-        return methods
 
     #
     # Test Utilities

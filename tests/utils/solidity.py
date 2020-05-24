@@ -14,8 +14,11 @@
  You should have received a copy of the GNU Affero General Public License
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+from typing import Callable, Type, Iterable
 
 from web3 import Web3
+
+from nucypher.types import Agent
 
 
 def to_bytes32(value=None, hexstr=None) -> bytes:
@@ -38,3 +41,23 @@ def get_array_data_location(array_location: int) -> int:
     # See https://solidity.readthedocs.io/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays
     data_location = Web3.toInt(Web3.keccak(to_bytes32(array_location)))
     return data_location
+
+
+COLLECTION_MARKER = "contract_api"  # decorator attribute
+
+
+def __is_contract_method(agent_class: Type[Agent], method_name: str) -> bool:
+    method_or_property = getattr(agent_class, method_name)
+    try:
+        real_method: Callable = method_or_property.fget  # Property (getter)
+    except AttributeError:
+        real_method: Callable = method_or_property  # Method
+    contract_api: bool = hasattr(real_method, COLLECTION_MARKER)
+    return contract_api
+
+
+def collect_contract_api(agent_class: Type[Agent]) -> Iterable[Callable]:
+    agent_attrs = dir(agent_class)
+    predicate = __is_contract_method
+    methods = (getattr(agent_class, name) for name in agent_attrs if predicate(agent_class, name))
+    return methods

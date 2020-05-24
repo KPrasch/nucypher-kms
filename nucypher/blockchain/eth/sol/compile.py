@@ -15,13 +15,12 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-import collections
 from os.path import abspath, dirname
 
 import itertools
 import os
 import re
+from solcx.main import compile_standard
 from twisted.logger import Logger
 from typing import List, NamedTuple, Optional, Set
 
@@ -80,7 +79,7 @@ class SolidityCompiler:
                 continue
 
             raw_interfaces = self._compile(root_source_dir, other_source_dirs)
-            for name, data in raw_interfaces.items():
+            for name, data in raw_interfaces['sources'].items():
                 # Extract contract version from docs
                 version_search = re.search(r"""
                 
@@ -112,14 +111,13 @@ class SolidityCompiler:
         """Executes the compiler with parameters specified in the json config"""
 
         # Allow for optional installation
-        from solcx import compile_files
         from solcx.exceptions import SolcError
 
         self.log.info("Using solidity compiler binary at {}".format(self.__sol_binary_path))
         contracts_dir = os.path.join(root_source_dir, self.__compiled_contracts_dir)
         self.log.info("Compiling solidity source files at {}".format(contracts_dir))
 
-        source_paths = set()
+        source_paths = dict()
         source_walker = os.walk(top=contracts_dir, topdown=True)
         if other_source_dirs is not None:
             for source_dir in other_source_dirs:
@@ -128,9 +126,9 @@ class SolidityCompiler:
 
         for root, dirs, files in source_walker:
             for filename in files:
-                if filename.endswith('.sol'):
+                if filename.endswith('.sol') and 'Abstract' not in filename and "Interface" not in filename:
                     path = os.path.join(root, filename)
-                    source_paths.add(path)
+                    source_paths[filename] = dict(urls=[path])
                     self.log.debug("Collecting solidity source {}".format(path))
 
         # Compile with remappings: https://github.com/ethereum/py-solc
@@ -145,17 +143,38 @@ class SolidityCompiler:
         self.log.info("Compiling with import remappings {}".format(", ".join(remappings)))
 
         optimization_runs = self.optimization_runs
-
         try:
-            compiled_sol = compile_files(source_files=source_paths,
-                                         solc_binary=self.__sol_binary_path,
-                                         import_remappings=remappings,
-                                         allow_paths=root_source_dir,
-                                         optimize=True,
-                                         optimize_runs=optimization_runs)
 
-            self.log.info("Successfully compiled {} contracts with {} optimization runs".format(len(compiled_sol),
-                                                                                                optimization_runs))
+            # Legacy Combined JSON API
+            # compiled_sol = compile_files(source_files=source_paths,
+            #                              solc_binary=self.__sol_binary_path,
+            #                              import_remappings=remappings,
+            #                              allow_paths=root_source_dir,
+            #                              optimize=True,
+            #                              optimize_runs=optimization_runs)
+
+            # Standard JSON I/O Compile
+            config = {
+                "language": "Solidity",
+                "sources": source_paths,
+                "settings": {
+                    "remappings": list(remappings),
+                    "optimizer": {
+                        "enabled": True,
+                        "runs": self.optimization_runs
+                    },
+                    "evmVersion": "istanbul",
+                    "outputSelection": {
+                        "*": {
+                            "*": ["metadata", "evm.bytecode", "evm.bytecode.sourceMap"],
+                            "": ["ast"]
+                        }
+                    }
+                }
+            }
+            compiled_sol = compile_standard(input_data=config, allow_paths=root_source_dir)
+
+            self.log.info(f"Successfully compiled {len(compiled_sol)} contracts with {self.optimization_runs} optimization runs")
 
         except FileNotFoundError:
             raise RuntimeError("The solidity compiler is not at the specified path. "
@@ -167,6 +186,4 @@ class SolidityCompiler:
         except SolcError:
             raise
 
-        # Cleanup the compiled data keys
-        interfaces = {name.split(':')[-1]: compiled_sol[name] for name in compiled_sol}
-        return interfaces
+        return compiled_sol
