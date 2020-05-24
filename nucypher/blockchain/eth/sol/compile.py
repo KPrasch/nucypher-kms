@@ -22,7 +22,7 @@ import os
 import re
 from solcx.main import compile_standard
 from twisted.logger import Logger
-from typing import List, NamedTuple, Optional, Set
+from typing import List, NamedTuple, Optional, Set, ChainMap
 
 from nucypher.blockchain.eth.sol import SOLIDITY_COMPILER_VERSION
 
@@ -71,47 +71,54 @@ class SolidityCompiler:
         else:
             self.source_dirs = source_dirs
 
-    def compile(self) -> dict:
+    def compile(self, include_ast: bool = True) -> dict:
         interfaces = dict()
         for root_source_dir, other_source_dirs in self.source_dirs:
             if root_source_dir is None:
                 self.log.warn("One of the root directories is None")
                 continue
 
-            raw_interfaces = self._compile(root_source_dir, other_source_dirs)
-            for name, data in raw_interfaces['sources'].items():
-                # Extract contract version from docs
-                version_search = re.search(r"""
-                
-                \"details\":  # @dev tag in contract docs
-                \".*?         # Skip any data in the beginning of details
-                \|            # Beginning of version definition |
-                (v            # Capture version starting from symbol v
-                \d+           # At least one digit of major version
-                \.            # Digits splitter
-                \d+           # At least one digit of minor version
-                \.            # Digits splitter
-                \d+           # At least one digit of patch
-                )             # End of capturing
-                \|            # End of version definition |
-                .*?\"         # Skip any data in the end of details
-                
-                """, data['devdoc'], re.VERBOSE)
-                version = version_search.group(1) if version_search else self.__default_contract_version
-                try:
-                    existence_data = interfaces[name]
-                except KeyError:
-                    existence_data = dict()
-                    interfaces.update({name: existence_data})
-                if version not in existence_data:
-                    existence_data.update({version: data})
+            compile_result = self._compile(root_source_dir, other_source_dirs)
+            compiled_contracts = compile_result['contracts'].items()
+            compiled_sources = compile_result['sources'].items()
+
+            for (source_path, source_data), (contract_path, bundle) in zip(compiled_sources, compiled_contracts):
+                for exported_name, contract_data in bundle.items():
+                    # Extract contract version from docs
+                    version_search = re.search(r"""
+                    
+                    \"details\":  # @dev tag in contract docs
+                    \".*?         # Skip any data in the beginning of details
+                    \|            # Beginning of version definition |
+                    (v            # Capture version starting from symbol v
+                    \d+           # At least one digit of major version
+                    \.            # Digits splitter
+                    \d+           # At least one digit of minor version
+                    \.            # Digits splitter
+                    \d+           # At least one digit of patch
+                    )             # End of capturing
+                    \|            # End of version definition |
+                    .*?\"         # Skip any data in the end of details
+                    
+                    """, contract_data['metadata'], re.VERBOSE)
+                    version = version_search.group(1) if version_search else self.__default_contract_version
+
+                    if include_ast:
+                        # pack it up pack it in
+                        ast = source_data['ast']
+                        contract_data['ast'] = ast
+
+                    try:
+                        existence_data = interfaces[exported_name]
+                    except KeyError:
+                        existence_data = dict()
+                        interfaces.update({exported_name: existence_data})
+                    if version not in existence_data:
+                        existence_data.update({version: contract_data})
+
         return interfaces
 
-    def _compile(self, root_source_dir: str, other_source_dirs: [str]) -> dict:
-        """Executes the compiler with parameters specified in the json config"""
-
-        # Allow for optional installation
-        from solcx.exceptions import SolcError
+    def collect_sources(self, root_source_dir: str, other_source_dirs: [str]):
 
         self.log.info("Using solidity compiler binary at {}".format(self.__sol_binary_path))
         contracts_dir = os.path.join(root_source_dir, self.__compiled_contracts_dir)
@@ -135,25 +142,39 @@ class SolidityCompiler:
         zeppelin_dir = os.path.join(root_source_dir, self.__zeppelin_library_dir)
         aragon_dir = os.path.join(root_source_dir, self.__aragon_library_dir)
 
-        remappings = ("contracts={}".format(contracts_dir),
-                      "zeppelin={}".format(zeppelin_dir),
-                      "aragon={}".format(aragon_dir),
-                      )
+        remappings = (
+            "contracts={}".format(contracts_dir),
+            "zeppelin={}".format(zeppelin_dir),
+            "aragon={}".format(aragon_dir),
+        )
 
-        self.log.info("Compiling with import remappings {}".format(", ".join(remappings)))
+        return source_paths, remappings
 
-        optimization_runs = self.optimization_runs
+    def _compile(self, root_source_dir: str, other_source_dirs: [str], ast: bool = True) -> dict:
+        """Executes the compiler with parameters specified in the json config"""
+
+        # Allow for optional installation
+        from solcx.exceptions import SolcError
+
+        source_paths, remappings = self.collect_sources(root_source_dir=root_source_dir, other_source_dirs=other_source_dirs)
+        self.log.info(f"Compiling with import remappings {', '.join(remappings)}")
+
         try:
 
-            # Legacy Combined JSON API
-            # compiled_sol = compile_files(source_files=source_paths,
-            #                              solc_binary=self.__sol_binary_path,
-            #                              import_remappings=remappings,
-            #                              allow_paths=root_source_dir,
-            #                              optimize=True,
-            #                              optimize_runs=optimization_runs)
-
             # Standard JSON I/O Compile
+            contract_outputs = [
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "abi",
+                "evm.bytecode",
+                "evm.bytecode.sourceMap"
+            ]
+
+            file_outputs = []
+            if ast:
+                file_outputs.append('ast')
+
             config = {
                 "language": "Solidity",
                 "sources": source_paths,
@@ -166,14 +187,14 @@ class SolidityCompiler:
                     "evmVersion": "istanbul",
                     "outputSelection": {
                         "*": {
-                            "*": ["metadata", "evm.bytecode", "evm.bytecode.sourceMap"],
-                            "": ["ast"]
+                            "*": contract_outputs,
+                            "": file_outputs
                         }
                     }
                 }
             }
-            compiled_sol = compile_standard(input_data=config, allow_paths=root_source_dir)
 
+            compiled_sol = compile_standard(input_data=config, allow_paths=root_source_dir)
             self.log.info(f"Successfully compiled {len(compiled_sol)} contracts with {self.optimization_runs} optimization runs")
 
         except FileNotFoundError:
