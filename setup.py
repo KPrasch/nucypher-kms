@@ -33,7 +33,7 @@ from setuptools.command.install import install
 PACKAGE_NAME = 'nucypher'
 BASE_DIR = os.path.dirname(__file__)
 
-ABOUT = dict()
+ABOUT: dict = dict()
 with open(os.path.join(BASE_DIR, PACKAGE_NAME, "__about__.py")) as f:
     exec(f.read(), ABOUT)
 
