@@ -49,8 +49,6 @@ def get_compiled_contract(compiler_output, agent_class, version: str) -> Dict[st
         version_number, contract_data = contract_versions[-1]  # TODO: Better way to get last version
     else:
         version_number, contract_data = compiled_contract_versions[version]
-    if 'home' not in contract_data['ast']['absolutePath']:
-        raise
     return contract_data
 
 
