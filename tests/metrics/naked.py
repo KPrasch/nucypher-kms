@@ -65,22 +65,24 @@ def compile_contract(agent_class, version: str):
     return contract_data
 
 
-def scrape_ast(contract_data, visibility: str):
+def scrape_ast_functions(contract_data, visibility: str, include_children: bool = False, requirements: bool = False):
     ast = contract_data['ast']
     nodes = solcast.from_ast(ast)
-    ast_functions = nodes.children(
-        include_children=False,
-        filters={'nodeType': "FunctionDefinition", "visibility": visibility}
-    )
-    # TODO: Follow-up idea - require coverage
-    # filters = {'nodeType': "FunctionCall", "expression.name": "require"}
-    return ast_functions
+    filters = {'nodeType': "FunctionDefinition", "visibility": visibility}
+    ast_functions = nodes.children(include_children=include_children, filters=filters)
+    if requirements:
+        filters = {'nodeType': "FunctionCall", "expression.name": "require"}
+        function_requirements = ast_functions.children(include_children=include_children, filters=filters)
+    else:
+        function_requirements = None
+    named_nodes = {n.name: dict(function=n, requirements=function_requirements) for n in ast_functions}
+    return named_nodes
 
 
-def get_exposed_contract_interfaces(agent_class: Type[Agent], version: str = 'latest'):
+def get_exposed_contract_interfaces(agent_class: Type[Agent], version: str = 'latest', requirements: bool = False):
     contract_data = compile_contract(agent_class=agent_class, version=version)
-    external_functions = scrape_ast(contract_data=contract_data, visibility='external')
-    public_functions = scrape_ast(contract_data=contract_data, visibility='public')
+    external_functions = scrape_ast_functions(contract_data=contract_data, visibility='external', requirements=requirements)
+    public_functions = scrape_ast_functions(contract_data=contract_data, visibility='public', requirements=requirements)
     return external_functions, public_functions
 
 
@@ -94,12 +96,11 @@ def get_callable_cell_contents(agent_method: Callable) -> List[Callable]:
     return callable_cells
 
 
-def setup_function_counter(contract_api: Iterable[Callable]) -> Counter:
+def setup_function_counter(contract_api) -> Counter:
 
     # Initial state
     function_counter = Counter()
-    for contract_function in contract_api:
-        name = contract_function.name
+    for name, contract_function in contract_api.items():
         function_counter[name] = 0
 
     # Handle fallback functions
@@ -110,15 +111,15 @@ def setup_function_counter(contract_api: Iterable[Callable]) -> Counter:
     return function_counter
 
 
-def sample(funcs: Iterable[Callable], function_counter: Counter) -> None:
-    for func in funcs:
-        internal_calls = inspect.getclosurevars(func)
-        contract_calls = tuple(f for f in internal_calls.unbound if f in function_counter)
-        for call in contract_calls:
-            function_counter[call] += 1
+def analyze_exposure(contract_api, agent_api) -> Counter:
 
+    def sample(funcs: Iterable[Callable], function_counter: Counter) -> None:
+        for func in funcs:
+            internal_calls = inspect.getclosurevars(func)
+            contract_calls = tuple(f for f in internal_calls.unbound if f in function_counter)
+            for call in contract_calls:
+                function_counter[call] += 1
 
-def analyze(contract_api, agent_api) -> Counter:
     function_counter = setup_function_counter(contract_api=contract_api)
     for agent_method in agent_api:
         callable_code_cells = get_callable_cell_contents(agent_method=agent_method)
@@ -153,33 +154,38 @@ def report(final_report: dict) -> None:
             click.secho(f'[{visibility}] {name} ({call_count})', fg=colors[bool(call_count)])
 
 
-def measure_contract_exposure(agent_class) -> Dict[str, dict]:
+def measure_contract_exposure(agent_class, requirements: bool = False) -> Dict[str, dict]:
 
     # Twin APIs
-    external_functions, public_functions = get_exposed_contract_interfaces(agent_class=agent_class)
+    external_functions, public_functions = get_exposed_contract_interfaces(agent_class=agent_class, requirements=requirements)
     agent_api = collect_agent_api(agent_class=agent_class)
-    contract_api = (*external_functions, *public_functions)
 
     # Analyze
-    function_counter = analyze(contract_api=contract_api, agent_api=agent_api)
+    external_counter = analyze_exposure(contract_api=external_functions, agent_api=agent_api)
+    public_counter = analyze_exposure(contract_api=public_functions, agent_api=agent_api)
+    function_counter = Counter({**external_counter, **public_counter})
     exposure = calculate_exposure(data=function_counter)
 
     # Record
     entry = dict(exposure=exposure,
                  counter=function_counter,
-                 public=[f.name for f in public_functions],
-                 external=[f.name for f in external_functions])
+                 public=public_functions,
+                 external=external_functions)
     result = {agent_class.contract_name: entry}
     return result
 
 
-def main() -> None:
+def measure_project_exposure():
     results = dict()
     with click.progressbar(AGENTS, label='Analyzing contract exposure') as agents:
         for agent_class in agents:
             result = measure_contract_exposure(agent_class=agent_class)
             results.update(result)
     report(final_report=results)
+
+
+def main() -> None:
+    measure_project_exposure()
 
 
 if __name__ == '__main__':
