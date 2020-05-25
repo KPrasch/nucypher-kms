@@ -124,19 +124,22 @@ def setup_function_counter(contract_api) -> Counter:
     return function_counter
 
 
-def sample(funcs: Iterable[Callable], function_counter: Counter) -> None:
+def sample(funcs: Iterable[Callable], function_counter: Counter, codex: Dict) -> None:
     for func in funcs:
         internal_calls = inspect.getclosurevars(func)
         contract_calls = tuple(f for f in internal_calls.unbound if f in function_counter)
         for call in contract_calls:
             function_counter[call] += 1
+            codex[call] = func.__name__
 
 
-def analyze_exposure(contract_api: Dict[str, Dict], agent_api: List[Callable]) -> Counter:
+def analyze_exposure(contract_api: Dict[str, Dict], agent_api: List[Callable]) -> Tuple[Dict, Counter]:
+    codex = dict()  # contract -> agent
     function_counter: Counter = setup_function_counter(contract_api=contract_api)
+
     for agent_method in agent_api:
         callable_code_cells = get_callable_cell_contents(agent_method=agent_method)
-        sample(funcs=callable_code_cells, function_counter=function_counter)
+        sample(funcs=callable_code_cells, function_counter=function_counter, codex=codex)
 
     # Special cases...
     # Handle fallback (payable) functions
@@ -144,7 +147,7 @@ def analyze_exposure(contract_api: Dict[str, Dict], agent_api: List[Callable]) -
     if fallback_function_detected:
         function_counter[FALLBACK] = function_counter.pop('')
 
-    return function_counter
+    return codex, function_counter
 
 
 def calculate_exposure(data: Counter, exclude: Tuple[str] = DEFAULT_EXCLUDE) -> float:
@@ -170,29 +173,34 @@ def paint_requirements(requirements, max_width: int = 25):
         click.secho(req_row, fg='blue')
 
 
+def resolve_row_details(name, exclude, counter):
+    if name in ('', FALLBACK):
+        name, call_count, color = FALLBACK, counter[name], COLORS[FALLBACK]
+    elif name in exclude:
+        call_count, color = counter[name], COLORS[EXCLUDE]
+    elif name in COLORS:
+        call_count, color = counter[name], COLORS[name]
+    else:
+        call_count = counter[name]
+        color = COLORS[bool(call_count)]
+    return name, call_count, color
+
+
 def paint_row(api: Dict,
               counter: Counter,
               visibility: str,
+              details: Dict,
               show_requirements: bool = True,
-              exclude: Tuple = None
+              exclude: Tuple = tuple()
               ) -> None:
-    if not exclude:
-        exclude = tuple()
     for name, function in api.items():
-        if name in ('', FALLBACK):
-            name, call_count, color = FALLBACK, counter[name], COLORS[FALLBACK]
-        elif name in exclude:
-            call_count, color = counter[name], COLORS[EXCLUDE]
-        elif name in COLORS:
-            call_count, color = counter[name], COLORS[name]
-        else:
-            call_count = counter[name]
-            color = COLORS[bool(call_count)]
+        name, call_count, color = resolve_row_details(name=name, counter=counter, exclude=exclude)
         reqs = function.get('requirements')
         if show_requirements and reqs:
             paint_requirements(requirements=reqs)
         line_location = function['function'].offset[0]
-        row = f'[{visibility}] {name} @ {line_location} ({call_count})'
+        agent_detail = details.get(name, '')
+        row = f'[{visibility}] {name} @ {line_location} ({call_count}) | {agent_detail}'
         click.secho(row, fg=color)
 
 
@@ -203,10 +211,11 @@ def report(final_report: Dict) -> None:
         external = contract_report['external']
         public = contract_report['public']
         counter = contract_report['counter']
+        codex = contract_report['codex']
         click.secho(f'\n\n{contract_name}Agent Exposure {exposure}% ({len(counter)})\n'
                     f'===============================================', fg='blue', bold=True)
-        paint_row(api=external, counter=counter, visibility='E', exclude=excluded)
-        paint_row(api=public, counter=counter, visibility='P', exclude=excluded)
+        paint_row(api=external, counter=counter, visibility='E', exclude=excluded, details=codex)
+        paint_row(api=public, counter=counter, visibility='P', exclude=excluded, details=codex)
 
 
 def measure_contract_exposure(compiler_output: Dict[str, dict],
@@ -220,14 +229,17 @@ def measure_contract_exposure(compiler_output: Dict[str, dict],
     agent_api = collect_agent_api(agent_class=agent_class)
 
     # Analyze
-    external_counter = analyze_exposure(contract_api=external_functions, agent_api=agent_api)
-    public_counter = analyze_exposure(contract_api=public_functions, agent_api=agent_api)
+    external_codex, external_counter = analyze_exposure(contract_api=external_functions, agent_api=agent_api)
+    public_codex, public_counter = analyze_exposure(contract_api=public_functions, agent_api=agent_api)
+
+    codex = {**external_codex, **public_codex}
     function_counter = Counter({**external_counter, **public_counter})
     exposure = calculate_exposure(data=function_counter, exclude=agent_class._excluded_interfaces)
 
     # Record
     entry = dict(exposure=exposure,
                  counter=function_counter,
+                 codex=codex,
                  public=public_functions,
                  excluded=agent_class._excluded_interfaces,
                  external=external_functions)
