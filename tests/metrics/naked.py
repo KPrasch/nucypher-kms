@@ -34,6 +34,7 @@ from nucypher.blockchain.eth.agents import (
 from nucypher.blockchain.eth.sol.compile import SolidityCompiler
 from nucypher.types import Agent
 from tests.utils.solidity import collect_agent_api
+from constant_sorrow.constants import FALLBACK
 
 AGENTS = (
     NucypherTokenAgent,
@@ -65,17 +66,24 @@ def compile_contract(agent_class, version: str):
     return contract_data
 
 
+def scrape_ast_requirements(ast_functions) -> Dict:
+    function_requirements = dict()
+    for node in ast_functions:
+        filters = {'nodeType': "FunctionCall", "expression.name": "require"}
+        requires = node.children(include_children=False, filters=filters)
+        function_requirements[node.name] = requires
+    return function_requirements
+
+
 def scrape_ast_functions(contract_data, visibility: str, include_children: bool = False, requirements: bool = False):
     ast = contract_data['ast']
     nodes = solcast.from_ast(ast)
     filters = {'nodeType': "FunctionDefinition", "visibility": visibility}
     ast_functions = nodes.children(include_children=include_children, filters=filters)
+    function_requirements = dict()
     if requirements:
-        filters = {'nodeType': "FunctionCall", "expression.name": "require"}
-        function_requirements = ast_functions.children(include_children=include_children, filters=filters)
-    else:
-        function_requirements = None
-    named_nodes = {n.name: dict(function=n, requirements=function_requirements) for n in ast_functions}
+        function_requirements = scrape_ast_requirements(ast_functions=ast_functions)
+    named_nodes = {n.name: dict(function=n, requirements=function_requirements.get(n.name)) for n in ast_functions}
     return named_nodes
 
 
@@ -97,17 +105,9 @@ def get_callable_cell_contents(agent_method: Callable) -> List[Callable]:
 
 
 def setup_function_counter(contract_api) -> Counter:
-
-    # Initial state
     function_counter = Counter()
     for name, contract_function in contract_api.items():
         function_counter[name] = 0
-
-    # Handle fallback functions
-    fallback_function_detected = '' in function_counter
-    if fallback_function_detected:
-        del function_counter['']  # Does not get explicit exposure
-
     return function_counter
 
 
@@ -124,6 +124,12 @@ def analyze_exposure(contract_api, agent_api) -> Counter:
     for agent_method in agent_api:
         callable_code_cells = get_callable_cell_contents(agent_method=agent_method)
         sample(funcs=callable_code_cells, function_counter=function_counter)
+
+    # Handle fallback (payable) functions
+    fallback_function_detected = '' in function_counter
+    if fallback_function_detected:
+        function_counter[FALLBACK] = function_counter.pop('')
+
     return function_counter
 
 
@@ -137,21 +143,36 @@ def calculate_exposure(data: Counter) -> float:
     return exposure
 
 
+def paint_row(api: Dict, counter: Counter, visibility: str):
+    colors = {True: 'green', False: 'yellow', FALLBACK: 'cyan'}  # TODO: Make constant
+    for name, function in api.items():
+        if name == '':
+            name, color = FALLBACK, colors[FALLBACK]
+            call_count = counter[name]
+        else:
+            call_count = counter[name]
+            color = colors[bool(call_count)]
+
+        row = f'[{visibility}] {name} ({call_count})'
+        click.secho(row, fg=color)
+
+
 def report(final_report: dict) -> None:
-    colors = {True: 'green', False: 'yellow'}
+    for contract_name, contract_report in final_report.items():
+        exposure = contract_report['exposure']
+        external = contract_report['external']
+        public = contract_report['public']
+        counter = contract_report['counter']
 
-    for contract_name, data in final_report.items():
-
-        click.secho(f'\n\n{contract_name}Agent Exposure {data["exposure"]}%\n'
+        click.secho(f'\n\n{contract_name}Agent Exposure {exposure}%\n'
                     f'===============================================',
                     fg='blue', bold=True)
 
-        for name, call_count in data['counter'].items():
-            if name in data['external']:
-                visibility = 'E'
-            elif name in data['public']:
-                visibility = 'P'
-            click.secho(f'[{visibility}] {name} ({call_count})', fg=colors[bool(call_count)])
+        paint_row(api=external, counter=counter, visibility='E')
+        paint_row(api=public, counter=counter, visibility='P')
+
+        # for name, call_count in counter.items():
+        #     click.secho(f'[{visibility}] {name} ({call_count})', fg=colors[bool(call_count)])
 
 
 def measure_contract_exposure(agent_class, requirements: bool = False) -> Dict[str, dict]:
@@ -179,7 +200,7 @@ def measure_project_exposure():
     results = dict()
     with click.progressbar(AGENTS, label='Analyzing contract exposure') as agents:
         for agent_class in agents:
-            result = measure_contract_exposure(agent_class=agent_class)
+            result = measure_contract_exposure(agent_class=agent_class, requirements=True)
             results.update(result)
     report(final_report=results)
 
