@@ -19,7 +19,7 @@ from collections import Counter
 import click
 import inspect
 import solcast
-from constant_sorrow.constants import FALLBACK
+from constant_sorrow.constants import FALLBACK, EXCLUDE
 from functools import partial
 from typing import Type, Dict, Callable, Iterable, List, Tuple
 
@@ -33,7 +33,15 @@ from nucypher.blockchain.eth.sol.compile import SolidityCompiler
 from nucypher.types import Agent
 from tests.utils.solidity import collect_agent_api
 
-COLORS = {True: 'green', False: 'yellow', FALLBACK: 'cyan'}  # TODO: Make constant
+COLORS = {
+    True: 'green',
+    False: 'yellow',
+    'receiveApproval':  'bright_black',
+    FALLBACK: 'bright_black',
+    EXCLUDE: 'bright_black'
+}
+
+DEFAULT_EXCLUDE = (FALLBACK, 'receiveApproval')
 
 
 def compile() -> Dict:
@@ -145,9 +153,13 @@ def analyze_exposure(contract_api: Dict[str, Dict], agent_api: List[Callable]) -
     return function_counter
 
 
-def calculate_exposure(data: Counter) -> float:
+def calculate_exposure(data: Counter, exclude: Tuple[str] = DEFAULT_EXCLUDE) -> float:
+    for item in DEFAULT_EXCLUDE:
+        if item not in exclude:
+            exclude = (item, *exclude)
     try:
-        exposure = sum(1 for v in data.values() if v > 0) / len(data)
+        exposure = sum(1 for k, v in data.items() if v > 0
+                       or k in exclude) / len(data)
     except ZeroDivisionError:
         exposure = 0
     exposure *= 100
@@ -164,11 +176,21 @@ def paint_requirements(requirements, max_width: int = 25):
         click.secho(req_row, fg='blue')
 
 
-def paint_row(api: Dict, counter: Counter, visibility: str, show_requirements: bool = True) -> None:
+def paint_row(api: Dict,
+              counter: Counter,
+              visibility: str,
+              show_requirements: bool = True,
+              exclude: Tuple = None
+              ) -> None:
+    if not exclude:
+        exclude = tuple()
     for name, function in api.items():
-        if name == '':
-            name, color = FALLBACK, COLORS[FALLBACK]
-            call_count = counter[name]
+        if name in ('', FALLBACK):
+            name, call_count, color = FALLBACK, counter[name], COLORS[FALLBACK]
+        elif name in exclude:
+            call_count, color = counter[name], COLORS[EXCLUDE]
+        elif name in COLORS:
+            call_count, color = counter[name], COLORS[name]
         else:
             call_count = counter[name]
             color = COLORS[bool(call_count)]
@@ -182,14 +204,15 @@ def paint_row(api: Dict, counter: Counter, visibility: str, show_requirements: b
 
 def report(final_report: Dict) -> None:
     for contract_name, contract_report in final_report.items():
+        excluded = contract_report['excluded']
         exposure = contract_report['exposure']
         external = contract_report['external']
         public = contract_report['public']
         counter = contract_report['counter']
         click.secho(f'\n\n{contract_name}Agent Exposure {exposure}% ({len(counter)})\n'
                     f'===============================================', fg='blue', bold=True)
-        paint_row(api=external, counter=counter, visibility='E')
-        paint_row(api=public, counter=counter, visibility='P')
+        paint_row(api=external, counter=counter, visibility='E', exclude=excluded)
+        paint_row(api=public, counter=counter, visibility='P', exclude=excluded)
 
 
 def measure_contract_exposure(compiler_output: Dict[str, dict],
@@ -206,12 +229,13 @@ def measure_contract_exposure(compiler_output: Dict[str, dict],
     external_counter = analyze_exposure(contract_api=external_functions, agent_api=agent_api)
     public_counter = analyze_exposure(contract_api=public_functions, agent_api=agent_api)
     function_counter = Counter({**external_counter, **public_counter})
-    exposure = calculate_exposure(data=function_counter)
+    exposure = calculate_exposure(data=function_counter, exclude=agent_class._excluded_interfaces)
 
     # Record
     entry = dict(exposure=exposure,
                  counter=function_counter,
                  public=public_functions,
+                 excluded=agent_class._excluded_interfaces,
                  external=external_functions)
     result = {agent_class.contract_name: entry}
     return result
