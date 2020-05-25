@@ -100,7 +100,7 @@ class SolidityCompiler:
                     \|            # End of version definition |
                     .*?\"         # Skip any data in the end of details
                     
-                    """, contract_data['metadata'], re.VERBOSE)
+                    """, contract_data['metadata'], re.VERBOSE)  # FIXME: No!!!
                     version = version_search.group(1) if version_search else self.__default_contract_version
 
                     if include_ast:
@@ -163,7 +163,7 @@ class SolidityCompiler:
 
             # Standard JSON I/O Compile
             contract_outputs = [
-                "metadata",
+                "metadata",  # TODO: FOR THE LOVE OF GOD
                 "devdoc",
                 "userdoc",
                 "abi",
@@ -175,6 +175,7 @@ class SolidityCompiler:
             if ast:
                 file_outputs.append('ast')
 
+            # TODO: No strings!!!
             config = {
                 "language": "Solidity",
                 "sources": source_paths,
@@ -184,7 +185,7 @@ class SolidityCompiler:
                         "enabled": True,
                         "runs": self.optimization_runs
                     },
-                    "evmVersion": "istanbul",
+                    "evmVersion": "berlin",
                     "outputSelection": {
                         "*": {
                             "*": contract_outputs,
@@ -194,7 +195,9 @@ class SolidityCompiler:
                 }
             }
 
-            compiled_sol = compile_standard(input_data=config, allow_paths=root_source_dir)
+            compiled_sol = compile_standard(input_data=config,
+                                            allow_paths=root_source_dir)
+
             self.log.info(f"Successfully compiled {len(compiled_sol)} contracts with {self.optimization_runs} optimization runs")
 
         except FileNotFoundError:
