@@ -60,18 +60,12 @@ def get_compiled_contract(compiler_output, agent_class, version: str) -> Dict[st
     return contract_data
 
 
-def source_reader(source_path: str, offset: Tuple):
+def source_reader(source, offset: Tuple):
     """coroutine for peeking at solidity source"""
-    source = None
-    try:
-        source = open(source_path, 'r')
-        start, stop = offset
-        source.seek(start)
-        snippet = source.read(stop-start)
-        return snippet
-    finally:
-        if source:
-            source.close()
+    start, stop = offset
+    source.seek(start)
+    snippet = source.read(stop-start)
+    return snippet
 
 
 def scrape_ast_requirements(ast_functions, seeker: Callable) -> Dict[str, str]:
@@ -96,7 +90,7 @@ def scrape_ast_functions(contract_data, visibility: str, include_children: bool 
     ast_functions = nodes.children(include_children=include_children, filters=filters)
     function_requirements = dict()
     if requirements:
-        seeker = partial(source_reader, source_path=source_path)  # They call me the seeker
+        seeker = partial(source_reader, source=open(source_path, 'r'))  # They call me the seeker
         function_requirements = scrape_ast_requirements(ast_functions=ast_functions, seeker=seeker)
     named_nodes = {n.name: dict(function=n, requirements=function_requirements.get(n.name)) for n in ast_functions}
     return named_nodes
