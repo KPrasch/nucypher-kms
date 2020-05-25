@@ -14,8 +14,9 @@
  You should have received a copy of the GNU Affero General Public License
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-from typing import Callable, Type, Iterable
 
+
+from typing import Callable, Type, List
 from web3 import Web3
 
 from nucypher.types import Agent
@@ -56,8 +57,8 @@ def __is_contract_method(agent_class: Type[Agent], method_name: str) -> bool:
     return contract_api
 
 
-def collect_contract_api(agent_class: Type[Agent]) -> Iterable[Callable]:
+def collect_contract_api(agent_class: Type[Agent]) -> List[Callable]:
     agent_attrs = dir(agent_class)
     predicate = __is_contract_method
-    methods = (getattr(agent_class, name) for name in agent_attrs if predicate(agent_class, name))
+    methods = list(getattr(agent_class, name) for name in agent_attrs if predicate(agent_class, name))
     return methods

@@ -74,7 +74,7 @@ class MockContractAgent:
 
     @classmethod
     def __setup_mock(cls, agent_class: Type[Agent]) -> None:
-        api_methods: Iterable[Callable] = list(collect_contract_api(agent_class=agent_class))
+        api_methods: Iterable[Callable] = collect_contract_api(agent_class=agent_class)
         mock_methods, mock_properties = list(), dict()
 
         for agent_interface in api_methods:
