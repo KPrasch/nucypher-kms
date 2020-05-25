@@ -18,7 +18,19 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 
 from collections import OrderedDict
 
-from constant_sorrow.constants import (BARE, CONTRACT_NOT_DEPLOYED, FULL, IDLE, NO_BENEFICIARY, NO_DEPLOYER_CONFIGURED)
+from constant_sorrow.constants import (
+    BARE,
+    CONTRACT_NOT_DEPLOYED,
+    FULL,
+    IDLE,
+    NO_BENEFICIARY,
+    NO_DEPLOYER_CONFIGURED
+)
+from constant_sorrow.constants import (
+    CONTRACT_ATTRIBUTE,
+    TRANSACTION,
+    CONTRACT_CALL
+)
 from typing import Dict, List, Tuple
 from web3 import Web3
 from web3.contract import Contract
@@ -28,7 +40,7 @@ from nucypher.blockchain.eth.agents import (AdjudicatorAgent, ContractAgency, Et
                                             NucypherTokenAgent, PolicyManagerAgent, PreallocationEscrowAgent,
                                             StakingEscrowAgent, WorkLockAgent)
 from nucypher.blockchain.eth.constants import DISPATCHER_CONTRACT_NAME, NULL_ADDRESS, STAKING_ESCROW_CONTRACT_NAME
-from nucypher.blockchain.eth.decorators import validate_checksum_address
+from nucypher.blockchain.eth.decorators import validate_checksum_address, contract_api
 from nucypher.blockchain.eth.interfaces import (
     BlockchainDeployerInterface,
     BlockchainInterfaceFactory,
@@ -190,6 +202,7 @@ class OwnableContractMixin:
     class ContractNotOwnable(RuntimeError):
         pass
 
+    @contract_api(TRANSACTION)
     def transfer_ownership(self, new_owner: str, transaction_gas_limit: int = None) -> dict:
         if not self._ownable:
             raise self.ContractNotOwnable(f"{self.contract_name} is not ownable.")
@@ -437,6 +450,7 @@ class ProxyContractDeployer(BaseContractDeployer):
         if new_target == self._contract.address:
             raise self.ContractDeploymentError(f"{self.contract_name} {self._contract.address} cannot target itself.")
 
+    @contract_api(TRANSACTION)
     def retarget(self,
                  new_target: str,
                  gas_limit: int = None) -> dict:
@@ -447,6 +461,7 @@ class ProxyContractDeployer(BaseContractDeployer):
                                                            transaction_gas_limit=gas_limit)
         return upgrade_receipt
 
+    @contract_api(TRANSACTION)
     def build_retarget_transaction(self,
                                    new_target: str,
                                    gas_limit: int = None) -> dict:
@@ -457,6 +472,7 @@ class ProxyContractDeployer(BaseContractDeployer):
                                                                  transaction_gas_limit=gas_limit)
         return unsigned_transaction
 
+    @contract_api(TRANSACTION)
     def rollback(self, gas_limit: int = None) -> dict:
         origin_args = {}  # TODO: Gas management - #842
         if gas_limit:
@@ -619,6 +635,7 @@ class StakingEscrowDeployer(BaseContractDeployer, UpgradeableContractMixin, Owna
             self.deployment_receipts.update(activation_receipts)
             return self.deployment_receipts
 
+    @contract_api(TRANSACTION)
     def activate(self, gas_limit: int = None, progress=None, emitter=None):
 
         self._contract = self._get_deployed_contract()
@@ -656,6 +673,7 @@ class StakingEscrowDeployer(BaseContractDeployer, UpgradeableContractMixin, Owna
         return activation_receipts
 
     @property
+    @contract_api(CONTRACT_ATTRIBUTE)
     def ready_to_activate(self) -> bool:
         try:
             deployed_contract = self._get_deployed_contract()
@@ -668,6 +686,7 @@ class StakingEscrowDeployer(BaseContractDeployer, UpgradeableContractMixin, Owna
         return current_minting_period == 0
 
     @property
+    @contract_api(CONTRACT_ATTRIBUTE)
     def is_active(self) -> bool:
         try:
             deployed_contract = self._get_deployed_contract()
@@ -698,6 +717,7 @@ class PolicyManagerDeployer(BaseContractDeployer, UpgradeableContractMixin, Owna
                                                                      contract_name=staking_contract_name,
                                                                      proxy_name=proxy_name)
 
+    @contract_api(CONTRACT_CALL)
     def check_deployment_readiness(self, *args, **kwargs) -> Tuple[bool, list]:
         staking_escrow_owner = self.staking_contract.functions.owner().call()
         policy_manager_deployment_rules = [
@@ -717,6 +737,7 @@ class PolicyManagerDeployer(BaseContractDeployer, UpgradeableContractMixin, Owna
                                                                                   **constructor_kwargs)
         return policy_manager_contract, deploy_receipt
 
+    @contract_api(TRANSACTION)
     def deploy(self,
                deployment_mode=FULL,
                gas_limit: int = None,
@@ -968,7 +989,7 @@ class PreallocationEscrowDeployer(BaseContractDeployer, UpgradeableContractMixin
     def allocation_registry(self):
         return self.__allocation_registry
 
-    @validate_checksum_address
+    @contract_api(TRANSACTION)
     def assign_beneficiary(self, checksum_address: str, use_sidekick: bool = False, progress=None) -> dict:
         """Relinquish ownership of a PreallocationEscrow deployment to the beneficiary"""
         deployer_address = self.sidekick_address if use_sidekick else self.deployer_address
@@ -984,6 +1005,7 @@ class PreallocationEscrowDeployer(BaseContractDeployer, UpgradeableContractMixin
             progress.update(1)
         return receipt
 
+    @contract_api(TRANSACTION)
     def initial_deposit(self, value: int, duration_seconds: int, progress=None):
         """Allocate an amount of tokens with lock time in seconds"""
         # Initial deposit transfer, using NuCypherToken.approveAndCall()
@@ -1052,6 +1074,7 @@ class AdjudicatorDeployer(BaseContractDeployer, UpgradeableContractMixin, Ownabl
                                                                      contract_name=staking_contract_name,
                                                                      proxy_name=proxy_name)
 
+    @contract_api(CONTRACT_CALL)
     def check_deployment_readiness(self, *args, **kwargs) -> Tuple[bool, list]:
         staking_escrow_owner = self.staking_contract.functions.owner().call()
         adjudicator_deployment_rules = [
@@ -1182,6 +1205,7 @@ class WorklockDeployer(BaseContractDeployer):
         self._contract = worklock_contract
         return worklock_contract, receipt
 
+    @contract_api(TRANSACTION)
     def deploy(self,
                gas_limit: int = None, 
                progress=None, 

@@ -140,7 +140,6 @@ AnyContractReturn = Callable[..., Union[TxReceipt, Wei, int, str, bool]]
 
 def contract_api(interface: Optional[ContractInterfaces] = UNKNOWN_CONTRACT_INTERFACE) -> Callable:
     """Decorator factory for contract API collection markers"""
-
     def decorator(agent_method: Callable) -> AnyContractReturn:
         """
         Marks an agent method as containing contract interactions (transaction or call)

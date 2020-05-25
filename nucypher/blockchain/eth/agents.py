@@ -1501,7 +1501,7 @@ class MultiSigAgent(EthereumContractAgent):
         result: bool = self.contract.functions.isOwner(checksum_address).call()
         return result
 
-    @validate_checksum_address
+    @contract_api(TRANSACTION)
     def build_add_owner_tx(self, new_owner_address: ChecksumAddress) -> TxParams:
         max_owner_count: int = self.contract.functions.MAX_OWNER_COUNT().call()
         if not self.number_of_owners < max_owner_count:
@@ -1515,7 +1515,7 @@ class MultiSigAgent(EthereumContractAgent):
                                                                   sender_address=self.contract_address)
         return transaction
 
-    @validate_checksum_address
+    @contract_api(TRANSACTION)
     def build_remove_owner_tx(self, owner_address: ChecksumAddress) -> TxParams:
         if not self.number_of_owners > self.threshold:
             raise self.RequirementError(f"Need at least one owner above the threshold to remove an owner.")
@@ -1527,7 +1527,7 @@ class MultiSigAgent(EthereumContractAgent):
                                                                    sender_address=self.contract_address)
         return transaction
 
-    @validate_checksum_address
+    @contract_api(TRANSACTION)
     def build_change_threshold_tx(self, threshold: int) -> TxParams:
         if not 0 < threshold <= self.number_of_owners:
             raise self.RequirementError(f"New threshold {threshold} does not satisfy "
