@@ -28,7 +28,7 @@ from nucypher.blockchain.eth.constants import NULL_ADDRESS
 from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory
 from tests.constants import MOCK_PROVIDER_URI
 from tests.mock.interfaces import MockBlockchain
-from tests.utils.solidity import collect_contract_api, COLLECTION_MARKER
+from tests.utils.solidity import collect_agent_api, COLLECTION_MARKER
 
 MOCK_TESTERCHAIN = BlockchainInterfaceFactory.get_or_create_interface(provider_uri=MOCK_PROVIDER_URI)
 CURRENT_BLOCK = MOCK_TESTERCHAIN.w3.eth.getBlock(block_identifier='latest')
@@ -74,7 +74,7 @@ class MockContractAgent:
 
     @classmethod
     def __setup_mock(cls, agent_class: Type[Agent]) -> None:
-        api_methods: Iterable[Callable] = collect_contract_api(agent_class=agent_class)
+        api_methods: Iterable[Callable] = collect_agent_api(agent_class=agent_class)
         mock_methods, mock_properties = list(), dict()
 
         for agent_interface in api_methods:

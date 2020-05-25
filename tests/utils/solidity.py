@@ -57,7 +57,7 @@ def __is_contract_method(agent_class: Type[Agent], method_name: str) -> bool:
     return contract_api
 
 
-def collect_contract_api(agent_class: Type[Agent]) -> List[Callable]:
+def collect_agent_api(agent_class: Type[Agent]) -> List[Callable]:
     agent_attrs = dir(agent_class)
     predicate = __is_contract_method
     methods = list(getattr(agent_class, name) for name in agent_attrs if predicate(agent_class, name))
