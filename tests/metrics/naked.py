@@ -15,19 +15,34 @@
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-import json
 from collections import Counter
 
+import click
 import solcast
-from typing import Type, Tuple
+from typing import Type
 
-from nucypher.blockchain.eth.agents import EthereumContractAgent
+from nucypher.blockchain.eth.agents import (
+    NucypherTokenAgent,
+    StakingEscrowAgent,
+    PolicyManagerAgent,
+    PreallocationEscrowAgent,
+    AdjudicatorAgent,
+    MultiSigAgent,
+    WorkLockAgent
+)
 from nucypher.blockchain.eth.sol.compile import SolidityCompiler
 from nucypher.types import Agent
 from tests.utils.solidity import collect_contract_api
 
-AGENTS: Tuple[Type[Agent]] = tuple(EthereumContractAgent.__subclasses__())
+AGENTS = (
+    NucypherTokenAgent,
+    StakingEscrowAgent,
+    PolicyManagerAgent,
+    PreallocationEscrowAgent,
+    AdjudicatorAgent,
+    WorkLockAgent,
+    MultiSigAgent
+)
 
 
 def get_exposed_contract_interfaces(agent_class: Type[Agent]):
@@ -82,6 +97,10 @@ def analyze(contract_api, agent_api):
             for call in contract_calls:
                 calls[call] += 1
 
+    fallback_function_detected = '' in calls
+    if fallback_function_detected:
+        del calls['']  # Does not get explicit exposure
+
     return calls
 
 
@@ -96,8 +115,14 @@ def calculate_exposure(data: Counter) -> float:
 
 
 def report(contract_name: str, exposure: float, data: Counter) -> None:
-    print(f'{contract_name} EXPOSURE {exposure}%')
-    print(json.dumps(data, indent=4))
+    click.secho(f'\n\n{contract_name} AGENT EXPOSURE {exposure}%\n=====================', fg='blue', bold=True)
+
+    colors = {True: 'green', False: 'yellow'}
+    for name, call_count in data.items():
+        click.secho(f'{name}({call_count})', fg=colors[bool(call_count)])
+
+    # TODO: JSON Output
+    # print(json.dumps(data, indent=4))
 
 
 def measure_contract_exposure():
@@ -117,4 +142,5 @@ def measure_contract_exposure():
 
 
 if __name__ == '__main__':
+    click.clear()
     measure_contract_exposure()
