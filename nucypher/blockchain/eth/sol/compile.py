@@ -85,24 +85,27 @@ class SolidityCompiler:
             for (source_path, source_data), (contract_path, bundle) in zip(compiled_sources, compiled_contracts):
                 for exported_name, contract_data in bundle.items():
                     # Extract contract version from docs
-                    version_search = re.search(r"""
-                    
-                    \"details\":  # @dev tag in contract docs
-                    \".*?         # Skip any data in the beginning of details
-                    \|            # Beginning of version definition |
-                    (v            # Capture version starting from symbol v
-                    \d+           # At least one digit of major version
-                    \.            # Digits splitter
-                    \d+           # At least one digit of minor version
-                    \.            # Digits splitter
-                    \d+           # At least one digit of patch
-                    )             # End of capturing
-                    \|            # End of version definition |
-                    .*?\"         # Skip any data in the end of details
-                    
-                    """, contract_data['metadata'], re.VERBOSE)  # FIXME: No!!!
-                    version = version_search.group(1) if version_search else self.__default_contract_version
-
+                    devdoc = False  #  contract_data['devdoc']  # TODO
+                    if devdoc:
+                        version_search = re.search(r"""
+                        
+                        \"details\":  # @dev tag in contract docs
+                        \".*?         # Skip any data in the beginning of details
+                        \|            # Beginning of version definition |
+                        (v            # Capture version starting from symbol v
+                        \d+           # At least one digit of major version
+                        \.            # Digits splitter
+                        \d+           # At least one digit of minor version
+                        \.            # Digits splitter
+                        \d+           # At least one digit of patch
+                        )             # End of capturing
+                        \|            # End of version definition |
+                        .*?\"         # Skip any data in the end of details
+                        
+                        """, devdoc, re.VERBOSE)
+                        version = version_search.group(1) if version_search else self.__default_contract_version
+                    else:
+                        version = self.__default_contract_version
                     if include_ast:
                         # pack it up pack it in
                         ast = source_data['ast']
@@ -163,19 +166,19 @@ class SolidityCompiler:
 
             # Standard JSON I/O Compile
             contract_outputs = [
-                "metadata",  # TODO: FOR THE LOVE OF GOD
                 "devdoc",
                 "userdoc",
                 "abi",
                 "evm.bytecode",
-                "evm.bytecode.sourceMap"
+                "evm.bytecode.sourceMap",
+                "evm.methodIdentifiers"
             ]
 
             file_outputs = []
             if ast:
                 file_outputs.append('ast')
 
-            # TODO: No strings!!!
+            # TODO: Dissolve into this object
             config = {
                 "language": "Solidity",
                 "sources": source_paths,
@@ -195,9 +198,7 @@ class SolidityCompiler:
                 }
             }
 
-            compiled_sol = compile_standard(input_data=config,
-                                            allow_paths=root_source_dir)
-
+            compiled_sol = compile_standard(input_data=config, allow_paths=root_source_dir)
             self.log.info(f"Successfully compiled {len(compiled_sol)} contracts with {self.optimization_runs} optimization runs")
 
         except FileNotFoundError:

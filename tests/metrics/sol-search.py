@@ -14,7 +14,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-from collections import Counter
+from collections import Counter, defaultdict
 
 import click
 import inspect
@@ -117,9 +117,9 @@ def get_callable_cell_contents(agent_method: Callable) -> List[Callable]:
     return callable_cells
 
 
-def setup_function_counter(contract_api) -> Counter:
+def setup_function_counter(contract_api: Tuple[str]) -> Counter:
     function_counter = Counter()
-    for name, contract_function in contract_api.items():
+    for name in contract_api:
         function_counter[name] = 0
     return function_counter
 
@@ -130,24 +130,23 @@ def sample(funcs: Iterable[Callable], function_counter: Counter, codex: Dict) ->
         contract_calls = tuple(f for f in internal_calls.unbound if f in function_counter)
         for call in contract_calls:
             function_counter[call] += 1
-            codex[call] = func.__name__
+            codex[call].append(func.__name__)
 
 
-def analyze_exposure(contract_api: Dict[str, Dict], agent_api: List[Callable]) -> Tuple[Dict, Counter]:
-    codex = dict()  # contract -> agent
-    function_counter: Counter = setup_function_counter(contract_api=contract_api)
+def analyze_exposure(agent_api: List[Callable],
+                     codex: Dict[str, str],
+                     counter: Counter,
+                     ) -> None:
 
     for agent_method in agent_api:
         callable_code_cells = get_callable_cell_contents(agent_method=agent_method)
-        sample(funcs=callable_code_cells, function_counter=function_counter, codex=codex)
+        sample(funcs=callable_code_cells, function_counter=counter, codex=codex)
 
     # Special cases...
     # Handle fallback (payable) functions
-    fallback_function_detected = '' in function_counter
+    fallback_function_detected = '' in counter
     if fallback_function_detected:
-        function_counter[FALLBACK] = function_counter.pop('')
-
-    return codex, function_counter
+        counter[FALLBACK] = counter.pop('')
 
 
 def calculate_exposure(data: Counter, exclude: Tuple[str] = DEFAULT_EXCLUDE) -> float:
@@ -199,7 +198,7 @@ def paint_row(api: Dict,
         if show_requirements and reqs:
             paint_requirements(requirements=reqs)
         line_location = function['function'].offset[0]
-        agent_detail = details.get(name, '')
+        agent_detail = ', '.join(details.get(name, ''))
         row = f'[{visibility}] {name} @ {line_location} ({call_count}) | {agent_detail}'
         click.secho(row, fg=color)
 
@@ -220,31 +219,31 @@ def report(final_report: Dict) -> None:
 
 def measure_contract_exposure(compiler_output: Dict[str, dict],
                               agent_class: Type[Agent],
-                              requirements: bool = True) -> Dict[str, dict]:
+                              requirements: bool = True
+                              ) -> Dict[str, dict]:
 
     # Twin APIs
-    external_functions, public_functions = get_exposed_contract_interfaces(compiler_output=compiler_output,
-                                                                           agent_class=agent_class,
-                                                                           requirements=requirements)
+    external, public = get_exposed_contract_interfaces(compiler_output=compiler_output,
+                                                       agent_class=agent_class,
+                                                       requirements=requirements)
     agent_api = collect_agent_api(agent_class=agent_class)
 
     # Analyze
-    external_codex, external_counter = analyze_exposure(contract_api=external_functions, agent_api=agent_api)
-    public_codex, public_counter = analyze_exposure(contract_api=public_functions, agent_api=agent_api)
-
-    codex = {**external_codex, **public_codex}
-    function_counter = Counter({**external_counter, **public_counter})
+    codex = defaultdict(list)
+    contract_api = (*external, *public)
+    function_counter: Counter = setup_function_counter(contract_api=contract_api)
+    analyze_exposure(agent_api=agent_api, codex=codex, counter=function_counter)
     exposure = calculate_exposure(data=function_counter, exclude=agent_class._excluded_interfaces)
 
     # Record
-    entry = dict(exposure=exposure,
-                 counter=function_counter,
-                 codex=codex,
-                 public=public_functions,
-                 excluded=agent_class._excluded_interfaces,
-                 external=external_functions)
-    result = {agent_class.contract_name: entry}
-    return result
+    report = dict(exposure=exposure,
+                  counter=function_counter,
+                  codex=codex,
+                  public=public,
+                  excluded=agent_class._excluded_interfaces,
+                  external=external)
+
+    return report
 
 
 def measure_project_exposure(compiler_output: Dict, capture_requirements: bool = True):
@@ -267,10 +266,11 @@ def measure_project_exposure(compiler_output: Dict, capture_requirements: bool =
     results = dict()
     with click.progressbar(AGENTS, label='Analyzing contract exposure') as agents:
         for agent_class in agents:
-            result = measure_contract_exposure(compiler_output=compiler_output,
-                                               agent_class=agent_class,
-                                               requirements=capture_requirements)
-            results.update(result)
+            single_report = measure_contract_exposure(compiler_output=compiler_output,
+                                                      agent_class=agent_class,
+                                                      requirements=capture_requirements)
+            entry = {agent_class.contract_name: single_report}
+            results.update(entry)
     report(final_report=results)
 
 
