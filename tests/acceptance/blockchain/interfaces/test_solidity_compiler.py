@@ -14,14 +14,14 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+
 from os.path import abspath, dirname
 
 import os
 
 from nucypher.blockchain.eth.deployers import NucypherTokenDeployer
-from nucypher.blockchain.eth.sol.compile import SolidityCompiler, SourceDirs
-from tests.constants import TEST_CONTRACTS_DIR
-from tests.utils.blockchain import TesterBlockchain
+from nucypher.blockchain.eth.sol.compile import compile_nucypher
 
 
 def test_nucypher_contract_compiled(testerchain, test_registry):
@@ -36,11 +36,7 @@ def test_nucypher_contract_compiled(testerchain, test_registry):
 
 
 def test_multi_source_compilation(testerchain):
-    solidity_compiler = SolidityCompiler(source_dirs=[
-        (SolidityCompiler.default_contract_dir(), None),
-        (SolidityCompiler.default_contract_dir(), {TEST_CONTRACTS_DIR})
-    ])
-    interfaces = solidity_compiler.compile()
+    interfaces = compile_nucypher(test_contracts=True)
 
     # Remove AST because id in tree node depends on compilation scope
     for contract_name, contract_data in interfaces.items():
