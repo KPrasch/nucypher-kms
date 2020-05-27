@@ -15,24 +15,28 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 from os.path import abspath, dirname
+from pathlib import Path
 
 import os
 import pytest
 
 from nucypher.blockchain.eth.interfaces import BlockchainDeployerInterface
 from nucypher.blockchain.eth.registry import InMemoryContractRegistry
-from nucypher.blockchain.eth.sol.compile import SolidityCompiler, SourceDirs
+from nucypher.blockchain.eth.sol.compile import _compile
 from nucypher.crypto.powers import TransactingPower
-# Prevents TesterBlockchain to be picked up by py.test as a test class
 from tests.utils.blockchain import TesterBlockchain as _TesterBlockchain
-from tests.constants import (DEVELOPMENT_ETH_AIRDROP_AMOUNT, INSECURE_DEVELOPMENT_PASSWORD,
-                                   NUMBER_OF_ETH_TEST_ACCOUNTS, NUMBER_OF_STAKERS_IN_BLOCKCHAIN_TESTS,
-                                   NUMBER_OF_URSULAS_IN_BLOCKCHAIN_TESTS)
+from tests.constants import (
+    DEVELOPMENT_ETH_AIRDROP_AMOUNT,
+    INSECURE_DEVELOPMENT_PASSWORD,
+    NUMBER_OF_ETH_TEST_ACCOUNTS,
+    NUMBER_OF_STAKERS_IN_BLOCKCHAIN_TESTS,
+    NUMBER_OF_URSULAS_IN_BLOCKCHAIN_TESTS
+)
 
 
 @pytest.fixture()
-def another_testerchain(solidity_compiler):
-    testerchain = _TesterBlockchain(eth_airdrop=True, free_transactions=True, light=True, compiler=solidity_compiler)
+def another_testerchain():
+    testerchain = _TesterBlockchain(eth_airdrop=True, free_transactions=True, light=True)
     testerchain.deployer_address = testerchain.etherbase_account
     assert testerchain.is_light
     yield testerchain
@@ -88,16 +92,14 @@ def test_testerchain_creation(testerchain, another_testerchain):
 
 
 def test_multiversion_contract():
+
     # Prepare compiler
-    base_dir = os.path.join(dirname(abspath(__file__)), "contracts", "multiversion")
-    v1_dir = os.path.join(base_dir, "v1")
-    v2_dir = os.path.join(base_dir, "v2")
-    root_dir = SolidityCompiler.default_contract_dir()
-    solidity_compiler = SolidityCompiler(source_dirs=[SourceDirs(root_dir, {v2_dir}),
-                                                      SourceDirs(root_dir, {v1_dir})])
+    base_dir = Path(__file__).parent / 'contracts' / 'multiversion'
+    v1_dir, v2_dir = base_dir / 'v1', base_dir / 'v2'
+    _compile(source_dirs=(v1_dir, v2_dir))
 
     # Prepare chain
-    blockchain_interface = BlockchainDeployerInterface(provider_uri='tester://pyevm/2', compiler=solidity_compiler)
+    blockchain_interface = BlockchainDeployerInterface(provider_uri='tester://pyevm/2')
     blockchain_interface.connect()
     origin = blockchain_interface.client.accounts[0]
     blockchain_interface.transacting_power = TransactingPower(password=INSECURE_DEVELOPMENT_PASSWORD, account=origin)

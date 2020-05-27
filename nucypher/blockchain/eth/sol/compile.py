@@ -18,18 +18,15 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 
 __all__ = ('compile_nucypher', )
 
-from typing import Dict, Iterator, List, Tuple, TypedDict, Union
-
 import itertools
 import os
 import re
 from pathlib import Path
-from solcx.install import get_executable
-from solcx.main import compile_standard
 from twisted.logger import Logger
+from typing import Dict, Iterator, List, Optional, Tuple, Union
 
 from nucypher.blockchain.eth.sol import SOLIDITY_COMPILER_VERSION as SOURCE_VERSION
-
+from nucypher.exceptions import DevelopmentInstallationRequired
 
 CompiledContracts = Dict[str, Dict[str, List[Dict[str, Union[str, List[Dict[str, str]]]]]]]
 
@@ -78,7 +75,6 @@ CONTRACT_OUTPUTS: List[str] = [
     'devdoc',                  # Developer documentation (natspec)
     'userdoc',                 # User documentation (natspec)
     'evm.bytecode.object',     # Bytecode object
-    # 'evm.deployedBytecode',    # Deployed bytecode (has all the options that evm.bytecode has)
 
     # Inactive
     # 'metadata',                # Metadata
@@ -89,6 +85,7 @@ CONTRACT_OUTPUTS: List[str] = [
     # 'evm.legacyAssembly',      # Old-style assembly format in JSON
     # 'evm.bytecode.opcodes',    # Opcodes list
     # 'evm.bytecode.linkReferences',  # Link references (if unlinked object)
+    # 'evm.deployedBytecode',         # Deployed bytecode (has all the options that evm.bytecode has)
     # 'evm.deployedBytecode.immutableReferences', # Map from AST ids to bytecode ranges that reference immutables
     # 'evm.methodIdentifiers',        # The list of function hashes
     # 'evm.gasEstimates',             # Function gas estimates
@@ -112,7 +109,7 @@ COMPILER_SETTINGS: Dict = dict(
 )
 
 
-class CompilerConfiguration(TypedDict, total=False):
+class CompilerConfiguration(Dict):
     language: str
     sources: Dict[str, Dict[str, str]]
     settings: Dict
@@ -125,40 +122,55 @@ COMPILER_CONFIG = CompilerConfiguration(
 )
 
 
-def __collect_test_contracts(source_walker: Iterator) -> Iterator:
-    from tests.constants import TEST_CONTRACTS_DIR
-    other_source_walker = os.walk(top=TEST_CONTRACTS_DIR, topdown=True)
-    source_walker = itertools.chain(source_walker, other_source_walker)
-    return source_walker
-
-
 def __source_filter(filename: str) -> bool:
     contains_ignored_prefix = any(prefix in filename for prefix in IGNORE_CONTRACT_PREFIXES)
     is_solidity_file = filename.endswith('.sol')
     return is_solidity_file and not contains_ignored_prefix
 
 
-def __collect_sources(test_contracts: bool):
-    contracts_dir: Path = SOURCE_ROOT / CONTRACTS
-    source_paths = dict()
-    source_walker = os.walk(top=str(contracts_dir), topdown=True)
+def __collect_sources(test_contracts: bool, source_dirs: Optional[Path] = None):
+
+    # Default
+    if not source_dirs:
+        source_dirs: List[Path] = [SOURCE_ROOT / CONTRACTS]
+
+    # Add test contracts to sources
     if test_contracts:
-        source_walker = __collect_test_contracts(source_walker=source_walker)
+        from tests.constants import TEST_CONTRACTS_DIR
+        source_dirs.append(TEST_CONTRACTS_DIR)
 
-    # Collect
-    for root, dirs, files in source_walker:
-        for filename in filter(__source_filter, files):
-            path = os.path.join(root, filename)
-            source_paths[filename] = dict(urls=[path])
-            LOG.debug(f"Collecting solidity source {path}")
-
-    LOG.info(f"Collected {len(source_paths)} solidity source files at {contracts_dir}")
+    # Collect all source directories
+    source_paths = dict()
+    for source_dir in source_dirs:
+        source_walker = os.walk(top=str(source_dir), topdown=True)
+        # Collect single directory
+        for root, dirs, files in source_walker:
+            # Collect files in source dir
+            for filename in filter(__source_filter, files):
+                path = os.path.join(root, filename)
+                source_paths[filename] = dict(urls=[path])
+                LOG.debug(f"Collecting solidity source {path}")
+        LOG.info(f"Collected {len(source_paths)} solidity source files at {source_dir}")
     return source_paths
 
 
-def _compile(include_ast: bool = True, ignore_version_check: bool = False, test_contracts: bool = False) -> dict:
+def _compile(source_dirs: Tuple[Path, ...] = None,
+             include_ast: bool = True,
+             ignore_version_check: bool = False,
+             test_contracts: bool = False) -> dict:
     """Executes the compiler with parameters specified in the json config"""
 
+    try:
+        from solcx.install import get_executable
+        from solcx.main import compile_standard
+    except ImportError:
+        raise DevelopmentInstallationRequired(importable_name='solcx')
+
+    # Solidity Compiler Binary
+    compiler_version = SOURCE_VERSION if not ignore_version_check else None
+    solc_binary_path = get_executable(version=compiler_version)
+
+    # Compile options
     if include_ast:
         FILE_OUTPUTS.append('ast')
 
@@ -166,16 +178,17 @@ def _compile(include_ast: bool = True, ignore_version_check: bool = False, test_
         from tests.constants import TEST_CONTRACTS_DIR
         ALLOWED_PATHS.append(str(TEST_CONTRACTS_DIR.resolve(True)))
 
-    # Solc
-    compiler_version = SOURCE_VERSION if not ignore_version_check else None
-    solc_binary_path = get_executable(version=compiler_version)
+    if source_dirs:
+        for source in source_dirs:
+            ALLOWED_PATHS.append(str(source.resolve(strict=True)))
 
-    sources = __collect_sources(test_contracts=test_contracts)
+    # Resolve Sources
+    allowed_paths = ','.join(ALLOWED_PATHS)
+    sources = __collect_sources(source_dirs=source_dirs, test_contracts=test_contracts)
     COMPILER_CONFIG.update(dict(sources=sources))
 
     try:
         LOG.info(f"Compiling with import remappings {' '.join(IMPORT_REMAPPINGS)}")
-        allowed_paths = ','.join(ALLOWED_PATHS)
         compiled_sol = compile_standard(input_data=COMPILER_CONFIG, allow_paths=allowed_paths)
         LOG.info(f"Successfully compiled {len(compiled_sol)} contracts with {OPTIMIZATION_RUNS} optimization runs")
     except FileNotFoundError:
@@ -187,28 +200,26 @@ def _compile(include_ast: bool = True, ignore_version_check: bool = False, test_
     return compiled_sol
 
 
-def extract_version(contract_data: dict):
-    devdoc = contract_data['devdoc'].get('details')
-    if not devdoc:
-        version = DEFAULT_CONTRACT_VERSION
-    else:
-        version_search = re.search(r"""
-
-        \"details\":  # @dev tag in contract docs
-        \".*?         # Skip any data in the beginning of details
-        \|            # Beginning of version definition |
-        (v            # Capture version starting from symbol v
-        \d+           # At least one digit of major version
-        \.            # Digits splitter
-        \d+           # At least one digit of minor version
-        \.            # Digits splitter
-        \d+           # At least one digit of patch
-        )             # End of capturing
-        \|            # End of version definition |
-        .*?\"         # Skip any data in the end of details
-
-        """, devdoc, re.VERBOSE)
-        version = version_search.group(1) if version_search else DEFAULT_CONTRACT_VERSION
+def extract_version(contract_data: dict) -> str:
+    try:
+        devdoc = contract_data['devdoc']['details']
+    except KeyError:
+        return DEFAULT_CONTRACT_VERSION
+    version_match = re.search(r"""
+    \"details\":  # @dev tag in contract docs
+    \".*?         # Skip any data in the beginning of details
+    \|            # Beginning of version definition |
+    (v            # Capture version starting from symbol v
+    \d+           # At least one digit of major version
+    \.            # Digits splitter
+    \d+           # At least one digit of minor version
+    \.            # Digits splitter
+    \d+           # At least one digit of patch
+    )             # End of capturing
+    \|            # End of version definition |
+    .*?\"         # Skip any data in the end of details
+    """, devdoc, re.VERBOSE)
+    version = version_match.group(1) if version_match else DEFAULT_CONTRACT_VERSION
     return version
 
 
@@ -219,9 +230,10 @@ def __handle_contract(contract_data: dict,
                       exported_name: str,
                       ) -> None:
     if ast:
-        # TODO: Resort AST by contract then pack it up pack it in
+        # TODO: Sort AST by contract
         ast = source_data['ast']
         contract_data['ast'] = ast
+
     try:
         existence_data = interfaces[exported_name]
     except KeyError:
@@ -232,14 +244,17 @@ def __handle_contract(contract_data: dict,
         existence_data.update({version: contract_data})
 
 
-def compile_nucypher(include_ast: bool = False,
+def compile_nucypher(source_dirs: Optional[Tuple[Path, ...]] = None,
+                     include_ast: bool = False,
                      ignore_version_check: bool = False,
                      test_contracts: bool = False
                      ) -> CompiledContracts:
+
     interfaces = dict()
     compile_result = _compile(include_ast=include_ast,
                               ignore_version_check=ignore_version_check,
-                              test_contracts=test_contracts)
+                              test_contracts=test_contracts,
+                              source_dirs=source_dirs)
     compiled_contracts, compiled_sources = compile_result['contracts'].items(), compile_result['sources'].items()
     for (source_path, source_data), (contract_path, compiled_contract) in zip(compiled_sources, compiled_contracts):
         for exported_name, contract_data in compiled_contract.items():
