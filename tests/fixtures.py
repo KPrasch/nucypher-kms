@@ -406,13 +406,6 @@ def token_economics(testerchain):
     return make_token_economics(blockchain=testerchain)
 
 
-@pytest.fixture(scope='session')
-def solidity_compiler():
-    """Doing this more than once per session will result in slower test run times."""
-    compiler = SolidityCompiler()
-    yield compiler
-
-
 @pytest.fixture(scope='module')
 def test_registry():
     registry = InMemoryContractRegistry()
