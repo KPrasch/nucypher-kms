@@ -42,6 +42,7 @@ pytest-twisted = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 # Tools
+hypothesis = "*"
 pre-commit = "*"
 pyflakes = "*"
 bandit = "*"
