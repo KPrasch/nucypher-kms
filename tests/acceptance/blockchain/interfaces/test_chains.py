@@ -14,20 +14,12 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-from os.path import abspath, dirname
-from pathlib import Path
 
-import os
 import pytest
 
-from nucypher.blockchain.eth.interfaces import BlockchainDeployerInterface
-from nucypher.blockchain.eth.registry import InMemoryContractRegistry
-from nucypher.blockchain.eth.sol.compile import compile_nucypher
-from nucypher.crypto.powers import TransactingPower
 from tests.utils.blockchain import TesterBlockchain as _TesterBlockchain
 from tests.constants import (
     DEVELOPMENT_ETH_AIRDROP_AMOUNT,
-    INSECURE_DEVELOPMENT_PASSWORD,
     NUMBER_OF_ETH_TEST_ACCOUNTS,
     NUMBER_OF_STAKERS_IN_BLOCKCHAIN_TESTS,
     NUMBER_OF_URSULAS_IN_BLOCKCHAIN_TESTS
@@ -89,74 +81,6 @@ def test_testerchain_creation(testerchain, another_testerchain):
             tx = {'to': etherbase, 'from': account, 'value': 100}
             txhash = chain.client.send_transaction(tx)
             _receipt = chain.wait_for_receipt(txhash)
-
-
-def test_multiversion_contract():
-
-    # Prepare compiler
-    base_dir = Path(__file__).parent / 'contracts' / 'multiversion'
-    v1_dir, v2_dir = base_dir / 'v1', base_dir / 'v2'
-    compiled_contracts = compile_nucypher(source_dirs=(v1_dir, v2_dir))
-
-    # Prepare chain
-    blockchain_interface = BlockchainDeployerInterface(provider_uri='tester://pyevm/2')
-    blockchain_interface.connect(compile_now=False)
-    blockchain_interface._raw_contract_cache = compiled_contracts
-
-    origin = blockchain_interface.client.accounts[0]
-    blockchain_interface.transacting_power = TransactingPower(password=INSECURE_DEVELOPMENT_PASSWORD, account=origin)
-    blockchain_interface.transacting_power.activate()
-
-    # Searching both contract through raw data
-    contract_name = "VersionTest"
-    requested_version = "v1.2.3"
-    version, _data = blockchain_interface.find_raw_contract_data(contract_name=contract_name,
-                                                                 requested_version=requested_version)
-    assert version == requested_version
-    version, _data = blockchain_interface.find_raw_contract_data(contract_name=contract_name,
-                                                                 requested_version="latest")
-    assert version == requested_version
-
-    requested_version = "v1.1.4"
-    version, _data = blockchain_interface.find_raw_contract_data(contract_name=contract_name,
-                                                                 requested_version=requested_version)
-    assert version == requested_version
-    version, _data = blockchain_interface.find_raw_contract_data(contract_name=contract_name,
-                                                                 requested_version="earliest")
-    assert version == requested_version
-
-    # Deploy different contracts and check their versions
-    registry = InMemoryContractRegistry()
-    contract, receipt = blockchain_interface.deploy_contract(deployer_address=origin,
-                                                             registry=registry,
-                                                             contract_name=contract_name,
-                                                             contract_version="v1.1.4")
-    assert contract.version == "v1.1.4"
-    assert contract.functions.VERSION().call() == 1
-    contract, receipt = blockchain_interface.deploy_contract(deployer_address=origin,
-                                                             registry=registry,
-                                                             contract_name=contract_name,
-                                                             contract_version="earliest")
-    assert contract.version == "v1.1.4"
-    assert contract.functions.VERSION().call() == 1
-
-    contract, receipt = blockchain_interface.deploy_contract(deployer_address=origin,
-                                                             registry=registry,
-                                                             contract_name=contract_name,
-                                                             contract_version="v1.2.3")
-    assert contract.version == "v1.2.3"
-    assert contract.functions.VERSION().call() == 2
-    contract, receipt = blockchain_interface.deploy_contract(deployer_address=origin,
-                                                             registry=registry,
-                                                             contract_name=contract_name,
-                                                             contract_version="latest")
-    assert contract.version == "v1.2.3"
-    assert contract.functions.VERSION().call() == 2
-    contract, receipt = blockchain_interface.deploy_contract(deployer_address=origin,
-                                                             registry=registry,
-                                                             contract_name=contract_name)
-    assert contract.version == "v1.2.3"
-    assert contract.functions.VERSION().call() == 2
 
 
 def test_block_confirmations(testerchain, test_registry):
