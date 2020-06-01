@@ -1,10 +1,10 @@
 pragma solidity ^0.6.5;
 
 
-import "contracts/Adjudicator.sol";
-import "contracts/StakingEscrow.sol";
-import "contracts/lib/SignatureVerifier.sol";
-import "contracts/proxy/Upgradeable.sol";
+import "nucypher/Adjudicator.sol";
+import "nucypher/StakingEscrow.sol";
+import "nucypher/lib/SignatureVerifier.sol";
+import "nucypher/proxy/Upgradeable.sol";
 
 
 /**

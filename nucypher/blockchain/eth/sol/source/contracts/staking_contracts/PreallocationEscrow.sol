@@ -3,7 +3,7 @@ pragma solidity ^0.6.5;
 
 import "zeppelin/ownership/Ownable.sol";
 import "zeppelin/math/SafeMath.sol";
-import "contracts/staking_contracts/AbstractStakingContract.sol";
+import "nucypher/staking_contracts/AbstractStakingContract.sol";
 
 
 /**

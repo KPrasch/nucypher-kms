@@ -1,0 +1,7227 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract NuCypherToken",
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minAllowableLockedTokens",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxAllowableLockedTokens",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint16",
+          "name": "_minLockedPeriods",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_staker",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint16",
+          "name": "_periods",
+          "type": "uint16"
+        }
+      ],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_staker",
+          "type": "address"
+        }
+      ],
+      "name": "getCompletedWork",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxAllowableLockedTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minAllowableLockedTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minLockedPeriods",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "secondsPerPeriod",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_staker",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_completedWork",
+          "type": "uint256"
+        }
+      ],
+      "name": "setCompletedWork",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_staker",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_measureWork",
+          "type": "bool"
+        }
+      ],
+      "name": "setWorkMeasurement",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "stakerInfo",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "measureWork",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "completedWork",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint16",
+          "name": "periods",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "token",
+      "outputs": [
+        {
+          "internalType": "contract NuCypherToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "allSourcePaths": {
+    "34": "contracts/WorkLockTestSet.sol"
+  },
+  "ast": {
+    "absolutePath": "contracts/WorkLockTestSet.sol",
+    "exportedSymbols": {
+      "StakingEscrowForWorkLockMock": [
+        2859
+      ]
+    },
+    "id": 2860,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2718,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".5"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:34"
+      },
+      {
+        "absolutePath": "/home/k/Git/nucypher/nucypher/blockchain/eth/sol/source/contracts/NuCypherToken.sol",
+        "file": "contracts/NuCypherToken.sol",
+        "id": 2719,
+        "nodeType": "ImportDirective",
+        "scope": 2860,
+        "sourceUnit": 11956,
+        "src": "26:37:34",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 2720,
+          "nodeType": "StructuredDocumentation",
+          "src": "66:53:34",
+          "text": "@notice Contract for using in WorkLock tests"
+        },
+        "fullyImplemented": true,
+        "id": 2859,
+        "linearizedBaseContracts": [
+          2859
+        ],
+        "name": "StakingEscrowForWorkLockMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "StakingEscrowForWorkLockMock.StakerInfo",
+            "id": 2729,
+            "members": [
+              {
+                "constant": false,
+                "id": 2722,
+                "mutability": "mutable",
+                "name": "value",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 2729,
+                "src": "193:13:34",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2721,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "193:7:34",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2724,
+                "mutability": "mutable",
+                "name": "measureWork",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 2729,
+                "src": "216:16:34",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 2723,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "216:4:34",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2726,
+                "mutability": "mutable",
+                "name": "completedWork",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 2729,
+                "src": "242:21:34",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2725,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "242:7:34",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2728,
+                "mutability": "mutable",
+                "name": "periods",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 2729,
+                "src": "273:14:34",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint16",
+                  "typeString": "uint16"
+                },
+                "typeName": {
+                  "id": 2727,
+                  "name": "uint16",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "273:6:34",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "StakerInfo",
+            "nodeType": "StructDefinition",
+            "scope": 2859,
+            "src": "165:129:34",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "fc0c546a",
+            "id": 2731,
+            "mutability": "immutable",
+            "name": "token",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 2859,
+            "src": "300:36:34",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+              "typeString": "contract NuCypherToken"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2730,
+              "name": "NuCypherToken",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 11941,
+              "src": "300:13:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                "typeString": "contract NuCypherToken"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "407f8001",
+            "id": 2734,
+            "mutability": "immutable",
+            "name": "secondsPerPeriod",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 2859,
+            "src": "342:44:34",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint32",
+              "typeString": "uint32"
+            },
+            "typeName": {
+              "id": 2732,
+              "name": "uint32",
+              "nodeType": "ElementaryTypeName",
+              "src": "342:6:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint32",
+                "typeString": "uint32"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31",
+              "id": 2733,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "385:1:34",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1_by_1",
+                "typeString": "int_const 1"
+              },
+              "value": "1"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "8cab6c4f",
+            "id": 2736,
+            "mutability": "immutable",
+            "name": "minAllowableLockedTokens",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 2859,
+            "src": "392:49:34",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2735,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "392:7:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "6fb653a2",
+            "id": 2738,
+            "mutability": "immutable",
+            "name": "maxAllowableLockedTokens",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 2859,
+            "src": "447:49:34",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2737,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "447:7:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "3ac5743d",
+            "id": 2740,
+            "mutability": "immutable",
+            "name": "minLockedPeriods",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 2859,
+            "src": "502:40:34",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint16",
+              "typeString": "uint16"
+            },
+            "typeName": {
+              "id": 2739,
+              "name": "uint16",
+              "nodeType": "ElementaryTypeName",
+              "src": "502:6:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint16",
+                "typeString": "uint16"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "4e745f1f",
+            "id": 2744,
+            "mutability": "mutable",
+            "name": "stakerInfo",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 2859,
+            "src": "549:49:34",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+              "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo)"
+            },
+            "typeName": {
+              "id": 2743,
+              "keyType": {
+                "id": 2741,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "558:7:34",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "549:31:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 2742,
+                "name": "StakerInfo",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 2729,
+                "src": "569:10:34",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_StakerInfo_$2729_storage_ptr",
+                  "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2771,
+              "nodeType": "Block",
+              "src": "792:201:34",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2757,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2755,
+                      "name": "token",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2731,
+                      "src": "802:5:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                        "typeString": "contract NuCypherToken"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2756,
+                      "name": "_token",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2746,
+                      "src": "810:6:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                        "typeString": "contract NuCypherToken"
+                      }
+                    },
+                    "src": "802:14:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                      "typeString": "contract NuCypherToken"
+                    }
+                  },
+                  "id": 2758,
+                  "nodeType": "ExpressionStatement",
+                  "src": "802:14:34"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2761,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2759,
+                      "name": "minAllowableLockedTokens",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2736,
+                      "src": "826:24:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2760,
+                      "name": "_minAllowableLockedTokens",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2748,
+                      "src": "853:25:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "826:52:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 2762,
+                  "nodeType": "ExpressionStatement",
+                  "src": "826:52:34"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2765,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2763,
+                      "name": "maxAllowableLockedTokens",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2738,
+                      "src": "888:24:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2764,
+                      "name": "_maxAllowableLockedTokens",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2750,
+                      "src": "915:25:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "888:52:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 2766,
+                  "nodeType": "ExpressionStatement",
+                  "src": "888:52:34"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2769,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2767,
+                      "name": "minLockedPeriods",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2740,
+                      "src": "950:16:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2768,
+                      "name": "_minLockedPeriods",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2752,
+                      "src": "969:17:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "src": "950:36:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "id": 2770,
+                  "nodeType": "ExpressionStatement",
+                  "src": "950:36:34"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2772,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 2753,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2746,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2772,
+                  "src": "626:20:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                    "typeString": "contract NuCypherToken"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 2745,
+                    "name": "NuCypherToken",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 11941,
+                    "src": "626:13:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                      "typeString": "contract NuCypherToken"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2748,
+                  "mutability": "mutable",
+                  "name": "_minAllowableLockedTokens",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2772,
+                  "src": "656:33:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2747,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "656:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2750,
+                  "mutability": "mutable",
+                  "name": "_maxAllowableLockedTokens",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2772,
+                  "src": "699:33:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2749,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "699:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2752,
+                  "mutability": "mutable",
+                  "name": "_minLockedPeriods",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2772,
+                  "src": "742:24:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2751,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "742:6:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "616:156:34"
+            },
+            "returnParameters": {
+              "id": 2754,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "792:0:34"
+            },
+            "scope": 2859,
+            "src": "605:388:34",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2784,
+              "nodeType": "Block",
+              "src": "1074:57:34",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 2779,
+                        "name": "stakerInfo",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2744,
+                        "src": "1091:10:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                          "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo storage ref)"
+                        }
+                      },
+                      "id": 2781,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 2780,
+                        "name": "_staker",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2774,
+                        "src": "1102:7:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1091:19:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_StakerInfo_$2729_storage",
+                        "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo storage ref"
+                      }
+                    },
+                    "id": 2782,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "completedWork",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": 2726,
+                    "src": "1091:33:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2778,
+                  "id": 2783,
+                  "nodeType": "Return",
+                  "src": "1084:40:34"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "d094adbf",
+            "id": 2785,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getCompletedWork",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 2775,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2774,
+                  "mutability": "mutable",
+                  "name": "_staker",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2785,
+                  "src": "1025:15:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2773,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1025:7:34",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1024:17:34"
+            },
+            "returnParameters": {
+              "id": 2778,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2777,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2785,
+                  "src": "1065:7:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2776,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1065:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1064:9:34"
+            },
+            "scope": 2859,
+            "src": "999:132:34",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 2806,
+              "nodeType": "Block",
+              "src": "1228:113:34",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2799,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 2794,
+                          "name": "stakerInfo",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2744,
+                          "src": "1238:10:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                            "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo storage ref)"
+                          }
+                        },
+                        "id": 2796,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 2795,
+                          "name": "_staker",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2787,
+                          "src": "1249:7:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1238:19:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_StakerInfo_$2729_storage",
+                          "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo storage ref"
+                        }
+                      },
+                      "id": 2797,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "measureWork",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2724,
+                      "src": "1238:31:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2798,
+                      "name": "_measureWork",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2789,
+                      "src": "1272:12:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "src": "1238:46:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 2800,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1238:46:34"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 2801,
+                        "name": "stakerInfo",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2744,
+                        "src": "1301:10:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                          "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo storage ref)"
+                        }
+                      },
+                      "id": 2803,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 2802,
+                        "name": "_staker",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2787,
+                        "src": "1312:7:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1301:19:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_StakerInfo_$2729_storage",
+                        "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo storage ref"
+                      }
+                    },
+                    "id": 2804,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "completedWork",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": 2726,
+                    "src": "1301:33:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2793,
+                  "id": 2805,
+                  "nodeType": "Return",
+                  "src": "1294:40:34"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "49e5add4",
+            "id": 2807,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setWorkMeasurement",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 2790,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2787,
+                  "mutability": "mutable",
+                  "name": "_staker",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2807,
+                  "src": "1165:15:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2786,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1165:7:34",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2789,
+                  "mutability": "mutable",
+                  "name": "_measureWork",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2807,
+                  "src": "1182:17:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2788,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1182:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1164:36:34"
+            },
+            "returnParameters": {
+              "id": 2793,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2792,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2807,
+                  "src": "1219:7:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2791,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1219:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1218:9:34"
+            },
+            "scope": 2859,
+            "src": "1137:204:34",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 2842,
+              "nodeType": "Block",
+              "src": "1423:162:34",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2821,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 2816,
+                          "name": "stakerInfo",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2744,
+                          "src": "1433:10:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                            "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo storage ref)"
+                          }
+                        },
+                        "id": 2818,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 2817,
+                          "name": "_staker",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2809,
+                          "src": "1444:7:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1433:19:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_StakerInfo_$2729_storage",
+                          "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo storage ref"
+                        }
+                      },
+                      "id": 2819,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "value",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2722,
+                      "src": "1433:25:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2820,
+                      "name": "_value",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2811,
+                      "src": "1461:6:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1433:34:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 2822,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1433:34:34"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2828,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 2823,
+                          "name": "stakerInfo",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2744,
+                          "src": "1477:10:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                            "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo storage ref)"
+                          }
+                        },
+                        "id": 2825,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 2824,
+                          "name": "_staker",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2809,
+                          "src": "1488:7:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1477:19:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_StakerInfo_$2729_storage",
+                          "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo storage ref"
+                        }
+                      },
+                      "id": 2826,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "periods",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2728,
+                      "src": "1477:27:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2827,
+                      "name": "_periods",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2813,
+                      "src": "1507:8:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint16",
+                        "typeString": "uint16"
+                      }
+                    },
+                    "src": "1477:38:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "id": 2829,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1477:38:34"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 2833,
+                          "name": "msg",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": -15,
+                          "src": "1544:3:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_magic_message",
+                            "typeString": "msg"
+                          }
+                        },
+                        "id": 2834,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "sender",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "1544:10:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2837,
+                            "name": "this",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": -28,
+                            "src": "1564:4:34",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_StakingEscrowForWorkLockMock_$2859",
+                              "typeString": "contract StakingEscrowForWorkLockMock"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_contract$_StakingEscrowForWorkLockMock_$2859",
+                              "typeString": "contract StakingEscrowForWorkLockMock"
+                            }
+                          ],
+                          "id": 2836,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "ElementaryTypeNameExpression",
+                          "src": "1556:7:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_address_$",
+                            "typeString": "type(address)"
+                          },
+                          "typeName": {
+                            "id": 2835,
+                            "name": "address",
+                            "nodeType": "ElementaryTypeName",
+                            "src": "1556:7:34",
+                            "typeDescriptions": {
+                              "typeIdentifier": null,
+                              "typeString": null
+                            }
+                          }
+                        },
+                        "id": 2838,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1556:13:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 2839,
+                        "name": "_value",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2811,
+                        "src": "1571:6:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 2830,
+                        "name": "token",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2731,
+                        "src": "1525:5:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_NuCypherToken_$11941",
+                          "typeString": "contract NuCypherToken"
+                        }
+                      },
+                      "id": 2832,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "transferFrom",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 19511,
+                      "src": "1525:18:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$_t_bool_$",
+                        "typeString": "function (address,address,uint256) external returns (bool)"
+                      }
+                    },
+                    "id": 2840,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1525:53:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 2841,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1525:53:34"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "d2d0e066",
+            "id": 2843,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "deposit",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 2814,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2809,
+                  "mutability": "mutable",
+                  "name": "_staker",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2843,
+                  "src": "1364:15:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2808,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1364:7:34",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2811,
+                  "mutability": "mutable",
+                  "name": "_value",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2843,
+                  "src": "1381:14:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2810,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1381:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2813,
+                  "mutability": "mutable",
+                  "name": "_periods",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2843,
+                  "src": "1397:15:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2812,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1397:6:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1363:50:34"
+            },
+            "returnParameters": {
+              "id": 2815,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1423:0:34"
+            },
+            "scope": 2859,
+            "src": "1347:238:34",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 2857,
+              "nodeType": "Block",
+              "src": "1667:67:34",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2855,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 2850,
+                          "name": "stakerInfo",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2744,
+                          "src": "1677:10:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StakerInfo_$2729_storage_$",
+                            "typeString": "mapping(address => struct StakingEscrowForWorkLockMock.StakerInfo storage ref)"
+                          }
+                        },
+                        "id": 2852,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 2851,
+                          "name": "_staker",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2845,
+                          "src": "1688:7:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1677:19:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_StakerInfo_$2729_storage",
+                          "typeString": "struct StakingEscrowForWorkLockMock.StakerInfo storage ref"
+                        }
+                      },
+                      "id": 2853,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "completedWork",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2726,
+                      "src": "1677:33:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2854,
+                      "name": "_completedWork",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2847,
+                      "src": "1713:14:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1677:50:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 2856,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1677:50:34"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "5448f3c0",
+            "id": 2858,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setCompletedWork",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 2848,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2845,
+                  "mutability": "mutable",
+                  "name": "_staker",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2858,
+                  "src": "1617:15:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2844,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1617:7:34",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2847,
+                  "mutability": "mutable",
+                  "name": "_completedWork",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2858,
+                  "src": "1634:22:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2846,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1634:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1616:41:34"
+            },
+            "returnParameters": {
+              "id": 2849,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1667:0:34"
+            },
+            "scope": 2859,
+            "src": "1591:143:34",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2860,
+        "src": "120:1617:34"
+      }
+    ],
+    "src": "0:1738:34"
+  },
+  "bytecode": "610120604052600160e01b60a05234801561001957600080fd5b5060405161054c38038061054c8339818101604052608081101561003c57600080fd5b508051602082015160408301516060938401519383901b6001600160601b03191660805260c082905260e081815260f085901b6001600160f01b0319166101005260a0516001600160a01b039094169493901c9261ffff166104846100c8600039806102335250806102fd5250806103215250806102575250806103b3528061042c52506104846000f3fe608060405234801561001057600080fd5b506004361061009e5760003560e01c80636fb653a2116100665780636fb653a2146101a15780638cab6c4f146101a9578063d094adbf146101b1578063d2d0e066146101d7578063fc0c546a1461020d5761009e565b80633ac5743d146100a3578063407f8001146100c257806349e5add4146100e35780634e745f1f146101235780635448f3c014610173575b600080fd5b6100ab610231565b6040805161ffff9092168252519081900360200190f35b6100ca610255565b6040805163ffffffff9092168252519081900360200190f35b610111600480360360408110156100f957600080fd5b506001600160a01b0381351690602001351515610279565b60408051918252519081900360200190f35b6101496004803603602081101561013957600080fd5b50356001600160a01b03166102ad565b6040805194855292151560208501528383019190915261ffff166060830152519081900360800190f35b61019f6004803603604081101561018957600080fd5b506001600160a01b0381351690602001356102dc565b005b6101116102fb565b61011161031f565b610111600480360360208110156101c757600080fd5b50356001600160a01b0316610343565b61019f600480360360608110156101ed57600080fd5b5080356001600160a01b0316906020810135906040013561ffff16610361565b61021561042a565b604080516001600160a01b039092168252519081900360200190f35b7f000000000000000000000000000000000000000000000000000000000000000081565b7f000000000000000000000000000000000000000000000000000000000000000081565b6001600160a01b038216600090815260208190526040902060018101805483151560ff199091161790556002015492915050565b6000602081905290815260409020805460018201546002830154600390930154919260ff9091169161ffff1684565b6001600160a01b03909116600090815260208190526040902060020155565b7f000000000000000000000000000000000000000000000000000000000000000081565b7f000000000000000000000000000000000000000000000000000000000000000081565b6001600160a01b031660009081526020819052604090206002015490565b6001600160a01b03838116600090815260208181526040808320868155600301805461ffff191661ffff871617905580516323b872dd60e01b81523360048201523060248201526044810187905290517f0000000000000000000000000000000000000000000000000000000000000000909416936323b872dd93606480840194938390030190829087803b1580156103f957600080fd5b505af115801561040d573d6000803e3d6000fd5b505050506040513d602081101561042357600080fd5b5050505050565b7f00000000000000000000000000000000000000000000000000000000000000008156fea2646970667358221220fac9a21f47eefdb485ba1fa32be1f12bb8f6b9c0c3b81a987b2ab7478d2a9fd664736f6c63430006070033",
+  "bytecodeSha1": "2df2229e519ba7cb02d3bc7c5b82af74a8a303c5",
+  "compiler": {
+    "evm_version": "berlin",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "version": "0.6.7"
+  },
+  "contractName": "StakingEscrowForWorkLockMock",
+  "coverageMap": {
+    "branches": {
+      "34": {}
+    },
+    "statements": {
+      "34": {
+        "StakingEscrowForWorkLockMock.deposit": {
+          "4": [
+            1433,
+            1467
+          ],
+          "5": [
+            1477,
+            1515
+          ],
+          "6": [
+            1525,
+            1578
+          ]
+        },
+        "StakingEscrowForWorkLockMock.getCompletedWork": {
+          "3": [
+            1084,
+            1124
+          ]
+        },
+        "StakingEscrowForWorkLockMock.setCompletedWork": {
+          "2": [
+            1677,
+            1727
+          ]
+        },
+        "StakingEscrowForWorkLockMock.setWorkMeasurement": {
+          "0": [
+            1238,
+            1284
+          ],
+          "1": [
+            1294,
+            1334
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": [],
+  "deployedBytecode": "608060405234801561001057600080fd5b506004361061009e5760003560e01c80636fb653a2116100665780636fb653a2146101a15780638cab6c4f146101a9578063d094adbf146101b1578063d2d0e066146101d7578063fc0c546a1461020d5761009e565b80633ac5743d146100a3578063407f8001146100c257806349e5add4146100e35780634e745f1f146101235780635448f3c014610173575b600080fd5b6100ab610231565b6040805161ffff9092168252519081900360200190f35b6100ca610255565b6040805163ffffffff9092168252519081900360200190f35b610111600480360360408110156100f957600080fd5b506001600160a01b0381351690602001351515610279565b60408051918252519081900360200190f35b6101496004803603602081101561013957600080fd5b50356001600160a01b03166102ad565b6040805194855292151560208501528383019190915261ffff166060830152519081900360800190f35b61019f6004803603604081101561018957600080fd5b506001600160a01b0381351690602001356102dc565b005b6101116102fb565b61011161031f565b610111600480360360208110156101c757600080fd5b50356001600160a01b0316610343565b61019f600480360360608110156101ed57600080fd5b5080356001600160a01b0316906020810135906040013561ffff16610361565b61021561042a565b604080516001600160a01b039092168252519081900360200190f35b7f000000000000000000000000000000000000000000000000000000000000000081565b7f000000000000000000000000000000000000000000000000000000000000000081565b6001600160a01b038216600090815260208190526040902060018101805483151560ff199091161790556002015492915050565b6000602081905290815260409020805460018201546002830154600390930154919260ff9091169161ffff1684565b6001600160a01b03909116600090815260208190526040902060020155565b7f000000000000000000000000000000000000000000000000000000000000000081565b7f000000000000000000000000000000000000000000000000000000000000000081565b6001600160a01b031660009081526020819052604090206002015490565b6001600160a01b03838116600090815260208181526040808320868155600301805461ffff191661ffff871617905580516323b872dd60e01b81523360048201523060248201526044810187905290517f0000000000000000000000000000000000000000000000000000000000000000909416936323b872dd93606480840194938390030190829087803b1580156103f957600080fd5b505af115801561040d573d6000803e3d6000fd5b505050506040513d602081101561042357600080fd5b5050505050565b7f00000000000000000000000000000000000000000000000000000000000000008156fea2646970667358221220fac9a21f47eefdb485ba1fa32be1f12bb8f6b9c0c3b81a987b2ab7478d2a9fd664736f6c63430006070033",
+  "deployedSourceMap": "120:1617:34:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;120:1617:34;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;12:1:-1;9;2:12;502:40:34;;;:::i;:::-;;;;;;;;;;;;;;;;;;;342:44;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1137:204;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;;;;;;1137:204:34;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;549:49;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;549:49:34;-1:-1:-1;;;;;549:49:34;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1591:143;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;;;;;;1591:143:34;;;;;;;;:::i;:::-;;447:49;;;:::i;392:::-;;;:::i;999:132::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;999:132:34;-1:-1:-1;;;;;999:132:34;;:::i;1347:238::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1347:238:34;;-1:-1:-1;;;;;1347:238:34;;;;;;;;;;;;;:::i;300:36::-;;;:::i;:::-;;;;-1:-1:-1;;;;;300:36:34;;;;;;;;;;;;;;502:40;;;:::o;342:44::-;;;:::o;1137:204::-;-1:-1:-1;;;;;1238:19:34;;1219:7;1238:19;;;;;;;;;;:31;;;:46;;;;;-1:-1:-1;;1238:46:34;;;;;;1301:33;;;1137:204;;;;:::o;549:49::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;1591:143::-;-1:-1:-1;;;;;1677:19:34;;;:10;:19;;;;;;;;;;:33;;:50;1591:143::o;447:49::-;;;:::o;392:::-;;;:::o;999:132::-;-1:-1:-1;;;;;1091:19:34;1065:7;1091:19;;;;;;;;;;:33;;;;999:132::o;1347:238::-;-1:-1:-1;;;;;1433:19:34;;;:10;:19;;;;;;;;;;;:34;;;1477:27;;:38;;-1:-1:-1;;1477:38:34;;;;;;;1525:53;;-1:-1:-1;;;1525:53:34;;1544:10;1525:53;;;;1564:4;1525:53;;;;;;;;;;;;:5;:18;;;;;;:53;;;;;1433:19;1525:53;;;;;;;:18;:53;;;2:2:-1;;;;27:1;24;17:12;2:2;1525:53:34;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1525:53:34;;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;;;;;1347:238:34:o;300:36::-;;;:::o",
+  "language": "Solidity",
+  "natspec": {
+    "methods": {},
+    "notice": "Contract for using in WorkLock tests"
+  },
+  "offset": [
+    120,
+    1737
+  ],
+  "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x4 CALLDATASIZE LT PUSH2 0x9E JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x6FB653A2 GT PUSH2 0x66 JUMPI DUP1 PUSH4 0x6FB653A2 EQ PUSH2 0x1A1 JUMPI DUP1 PUSH4 0x8CAB6C4F EQ PUSH2 0x1A9 JUMPI DUP1 PUSH4 0xD094ADBF EQ PUSH2 0x1B1 JUMPI DUP1 PUSH4 0xD2D0E066 EQ PUSH2 0x1D7 JUMPI DUP1 PUSH4 0xFC0C546A EQ PUSH2 0x20D JUMPI PUSH2 0x9E JUMP JUMPDEST DUP1 PUSH4 0x3AC5743D EQ PUSH2 0xA3 JUMPI DUP1 PUSH4 0x407F8001 EQ PUSH2 0xC2 JUMPI DUP1 PUSH4 0x49E5ADD4 EQ PUSH2 0xE3 JUMPI DUP1 PUSH4 0x4E745F1F EQ PUSH2 0x123 JUMPI DUP1 PUSH4 0x5448F3C0 EQ PUSH2 0x173 JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0xAB PUSH2 0x231 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH2 0xFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xCA PUSH2 0x255 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH4 0xFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x111 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0xF9 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP2 CALLDATALOAD AND SWAP1 PUSH1 0x20 ADD CALLDATALOAD ISZERO ISZERO PUSH2 0x279 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP2 DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x149 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x139 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH2 0x2AD JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP5 DUP6 MSTORE SWAP3 ISZERO ISZERO PUSH1 0x20 DUP6 ADD MSTORE DUP4 DUP4 ADD SWAP2 SWAP1 SWAP2 MSTORE PUSH2 0xFFFF AND PUSH1 0x60 DUP4 ADD MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x80 ADD SWAP1 RETURN JUMPDEST PUSH2 0x19F PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0x189 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP2 CALLDATALOAD AND SWAP1 PUSH1 0x20 ADD CALLDATALOAD PUSH2 0x2DC JUMP JUMPDEST STOP JUMPDEST PUSH2 0x111 PUSH2 0x2FB JUMP JUMPDEST PUSH2 0x111 PUSH2 0x31F JUMP JUMPDEST PUSH2 0x111 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x1C7 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH2 0x343 JUMP JUMPDEST PUSH2 0x19F PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x60 DUP2 LT ISZERO PUSH2 0x1ED JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND SWAP1 PUSH1 0x20 DUP2 ADD CALLDATALOAD SWAP1 PUSH1 0x40 ADD CALLDATALOAD PUSH2 0xFFFF AND PUSH2 0x361 JUMP JUMPDEST PUSH2 0x215 PUSH2 0x42A JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH32 0x0 DUP2 JUMP JUMPDEST PUSH32 0x0 DUP2 JUMP JUMPDEST PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP3 AND PUSH1 0x0 SWAP1 DUP2 MSTORE PUSH1 0x20 DUP2 SWAP1 MSTORE PUSH1 0x40 SWAP1 KECCAK256 PUSH1 0x1 DUP2 ADD DUP1 SLOAD DUP4 ISZERO ISZERO PUSH1 0xFF NOT SWAP1 SWAP2 AND OR SWAP1 SSTORE PUSH1 0x2 ADD SLOAD SWAP3 SWAP2 POP POP JUMP JUMPDEST PUSH1 0x0 PUSH1 0x20 DUP2 SWAP1 MSTORE SWAP1 DUP2 MSTORE PUSH1 0x40 SWAP1 KECCAK256 DUP1 SLOAD PUSH1 0x1 DUP3 ADD SLOAD PUSH1 0x2 DUP4 ADD SLOAD PUSH1 0x3 SWAP1 SWAP4 ADD SLOAD SWAP2 SWAP3 PUSH1 0xFF SWAP1 SWAP2 AND SWAP2 PUSH2 0xFFFF AND DUP5 JUMP JUMPDEST PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP1 SWAP2 AND PUSH1 0x0 SWAP1 DUP2 MSTORE PUSH1 0x20 DUP2 SWAP1 MSTORE PUSH1 0x40 SWAP1 KECCAK256 PUSH1 0x2 ADD SSTORE JUMP JUMPDEST PUSH32 0x0 DUP2 JUMP JUMPDEST PUSH32 0x0 DUP2 JUMP JUMPDEST PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND PUSH1 0x0 SWAP1 DUP2 MSTORE PUSH1 0x20 DUP2 SWAP1 MSTORE PUSH1 0x40 SWAP1 KECCAK256 PUSH1 0x2 ADD SLOAD SWAP1 JUMP JUMPDEST PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP4 DUP2 AND PUSH1 0x0 SWAP1 DUP2 MSTORE PUSH1 0x20 DUP2 DUP2 MSTORE PUSH1 0x40 DUP1 DUP4 KECCAK256 DUP7 DUP2 SSTORE PUSH1 0x3 ADD DUP1 SLOAD PUSH2 0xFFFF NOT AND PUSH2 0xFFFF DUP8 AND OR SWAP1 SSTORE DUP1 MLOAD PUSH4 0x23B872DD PUSH1 0xE0 SHL DUP2 MSTORE CALLER PUSH1 0x4 DUP3 ADD MSTORE ADDRESS PUSH1 0x24 DUP3 ADD MSTORE PUSH1 0x44 DUP2 ADD DUP8 SWAP1 MSTORE SWAP1 MLOAD PUSH32 0x0 SWAP1 SWAP5 AND SWAP4 PUSH4 0x23B872DD SWAP4 PUSH1 0x64 DUP1 DUP5 ADD SWAP5 SWAP4 DUP4 SWAP1 SUB ADD SWAP1 DUP3 SWAP1 DUP8 DUP1 EXTCODESIZE ISZERO DUP1 ISZERO PUSH2 0x3F9 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP GAS CALL ISZERO DUP1 ISZERO PUSH2 0x40D JUMPI RETURNDATASIZE PUSH1 0x0 DUP1 RETURNDATACOPY RETURNDATASIZE PUSH1 0x0 REVERT JUMPDEST POP POP POP POP PUSH1 0x40 MLOAD RETURNDATASIZE PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x423 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP POP POP POP POP JUMP JUMPDEST PUSH32 0x0 DUP2 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 STATICCALL 0xC9 LOG2 0x1F SELFBALANCE 0xEE REVERT 0xB4 DUP6 0xBA 0x1F LOG3 0x2B 0xE1 CALL 0x2B 0xB8 0xF6 0xB9 0xC0 0xC3 0xB8 BYTE SWAP9 PUSH28 0x2AB7478D2A9FD664736F6C6343000607003300000000000000000000 ",
+  "pcMap": {
+    "0": {
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x80"
+    },
+    "2": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "4": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "5": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "CALLVALUE",
+      "path": "34"
+    },
+    "6": {
+      "op": "DUP1"
+    },
+    "7": {
+      "op": "ISZERO"
+    },
+    "8": {
+      "op": "PUSH2",
+      "value": "0x10"
+    },
+    "11": {
+      "op": "JUMPI"
+    },
+    "12": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "14": {
+      "op": "DUP1"
+    },
+    "15": {
+      "dev": "Cannot send ether to nonpayable function",
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "REVERT",
+      "path": "34"
+    },
+    "16": {
+      "op": "JUMPDEST"
+    },
+    "17": {
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "18": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "20": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "CALLDATASIZE",
+      "path": "34"
+    },
+    "21": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "LT",
+      "path": "34"
+    },
+    "22": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x9E"
+    },
+    "25": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "26": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x0"
+    },
+    "28": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "29": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0xE0"
+    },
+    "31": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "SHR",
+      "path": "34"
+    },
+    "32": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "33": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x6FB653A2"
+    },
+    "38": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "GT",
+      "path": "34"
+    },
+    "39": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x66"
+    },
+    "42": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "43": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "44": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x6FB653A2"
+    },
+    "49": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "50": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x1A1"
+    },
+    "53": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "54": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "55": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x8CAB6C4F"
+    },
+    "60": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "61": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x1A9"
+    },
+    "64": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "65": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "66": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0xD094ADBF"
+    },
+    "71": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "72": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x1B1"
+    },
+    "75": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "76": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "77": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0xD2D0E066"
+    },
+    "82": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "83": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x1D7"
+    },
+    "86": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "87": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "88": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0xFC0C546A"
+    },
+    "93": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "94": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x20D"
+    },
+    "97": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "98": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x9E"
+    },
+    "101": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "102": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "103": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "104": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x3AC5743D"
+    },
+    "109": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "110": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xA3"
+    },
+    "113": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "114": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "115": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x407F8001"
+    },
+    "120": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "121": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xC2"
+    },
+    "124": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "125": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "126": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x49E5ADD4"
+    },
+    "131": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "132": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xE3"
+    },
+    "135": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "136": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "137": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x4E745F1F"
+    },
+    "142": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "143": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x123"
+    },
+    "146": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "147": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "148": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x5448F3C0"
+    },
+    "153": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "EQ",
+      "path": "34"
+    },
+    "154": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x173"
+    },
+    "157": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPI",
+      "path": "34"
+    },
+    "158": {
+      "fn": null,
+      "offset": [
+        120,
+        1737
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "159": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "161": {
+      "op": "DUP1"
+    },
+    "162": {
+      "first_revert": true,
+      "op": "REVERT"
+    },
+    "163": {
+      "offset": [
+        502,
+        542
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "164": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xAB"
+    },
+    "167": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x231"
+    },
+    "170": {
+      "fn": null,
+      "jump": "i",
+      "offset": [
+        502,
+        542
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "171": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "172": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "174": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "175": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "176": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xFFFF"
+    },
+    "179": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "180": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "SWAP3",
+      "path": "34"
+    },
+    "181": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "182": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "183": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "184": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "185": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "186": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "187": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "188": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "189": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "191": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "192": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "193": {
+      "fn": null,
+      "offset": [
+        502,
+        542
+      ],
+      "op": "RETURN",
+      "path": "34"
+    },
+    "194": {
+      "offset": [
+        342,
+        386
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "195": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xCA"
+    },
+    "198": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x255"
+    },
+    "201": {
+      "fn": null,
+      "jump": "i",
+      "offset": [
+        342,
+        386
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "202": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "203": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "205": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "206": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "207": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0xFFFFFFFF"
+    },
+    "212": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "213": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "SWAP3",
+      "path": "34"
+    },
+    "214": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "215": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "216": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "217": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "218": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "219": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "220": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "221": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "222": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "224": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "225": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "226": {
+      "fn": null,
+      "offset": [
+        342,
+        386
+      ],
+      "op": "RETURN",
+      "path": "34"
+    },
+    "227": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "228": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x111"
+    },
+    "231": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "233": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "234": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "CALLDATASIZE",
+      "path": "34"
+    },
+    "235": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "236": {
+      "op": "PUSH1",
+      "value": "0x40"
+    },
+    "238": {
+      "op": "DUP2"
+    },
+    "239": {
+      "op": "LT"
+    },
+    "240": {
+      "op": "ISZERO"
+    },
+    "241": {
+      "op": "PUSH2",
+      "value": "0xF9"
+    },
+    "244": {
+      "op": "JUMPI"
+    },
+    "245": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "247": {
+      "op": "DUP1"
+    },
+    "248": {
+      "op": "REVERT"
+    },
+    "249": {
+      "op": "JUMPDEST"
+    },
+    "250": {
+      "op": "POP"
+    },
+    "251": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "253": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "255": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "257": {
+      "op": "SHL"
+    },
+    "258": {
+      "op": "SUB"
+    },
+    "259": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "260": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "261": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "262": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "263": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "265": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "266": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "267": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "268": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "269": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x279"
+    },
+    "272": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "jump": "i",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "273": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "274": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "276": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "277": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "278": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "279": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "280": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "281": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "282": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "283": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "284": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "285": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "286": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "288": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "289": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "290": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "RETURN",
+      "path": "34"
+    },
+    "291": {
+      "offset": [
+        549,
+        598
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "292": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x149"
+    },
+    "295": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "297": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "298": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "CALLDATASIZE",
+      "path": "34"
+    },
+    "299": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "300": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "302": {
+      "op": "DUP2"
+    },
+    "303": {
+      "op": "LT"
+    },
+    "304": {
+      "op": "ISZERO"
+    },
+    "305": {
+      "op": "PUSH2",
+      "value": "0x139"
+    },
+    "308": {
+      "op": "JUMPI"
+    },
+    "309": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "311": {
+      "op": "DUP1"
+    },
+    "312": {
+      "op": "REVERT"
+    },
+    "313": {
+      "op": "JUMPDEST"
+    },
+    "314": {
+      "op": "POP"
+    },
+    "315": {
+      "offset": [
+        549,
+        598
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "316": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "318": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "320": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "322": {
+      "op": "SHL"
+    },
+    "323": {
+      "op": "SUB"
+    },
+    "324": {
+      "offset": [
+        549,
+        598
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "325": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x2AD"
+    },
+    "328": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "jump": "i",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "329": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "330": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "332": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "333": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "334": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP5",
+      "path": "34"
+    },
+    "335": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP6",
+      "path": "34"
+    },
+    "336": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "337": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP3",
+      "path": "34"
+    },
+    "338": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "339": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "340": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "342": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP6",
+      "path": "34"
+    },
+    "343": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "344": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "345": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "346": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "347": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "348": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "349": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "350": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "351": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "352": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xFFFF"
+    },
+    "355": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "356": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x60"
+    },
+    "358": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "359": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "360": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "361": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "362": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "363": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "364": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "365": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "366": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x80"
+    },
+    "368": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "369": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "370": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "RETURN",
+      "path": "34"
+    },
+    "371": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "372": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x19F"
+    },
+    "375": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "377": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "378": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "CALLDATASIZE",
+      "path": "34"
+    },
+    "379": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "380": {
+      "op": "PUSH1",
+      "value": "0x40"
+    },
+    "382": {
+      "op": "DUP2"
+    },
+    "383": {
+      "op": "LT"
+    },
+    "384": {
+      "op": "ISZERO"
+    },
+    "385": {
+      "op": "PUSH2",
+      "value": "0x189"
+    },
+    "388": {
+      "op": "JUMPI"
+    },
+    "389": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "391": {
+      "op": "DUP1"
+    },
+    "392": {
+      "op": "REVERT"
+    },
+    "393": {
+      "op": "JUMPDEST"
+    },
+    "394": {
+      "op": "POP"
+    },
+    "395": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "397": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "399": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "401": {
+      "op": "SHL"
+    },
+    "402": {
+      "op": "SUB"
+    },
+    "403": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "404": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "405": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "406": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "407": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "409": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "410": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "411": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x2DC"
+    },
+    "414": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "jump": "i",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "415": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "416": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "STOP",
+      "path": "34"
+    },
+    "417": {
+      "offset": [
+        447,
+        496
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "418": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        447,
+        496
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x111"
+    },
+    "421": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        447,
+        496
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x2FB"
+    },
+    "424": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "jump": "i",
+      "offset": [
+        447,
+        496
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "425": {
+      "offset": [
+        392,
+        441
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "426": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        392,
+        441
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x111"
+    },
+    "429": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        392,
+        441
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x31F"
+    },
+    "432": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "jump": "i",
+      "offset": [
+        392,
+        441
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "433": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "434": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x111"
+    },
+    "437": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "439": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "440": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "CALLDATASIZE",
+      "path": "34"
+    },
+    "441": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "442": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "444": {
+      "op": "DUP2"
+    },
+    "445": {
+      "op": "LT"
+    },
+    "446": {
+      "op": "ISZERO"
+    },
+    "447": {
+      "op": "PUSH2",
+      "value": "0x1C7"
+    },
+    "450": {
+      "op": "JUMPI"
+    },
+    "451": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "453": {
+      "op": "DUP1"
+    },
+    "454": {
+      "op": "REVERT"
+    },
+    "455": {
+      "op": "JUMPDEST"
+    },
+    "456": {
+      "op": "POP"
+    },
+    "457": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "458": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "460": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "462": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "464": {
+      "op": "SHL"
+    },
+    "465": {
+      "op": "SUB"
+    },
+    "466": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "467": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x343"
+    },
+    "470": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "jump": "i",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "471": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "472": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x19F"
+    },
+    "475": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "477": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "478": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "CALLDATASIZE",
+      "path": "34"
+    },
+    "479": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "480": {
+      "op": "PUSH1",
+      "value": "0x60"
+    },
+    "482": {
+      "op": "DUP2"
+    },
+    "483": {
+      "op": "LT"
+    },
+    "484": {
+      "op": "ISZERO"
+    },
+    "485": {
+      "op": "PUSH2",
+      "value": "0x1ED"
+    },
+    "488": {
+      "op": "JUMPI"
+    },
+    "489": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "491": {
+      "op": "DUP1"
+    },
+    "492": {
+      "op": "REVERT"
+    },
+    "493": {
+      "op": "JUMPDEST"
+    },
+    "494": {
+      "op": "POP"
+    },
+    "495": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "496": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "497": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "499": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "501": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "503": {
+      "op": "SHL"
+    },
+    "504": {
+      "op": "SUB"
+    },
+    "505": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "506": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "507": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "509": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "510": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "511": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "512": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "513": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "515": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "516": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "CALLDATALOAD",
+      "path": "34"
+    },
+    "517": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xFFFF"
+    },
+    "520": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "521": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x361"
+    },
+    "524": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "jump": "i",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "525": {
+      "offset": [
+        300,
+        336
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "526": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x215"
+    },
+    "529": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0x42A"
+    },
+    "532": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "jump": "i",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "533": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "534": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "536": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "537": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "538": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "540": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "542": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "544": {
+      "op": "SHL"
+    },
+    "545": {
+      "op": "SUB"
+    },
+    "546": {
+      "offset": [
+        300,
+        336
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "547": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "SWAP3",
+      "path": "34"
+    },
+    "548": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "549": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "550": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "551": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "552": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "553": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "554": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "555": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "556": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "558": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "559": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "560": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "RETURN",
+      "path": "34"
+    },
+    "561": {
+      "offset": [
+        502,
+        542
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "562": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        502,
+        542
+      ],
+      "op": "PUSH32",
+      "path": "34",
+      "value": "0x0"
+    },
+    "595": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        502,
+        542
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "596": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "jump": "o",
+      "offset": [
+        502,
+        542
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "597": {
+      "offset": [
+        342,
+        386
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "598": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        342,
+        386
+      ],
+      "op": "PUSH32",
+      "path": "34",
+      "value": "0x0"
+    },
+    "631": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        342,
+        386
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "632": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "jump": "o",
+      "offset": [
+        342,
+        386
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "633": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "634": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "636": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "638": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "640": {
+      "op": "SHL"
+    },
+    "641": {
+      "op": "SUB"
+    },
+    "642": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "DUP3",
+      "path": "34",
+      "statement": 0
+    },
+    "643": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "644": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1219,
+        1226
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x0"
+    },
+    "646": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "647": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "648": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "649": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "651": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "652": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "653": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "654": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "656": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "657": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1257
+      ],
+      "op": "KECCAK256",
+      "path": "34"
+    },
+    "658": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1269
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x1"
+    },
+    "660": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1269
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "661": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1269
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "662": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "663": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "664": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "665": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "666": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "667": {
+      "op": "PUSH1",
+      "value": "0xFF"
+    },
+    "669": {
+      "op": "NOT"
+    },
+    "670": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "671": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "672": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "673": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "OR",
+      "path": "34"
+    },
+    "674": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "675": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1238,
+        1284
+      ],
+      "op": "SSTORE",
+      "path": "34"
+    },
+    "676": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1301,
+        1334
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "statement": 1,
+      "value": "0x2"
+    },
+    "678": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1301,
+        1334
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "679": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1301,
+        1334
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "680": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP3",
+      "path": "34"
+    },
+    "681": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "682": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "683": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "684": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "jump": "o",
+      "offset": [
+        1137,
+        1341
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "685": {
+      "offset": [
+        549,
+        598
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "686": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x0"
+    },
+    "688": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "690": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "691": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "692": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "693": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "694": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "695": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "696": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "698": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "699": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "KECCAK256",
+      "path": "34"
+    },
+    "700": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "701": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "702": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x1"
+    },
+    "704": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "705": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "706": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "707": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x2"
+    },
+    "709": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "710": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "711": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "712": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x3"
+    },
+    "714": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "715": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP4",
+      "path": "34"
+    },
+    "716": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "717": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "718": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "719": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP3",
+      "path": "34"
+    },
+    "720": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0xFF"
+    },
+    "722": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "723": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "724": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "725": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "726": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xFFFF"
+    },
+    "729": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "730": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "DUP5",
+      "path": "34"
+    },
+    "731": {
+      "fn": "StakingEscrowForWorkLockMock.setWorkMeasurement",
+      "jump": "o",
+      "offset": [
+        549,
+        598
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "732": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "733": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "735": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "737": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "739": {
+      "op": "SHL"
+    },
+    "740": {
+      "op": "SUB"
+    },
+    "741": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "SWAP1",
+      "path": "34",
+      "statement": 2
+    },
+    "742": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "SWAP2",
+      "path": "34"
+    },
+    "743": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "744": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1687
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x0"
+    },
+    "746": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "747": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "748": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "749": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "751": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "752": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "753": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "754": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "756": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "757": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1696
+      ],
+      "op": "KECCAK256",
+      "path": "34"
+    },
+    "758": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1710
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x2"
+    },
+    "760": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1710
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "761": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        1677,
+        1727
+      ],
+      "op": "SSTORE",
+      "path": "34"
+    },
+    "762": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "jump": "o",
+      "offset": [
+        1591,
+        1734
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "763": {
+      "offset": [
+        447,
+        496
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "764": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        447,
+        496
+      ],
+      "op": "PUSH32",
+      "path": "34",
+      "value": "0x0"
+    },
+    "797": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        447,
+        496
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "798": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "jump": "o",
+      "offset": [
+        447,
+        496
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "799": {
+      "offset": [
+        392,
+        441
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "800": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        392,
+        441
+      ],
+      "op": "PUSH32",
+      "path": "34",
+      "value": "0x0"
+    },
+    "833": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "offset": [
+        392,
+        441
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "834": {
+      "fn": "StakingEscrowForWorkLockMock.setCompletedWork",
+      "jump": "o",
+      "offset": [
+        392,
+        441
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "835": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "836": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "838": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "840": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "842": {
+      "op": "SHL"
+    },
+    "843": {
+      "op": "SUB"
+    },
+    "844": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "AND",
+      "path": "34",
+      "statement": 3
+    },
+    "845": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1065,
+        1072
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x0"
+    },
+    "847": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "848": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "849": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "850": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "852": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "853": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "854": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "855": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "857": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "858": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1110
+      ],
+      "op": "KECCAK256",
+      "path": "34"
+    },
+    "859": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1124
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x2"
+    },
+    "861": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1124
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "862": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1124
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "863": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "offset": [
+        1091,
+        1124
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "864": {
+      "fn": "StakingEscrowForWorkLockMock.getCompletedWork",
+      "jump": "o",
+      "offset": [
+        999,
+        1131
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "865": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "866": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "868": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "870": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "872": {
+      "op": "SHL"
+    },
+    "873": {
+      "op": "SUB"
+    },
+    "874": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP4",
+      "path": "34",
+      "statement": 4
+    },
+    "875": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "876": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "877": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1443
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x0"
+    },
+    "879": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "880": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "881": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "882": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x20"
+    },
+    "884": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "885": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "886": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "887": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "889": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "890": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "891": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "KECCAK256",
+      "path": "34"
+    },
+    "892": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1467
+      ],
+      "op": "DUP7",
+      "path": "34"
+    },
+    "893": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1467
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "894": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1467
+      ],
+      "op": "SSTORE",
+      "path": "34"
+    },
+    "895": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1504
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "statement": 5,
+      "value": "0x3"
+    },
+    "897": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1504
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "898": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "899": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "SLOAD",
+      "path": "34"
+    },
+    "900": {
+      "op": "PUSH2",
+      "value": "0xFFFF"
+    },
+    "903": {
+      "op": "NOT"
+    },
+    "904": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "905": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "PUSH2",
+      "path": "34",
+      "value": "0xFFFF"
+    },
+    "908": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "DUP8",
+      "path": "34"
+    },
+    "909": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "910": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "OR",
+      "path": "34"
+    },
+    "911": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "912": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1477,
+        1515
+      ],
+      "op": "SSTORE",
+      "path": "34"
+    },
+    "913": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP1",
+      "path": "34",
+      "statement": 6
+    },
+    "914": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "915": {
+      "op": "PUSH4",
+      "value": "0x23B872DD"
+    },
+    "920": {
+      "op": "PUSH1",
+      "value": "0xE0"
+    },
+    "922": {
+      "op": "SHL"
+    },
+    "923": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "924": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "925": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1544,
+        1554
+      ],
+      "op": "CALLER",
+      "path": "34"
+    },
+    "926": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x4"
+    },
+    "928": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "929": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "930": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "931": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1564,
+        1568
+      ],
+      "op": "ADDRESS",
+      "path": "34"
+    },
+    "932": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x24"
+    },
+    "934": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "935": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "936": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "937": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x44"
+    },
+    "939": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "940": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "941": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP8",
+      "path": "34"
+    },
+    "942": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "943": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MSTORE",
+      "path": "34"
+    },
+    "944": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "945": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "946": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1530
+      ],
+      "op": "PUSH32",
+      "path": "34",
+      "value": "0x0"
+    },
+    "979": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "980": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "SWAP5",
+      "path": "34"
+    },
+    "981": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "AND",
+      "path": "34"
+    },
+    "982": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "SWAP4",
+      "path": "34"
+    },
+    "983": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "PUSH4",
+      "path": "34",
+      "value": "0x23B872DD"
+    },
+    "988": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "SWAP4",
+      "path": "34"
+    },
+    "989": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x64"
+    },
+    "991": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "992": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP5",
+      "path": "34"
+    },
+    "993": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "994": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SWAP5",
+      "path": "34"
+    },
+    "995": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1433,
+        1452
+      ],
+      "op": "SWAP4",
+      "path": "34"
+    },
+    "996": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP4",
+      "path": "34"
+    },
+    "997": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "998": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SUB",
+      "path": "34"
+    },
+    "999": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ADD",
+      "path": "34"
+    },
+    "1000": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "1001": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP3",
+      "path": "34"
+    },
+    "1002": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "SWAP1",
+      "path": "34"
+    },
+    "1003": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1543
+      ],
+      "op": "DUP8",
+      "path": "34"
+    },
+    "1004": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "DUP1",
+      "path": "34"
+    },
+    "1005": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "EXTCODESIZE",
+      "path": "34"
+    },
+    "1006": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "1007": {
+      "op": "DUP1"
+    },
+    "1008": {
+      "op": "ISZERO"
+    },
+    "1009": {
+      "op": "PUSH2",
+      "value": "0x3F9"
+    },
+    "1012": {
+      "op": "JUMPI"
+    },
+    "1013": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "1015": {
+      "op": "DUP1"
+    },
+    "1016": {
+      "op": "REVERT"
+    },
+    "1017": {
+      "op": "JUMPDEST"
+    },
+    "1018": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "1019": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "GAS",
+      "path": "34"
+    },
+    "1020": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "CALL",
+      "path": "34"
+    },
+    "1021": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "ISZERO",
+      "path": "34"
+    },
+    "1022": {
+      "op": "DUP1"
+    },
+    "1023": {
+      "op": "ISZERO"
+    },
+    "1024": {
+      "op": "PUSH2",
+      "value": "0x40D"
+    },
+    "1027": {
+      "op": "JUMPI"
+    },
+    "1028": {
+      "op": "RETURNDATASIZE"
+    },
+    "1029": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "1031": {
+      "op": "DUP1"
+    },
+    "1032": {
+      "op": "RETURNDATACOPY"
+    },
+    "1033": {
+      "op": "RETURNDATASIZE"
+    },
+    "1034": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "1036": {
+      "op": "REVERT"
+    },
+    "1037": {
+      "op": "JUMPDEST"
+    },
+    "1038": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "1039": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "1040": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "1041": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "POP",
+      "path": "34"
+    },
+    "1042": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "PUSH1",
+      "path": "34",
+      "value": "0x40"
+    },
+    "1044": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "MLOAD",
+      "path": "34"
+    },
+    "1045": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        1525,
+        1578
+      ],
+      "op": "RETURNDATASIZE",
+      "path": "34"
+    },
+    "1046": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "1048": {
+      "op": "DUP2"
+    },
+    "1049": {
+      "op": "LT"
+    },
+    "1050": {
+      "op": "ISZERO"
+    },
+    "1051": {
+      "op": "PUSH2",
+      "value": "0x423"
+    },
+    "1054": {
+      "op": "JUMPI"
+    },
+    "1055": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "1057": {
+      "op": "DUP1"
+    },
+    "1058": {
+      "op": "REVERT"
+    },
+    "1059": {
+      "op": "JUMPDEST"
+    },
+    "1060": {
+      "op": "POP"
+    },
+    "1061": {
+      "op": "POP"
+    },
+    "1062": {
+      "op": "POP"
+    },
+    "1063": {
+      "op": "POP"
+    },
+    "1064": {
+      "op": "POP"
+    },
+    "1065": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "jump": "o",
+      "offset": [
+        1347,
+        1585
+      ],
+      "op": "JUMP",
+      "path": "34"
+    },
+    "1066": {
+      "offset": [
+        300,
+        336
+      ],
+      "op": "JUMPDEST",
+      "path": "34"
+    },
+    "1067": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "PUSH32",
+      "path": "34",
+      "value": "0x0"
+    },
+    "1100": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "DUP2",
+      "path": "34"
+    },
+    "1101": {
+      "fn": "StakingEscrowForWorkLockMock.deposit",
+      "jump": "o",
+      "offset": [
+        300,
+        336
+      ],
+      "op": "JUMP",
+      "path": "34"
+    }
+  },
+  "sha1": "ed130cf5548fec234dc2ad0e86e3d626cf0ddbfd",
+  "source": "pragma solidity ^0.6.5;\n\n\nimport \"contracts/NuCypherToken.sol\";\n\n\n/**\n* @notice Contract for using in WorkLock tests\n*/\ncontract StakingEscrowForWorkLockMock {\n\n    struct StakerInfo {\n        uint256 value;\n        bool measureWork;\n        uint256 completedWork;\n        uint16 periods;\n    }\n\n    NuCypherToken public immutable token;\n    uint32 public immutable secondsPerPeriod = 1;\n    uint256 public immutable minAllowableLockedTokens;\n    uint256 public immutable maxAllowableLockedTokens;\n    uint16 public immutable minLockedPeriods;\n\n    mapping (address => StakerInfo) public stakerInfo;\n\n    constructor(\n        NuCypherToken _token,\n        uint256 _minAllowableLockedTokens,\n        uint256 _maxAllowableLockedTokens,\n        uint16 _minLockedPeriods\n    )\n        public\n    {\n        token = _token;\n        minAllowableLockedTokens = _minAllowableLockedTokens;\n        maxAllowableLockedTokens = _maxAllowableLockedTokens;\n        minLockedPeriods = _minLockedPeriods;\n    }\n\n    function getCompletedWork(address _staker) external view returns (uint256) {\n        return stakerInfo[_staker].completedWork;\n    }\n\n    function setWorkMeasurement(address _staker, bool _measureWork) external returns (uint256) {\n        stakerInfo[_staker].measureWork = _measureWork;\n        return stakerInfo[_staker].completedWork;\n    }\n\n    function deposit(address _staker, uint256 _value, uint16 _periods) external {\n        stakerInfo[_staker].value = _value;\n        stakerInfo[_staker].periods = _periods;\n        token.transferFrom(msg.sender, address(this), _value);\n    }\n\n    function setCompletedWork(address _staker, uint256 _completedWork) external {\n        stakerInfo[_staker].completedWork = _completedWork;\n    }\n\n}\n",
+  "sourceMap": "120:1617:34:-:0;;;-1:-1:-1;;;342:44:34;;605:388;2:2:-1;;;;27:1;24;17:12;2:2;605:388:34;;;;;;;;;;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;-1:-1;605:388:34;;;;;;;;;;;;;;;802:14;;;;-1:-1:-1;;;;;;802:14:34;605:388;802:14;826:52;;;;888;;;;950:36;;;;-1:-1:-1;;;;;;950:36:34;;;120:1617;;-1:-1:-1;;;;;120:1617:34;;;;;;;;;;;;;;;;;;;;;",
+  "sourcePath": "contracts/WorkLockTestSet.sol",
+  "type": "contract"
+}

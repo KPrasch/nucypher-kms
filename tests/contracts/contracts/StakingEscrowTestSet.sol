@@ -1,8 +1,8 @@
 pragma solidity ^0.6.5;
 
 
-import "contracts/StakingEscrow.sol";
-import "contracts/NuCypherToken.sol";
+import "nucypher/StakingEscrow.sol";
+import "nucypher/NuCypherToken.sol";
 
 
 /**

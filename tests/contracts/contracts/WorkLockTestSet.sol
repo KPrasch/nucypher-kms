@@ -1,7 +1,7 @@
 pragma solidity ^0.6.5;
 
 
-import "contracts/NuCypherToken.sol";
+import "nucypher/NuCypherToken.sol";
 
 
 /**

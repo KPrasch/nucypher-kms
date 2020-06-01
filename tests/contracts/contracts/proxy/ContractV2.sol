@@ -1,7 +1,7 @@
 pragma solidity ^0.6.1;
 
 
-import "contracts/proxy/Upgradeable.sol";
+import "nucypher/proxy/Upgradeable.sol";
 
 
 /**

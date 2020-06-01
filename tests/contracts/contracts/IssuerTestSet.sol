@@ -1,9 +1,9 @@
 pragma solidity ^0.6.5;
 
 
-import "contracts/Issuer.sol";
-import "contracts/NuCypherToken.sol";
-import "contracts/proxy/Upgradeable.sol";
+import "nucypher/Issuer.sol";
+import "nucypher/NuCypherToken.sol";
+import "nucypher/proxy/Upgradeable.sol";
 
 
 /**

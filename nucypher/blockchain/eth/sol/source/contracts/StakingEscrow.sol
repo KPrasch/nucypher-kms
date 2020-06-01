@@ -1,9 +1,9 @@
 pragma solidity ^0.6.5;
 
 import "aragon/interfaces/IERC900History.sol";
-import "contracts/Issuer.sol";
-import "contracts/lib/Bits.sol";
-import "contracts/lib/Snapshot.sol";
+import "nucypher/Issuer.sol";
+import "nucypher/lib/Bits.sol";
+import "nucypher/lib/Snapshot.sol";
 import "zeppelin/math/SafeMath.sol";
 
 

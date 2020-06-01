@@ -4,7 +4,7 @@ pragma solidity ^0.6.5;
 import "zeppelin/ownership/Ownable.sol";
 import "zeppelin/utils/Address.sol";
 import "zeppelin/token/ERC20/SafeERC20.sol";
-import "contracts/staking_contracts/StakingInterface.sol";
+import "nucypher/staking_contracts/StakingInterface.sol";
 
 
 /**

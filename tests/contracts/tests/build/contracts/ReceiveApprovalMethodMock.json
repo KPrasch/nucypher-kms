@@ -1,0 +1,5746 @@
+{
+  "abi": [
+    {
+      "inputs": [],
+      "name": "extraData",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_tokenContract",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_extraData",
+          "type": "bytes"
+        }
+      ],
+      "name": "receiveApproval",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "sender",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "tokenContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "value",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "allSourcePaths": {
+    "30": "contracts/ReceiveApprovalMethodMock.sol"
+  },
+  "ast": {
+    "absolutePath": "contracts/ReceiveApprovalMethodMock.sol",
+    "exportedSymbols": {
+      "ReceiveApprovalMethodMock": [
+        1643
+      ]
+    },
+    "id": 1644,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1605,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".1"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:30"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 1606,
+          "nodeType": "StructuredDocumentation",
+          "src": "26:50:30",
+          "text": "@notice Contract for using in token tests"
+        },
+        "fullyImplemented": true,
+        "id": 1643,
+        "linearizedBaseContracts": [
+          1643
+        ],
+        "name": "ReceiveApprovalMethodMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "67e404ce",
+            "id": 1608,
+            "mutability": "mutable",
+            "name": "sender",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1643,
+            "src": "119:21:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 1607,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "119:7:30",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "3fa4f245",
+            "id": 1610,
+            "mutability": "mutable",
+            "name": "value",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1643,
+            "src": "146:20:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1609,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "146:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "55a373d6",
+            "id": 1612,
+            "mutability": "mutable",
+            "name": "tokenContract",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1643,
+            "src": "172:28:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 1611,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "172:7:30",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "609d3334",
+            "id": 1614,
+            "mutability": "mutable",
+            "name": "extraData",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1643,
+            "src": "206:22:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes_storage",
+              "typeString": "bytes"
+            },
+            "typeName": {
+              "id": 1613,
+              "name": "bytes",
+              "nodeType": "ElementaryTypeName",
+              "src": "206:5:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes_storage_ptr",
+                "typeString": "bytes"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1641,
+              "nodeType": "Block",
+              "src": "401:127:30",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1627,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 1625,
+                      "name": "sender",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1608,
+                      "src": "411:6:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 1626,
+                      "name": "_from",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1616,
+                      "src": "420:5:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "411:14:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 1628,
+                  "nodeType": "ExpressionStatement",
+                  "src": "411:14:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1631,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 1629,
+                      "name": "value",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1610,
+                      "src": "435:5:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 1630,
+                      "name": "_value",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1618,
+                      "src": "443:6:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "435:14:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 1632,
+                  "nodeType": "ExpressionStatement",
+                  "src": "435:14:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1635,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 1633,
+                      "name": "tokenContract",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1612,
+                      "src": "459:13:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 1634,
+                      "name": "_tokenContract",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1620,
+                      "src": "475:14:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "459:30:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 1636,
+                  "nodeType": "ExpressionStatement",
+                  "src": "459:30:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1639,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 1637,
+                      "name": "extraData",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1614,
+                      "src": "499:9:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes_storage",
+                        "typeString": "bytes storage ref"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 1638,
+                      "name": "_extraData",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1622,
+                      "src": "511:10:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes_calldata_ptr",
+                        "typeString": "bytes calldata"
+                      }
+                    },
+                    "src": "499:22:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage",
+                      "typeString": "bytes storage ref"
+                    }
+                  },
+                  "id": 1640,
+                  "nodeType": "ExpressionStatement",
+                  "src": "499:22:30"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "8f4ffcb1",
+            "id": 1642,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "receiveApproval",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 1623,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1616,
+                  "mutability": "mutable",
+                  "name": "_from",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1642,
+                  "src": "269:13:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1615,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "269:7:30",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1618,
+                  "mutability": "mutable",
+                  "name": "_value",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1642,
+                  "src": "292:14:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1617,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "292:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1620,
+                  "mutability": "mutable",
+                  "name": "_tokenContract",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1642,
+                  "src": "316:22:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1619,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "316:7:30",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1622,
+                  "mutability": "mutable",
+                  "name": "_extraData",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 1642,
+                  "src": "348:25:30",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 1621,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "348:5:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "259:120:30"
+            },
+            "returnParameters": {
+              "id": 1624,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "401:0:30"
+            },
+            "scope": 1643,
+            "src": "235:293:30",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 1644,
+        "src": "77:454:30"
+      }
+    ],
+    "src": "0:532:30"
+  },
+  "bytecode": "608060405234801561001057600080fd5b5061037c806100206000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80633fa4f2451461005c57806355a373d614610076578063609d33341461009a57806367e404ce146101175780638f4ffcb11461011f575b600080fd5b6100646101b0565b60408051918252519081900360200190f35b61007e6101b6565b604080516001600160a01b039092168252519081900360200190f35b6100a26101c5565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100dc5781810151838201526020016100c4565b50505050905090810190601f1680156101095780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b61007e610253565b6101ae6004803603608081101561013557600080fd5b6001600160a01b03823581169260208101359260408201359092169181019060808101606082013564010000000081111561016f57600080fd5b82018360208201111561018157600080fd5b803590602001918460018302840111640100000000831117156101a357600080fd5b509092509050610262565b005b60015481565b6002546001600160a01b031681565b6003805460408051602060026001851615610100026000190190941693909304601f8101849004840282018401909252818152929183018282801561024b5780601f106102205761010080835404028352916020019161024b565b820191906000526020600020905b81548152906001019060200180831161022e57829003601f168201915b505050505081565b6000546001600160a01b031681565b600080546001600160a01b038088166001600160a01b031992831617909255600186905560028054928616929091169190911790556102a3600383836102ab565b505050505050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106102ec5782800160ff19823516178555610319565b82800160010185558215610319579182015b828111156103195782358255916020019190600101906102fe565b50610325929150610329565b5090565b61034391905b80821115610325576000815560010161032f565b9056fea2646970667358221220c2839d6a1c915f1c2f84ad9739577366a1fd416521bc69a48cb72b3c006147aa64736f6c63430006070033",
+  "bytecodeSha1": "427f82ab0d5226716509614772c76d0d5db9e625",
+  "compiler": {
+    "evm_version": "berlin",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "version": "0.6.7"
+  },
+  "contractName": "ReceiveApprovalMethodMock",
+  "coverageMap": {
+    "branches": {
+      "30": {}
+    },
+    "statements": {
+      "30": {
+        "ReceiveApprovalMethodMock.receiveApproval": {
+          "0": [
+            411,
+            425
+          ],
+          "1": [
+            435,
+            449
+          ],
+          "2": [
+            459,
+            489
+          ],
+          "3": [
+            499,
+            521
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": [],
+  "deployedBytecode": "608060405234801561001057600080fd5b50600436106100575760003560e01c80633fa4f2451461005c57806355a373d614610076578063609d33341461009a57806367e404ce146101175780638f4ffcb11461011f575b600080fd5b6100646101b0565b60408051918252519081900360200190f35b61007e6101b6565b604080516001600160a01b039092168252519081900360200190f35b6100a26101c5565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100dc5781810151838201526020016100c4565b50505050905090810190601f1680156101095780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b61007e610253565b6101ae6004803603608081101561013557600080fd5b6001600160a01b03823581169260208101359260408201359092169181019060808101606082013564010000000081111561016f57600080fd5b82018360208201111561018157600080fd5b803590602001918460018302840111640100000000831117156101a357600080fd5b509092509050610262565b005b60015481565b6002546001600160a01b031681565b6003805460408051602060026001851615610100026000190190941693909304601f8101849004840282018401909252818152929183018282801561024b5780601f106102205761010080835404028352916020019161024b565b820191906000526020600020905b81548152906001019060200180831161022e57829003601f168201915b505050505081565b6000546001600160a01b031681565b600080546001600160a01b038088166001600160a01b031992831617909255600186905560028054928616929091169190911790556102a3600383836102ab565b505050505050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106102ec5782800160ff19823516178555610319565b82800160010185558215610319579182015b828111156103195782358255916020019190600101906102fe565b50610325929150610329565b5090565b61034391905b80821115610325576000815560010161032f565b9056fea2646970667358221220c2839d6a1c915f1c2f84ad9739577366a1fd416521bc69a48cb72b3c006147aa64736f6c63430006070033",
+  "deployedSourceMap": "77:454:30:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;77:454:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;12:1:-1;9;2:12;146:20:30;;;:::i;:::-;;;;;;;;;;;;;;;;172:28;;;:::i;:::-;;;;-1:-1:-1;;;;;172:28:30;;;;;;;;;;;;;;206:22;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;206:22:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;119:21;;;:::i;235:293::-;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;-1:-1;;;;;235:293:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;27:11:-1;11:28;;8:2;;;52:1;49;42:12;8:2;235:293:30;;41:9:-1;34:4;18:14;14:25;11:40;8:2;;;64:1;61;54:12;8:2;235:293:30;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;-1:-1;235:293:30;;-1:-1:-1;235:293:30;-1:-1:-1;235:293:30;:::i;:::-;;146:20;;;;:::o;172:28::-;;;-1:-1:-1;;;;;172:28:30;;:::o;206:22::-;;;;;;;;;;;;;;;-1:-1:-1;;206:22:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;119:21::-;;;-1:-1:-1;;;;;119:21:30;;:::o;235:293::-;411:6;:14;;-1:-1:-1;;;;;411:14:30;;;-1:-1:-1;;;;;;411:14:30;;;;;;;;435;;;459:13;:30;;;;;;;;;;;;;;;499:22;:9;511:10;;499:22;:::i;:::-;;235:293;;;;;:::o;77:454::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;77:454:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;77:454:30;;;-1:-1:-1;77:454:30;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;:::o",
+  "language": "Solidity",
+  "natspec": {
+    "methods": {},
+    "notice": "Contract for using in token tests"
+  },
+  "offset": [
+    77,
+    531
+  ],
+  "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x4 CALLDATASIZE LT PUSH2 0x57 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x3FA4F245 EQ PUSH2 0x5C JUMPI DUP1 PUSH4 0x55A373D6 EQ PUSH2 0x76 JUMPI DUP1 PUSH4 0x609D3334 EQ PUSH2 0x9A JUMPI DUP1 PUSH4 0x67E404CE EQ PUSH2 0x117 JUMPI DUP1 PUSH4 0x8F4FFCB1 EQ PUSH2 0x11F JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x64 PUSH2 0x1B0 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP2 DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x7E PUSH2 0x1B6 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xA2 PUSH2 0x1C5 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x20 DUP1 DUP3 MSTORE DUP4 MLOAD DUP2 DUP4 ADD MSTORE DUP4 MLOAD SWAP2 SWAP3 DUP4 SWAP3 SWAP1 DUP4 ADD SWAP2 DUP6 ADD SWAP1 DUP1 DUP4 DUP4 PUSH1 0x0 JUMPDEST DUP4 DUP2 LT ISZERO PUSH2 0xDC JUMPI DUP2 DUP2 ADD MLOAD DUP4 DUP3 ADD MSTORE PUSH1 0x20 ADD PUSH2 0xC4 JUMP JUMPDEST POP POP POP POP SWAP1 POP SWAP1 DUP2 ADD SWAP1 PUSH1 0x1F AND DUP1 ISZERO PUSH2 0x109 JUMPI DUP1 DUP3 SUB DUP1 MLOAD PUSH1 0x1 DUP4 PUSH1 0x20 SUB PUSH2 0x100 EXP SUB NOT AND DUP2 MSTORE PUSH1 0x20 ADD SWAP2 POP JUMPDEST POP SWAP3 POP POP POP PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 RETURN JUMPDEST PUSH2 0x7E PUSH2 0x253 JUMP JUMPDEST PUSH2 0x1AE PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x80 DUP2 LT ISZERO PUSH2 0x135 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP3 CALLDATALOAD DUP2 AND SWAP3 PUSH1 0x20 DUP2 ADD CALLDATALOAD SWAP3 PUSH1 0x40 DUP3 ADD CALLDATALOAD SWAP1 SWAP3 AND SWAP2 DUP2 ADD SWAP1 PUSH1 0x80 DUP2 ADD PUSH1 0x60 DUP3 ADD CALLDATALOAD PUSH5 0x100000000 DUP2 GT ISZERO PUSH2 0x16F JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST DUP3 ADD DUP4 PUSH1 0x20 DUP3 ADD GT ISZERO PUSH2 0x181 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 ADD SWAP2 DUP5 PUSH1 0x1 DUP4 MUL DUP5 ADD GT PUSH5 0x100000000 DUP4 GT OR ISZERO PUSH2 0x1A3 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP SWAP1 SWAP3 POP SWAP1 POP PUSH2 0x262 JUMP JUMPDEST STOP JUMPDEST PUSH1 0x1 SLOAD DUP2 JUMP JUMPDEST PUSH1 0x2 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP2 JUMP JUMPDEST PUSH1 0x3 DUP1 SLOAD PUSH1 0x40 DUP1 MLOAD PUSH1 0x20 PUSH1 0x2 PUSH1 0x1 DUP6 AND ISZERO PUSH2 0x100 MUL PUSH1 0x0 NOT ADD SWAP1 SWAP5 AND SWAP4 SWAP1 SWAP4 DIV PUSH1 0x1F DUP2 ADD DUP5 SWAP1 DIV DUP5 MUL DUP3 ADD DUP5 ADD SWAP1 SWAP3 MSTORE DUP2 DUP2 MSTORE SWAP3 SWAP2 DUP4 ADD DUP3 DUP3 DUP1 ISZERO PUSH2 0x24B JUMPI DUP1 PUSH1 0x1F LT PUSH2 0x220 JUMPI PUSH2 0x100 DUP1 DUP4 SLOAD DIV MUL DUP4 MSTORE SWAP2 PUSH1 0x20 ADD SWAP2 PUSH2 0x24B JUMP JUMPDEST DUP3 ADD SWAP2 SWAP1 PUSH1 0x0 MSTORE PUSH1 0x20 PUSH1 0x0 KECCAK256 SWAP1 JUMPDEST DUP2 SLOAD DUP2 MSTORE SWAP1 PUSH1 0x1 ADD SWAP1 PUSH1 0x20 ADD DUP1 DUP4 GT PUSH2 0x22E JUMPI DUP3 SWAP1 SUB PUSH1 0x1F AND DUP3 ADD SWAP2 JUMPDEST POP POP POP POP POP DUP2 JUMP JUMPDEST PUSH1 0x0 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND DUP2 JUMP JUMPDEST PUSH1 0x0 DUP1 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB DUP1 DUP9 AND PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB NOT SWAP3 DUP4 AND OR SWAP1 SWAP3 SSTORE PUSH1 0x1 DUP7 SWAP1 SSTORE PUSH1 0x2 DUP1 SLOAD SWAP3 DUP7 AND SWAP3 SWAP1 SWAP2 AND SWAP2 SWAP1 SWAP2 OR SWAP1 SSTORE PUSH2 0x2A3 PUSH1 0x3 DUP4 DUP4 PUSH2 0x2AB JUMP JUMPDEST POP POP POP POP POP POP JUMP JUMPDEST DUP3 DUP1 SLOAD PUSH1 0x1 DUP2 PUSH1 0x1 AND ISZERO PUSH2 0x100 MUL SUB AND PUSH1 0x2 SWAP1 DIV SWAP1 PUSH1 0x0 MSTORE PUSH1 0x20 PUSH1 0x0 KECCAK256 SWAP1 PUSH1 0x1F ADD PUSH1 0x20 SWAP1 DIV DUP2 ADD SWAP3 DUP3 PUSH1 0x1F LT PUSH2 0x2EC JUMPI DUP3 DUP1 ADD PUSH1 0xFF NOT DUP3 CALLDATALOAD AND OR DUP6 SSTORE PUSH2 0x319 JUMP JUMPDEST DUP3 DUP1 ADD PUSH1 0x1 ADD DUP6 SSTORE DUP3 ISZERO PUSH2 0x319 JUMPI SWAP2 DUP3 ADD JUMPDEST DUP3 DUP2 GT ISZERO PUSH2 0x319 JUMPI DUP3 CALLDATALOAD DUP3 SSTORE SWAP2 PUSH1 0x20 ADD SWAP2 SWAP1 PUSH1 0x1 ADD SWAP1 PUSH2 0x2FE JUMP JUMPDEST POP PUSH2 0x325 SWAP3 SWAP2 POP PUSH2 0x329 JUMP JUMPDEST POP SWAP1 JUMP JUMPDEST PUSH2 0x343 SWAP2 SWAP1 JUMPDEST DUP1 DUP3 GT ISZERO PUSH2 0x325 JUMPI PUSH1 0x0 DUP2 SSTORE PUSH1 0x1 ADD PUSH2 0x32F JUMP JUMPDEST SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xC2 DUP4 SWAP14 PUSH11 0x1C915F1C2F84AD97395773 PUSH7 0xA1FD416521BC69 LOG4 DUP13 0xB7 0x2B EXTCODECOPY STOP PUSH2 0x47AA PUSH5 0x736F6C6343 STOP MOD SMOD STOP CALLER ",
+  "pcMap": {
+    "0": {
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x80"
+    },
+    "2": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "4": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "5": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "CALLVALUE",
+      "path": "30"
+    },
+    "6": {
+      "op": "DUP1"
+    },
+    "7": {
+      "op": "ISZERO"
+    },
+    "8": {
+      "op": "PUSH2",
+      "value": "0x10"
+    },
+    "11": {
+      "op": "JUMPI"
+    },
+    "12": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "14": {
+      "op": "DUP1"
+    },
+    "15": {
+      "dev": "Cannot send ether to nonpayable function",
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "REVERT",
+      "path": "30"
+    },
+    "16": {
+      "op": "JUMPDEST"
+    },
+    "17": {
+      "offset": [
+        77,
+        531
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "18": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x4"
+    },
+    "20": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "CALLDATASIZE",
+      "path": "30"
+    },
+    "21": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "LT",
+      "path": "30"
+    },
+    "22": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x57"
+    },
+    "25": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "26": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "28": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "29": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0xE0"
+    },
+    "31": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SHR",
+      "path": "30"
+    },
+    "32": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "33": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH4",
+      "path": "30",
+      "value": "0x3FA4F245"
+    },
+    "38": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "EQ",
+      "path": "30"
+    },
+    "39": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x5C"
+    },
+    "42": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "43": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "44": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH4",
+      "path": "30",
+      "value": "0x55A373D6"
+    },
+    "49": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "EQ",
+      "path": "30"
+    },
+    "50": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x76"
+    },
+    "53": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "54": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "55": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH4",
+      "path": "30",
+      "value": "0x609D3334"
+    },
+    "60": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "EQ",
+      "path": "30"
+    },
+    "61": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x9A"
+    },
+    "64": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "65": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "66": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH4",
+      "path": "30",
+      "value": "0x67E404CE"
+    },
+    "71": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "EQ",
+      "path": "30"
+    },
+    "72": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x117"
+    },
+    "75": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "76": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "77": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH4",
+      "path": "30",
+      "value": "0x8F4FFCB1"
+    },
+    "82": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "EQ",
+      "path": "30"
+    },
+    "83": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x11F"
+    },
+    "86": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "87": {
+      "fn": null,
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "88": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "90": {
+      "op": "DUP1"
+    },
+    "91": {
+      "first_revert": true,
+      "op": "REVERT"
+    },
+    "92": {
+      "offset": [
+        146,
+        166
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "93": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x64"
+    },
+    "96": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x1B0"
+    },
+    "99": {
+      "fn": null,
+      "jump": "i",
+      "offset": [
+        146,
+        166
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "100": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "101": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "103": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "104": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "105": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "106": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "107": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "108": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "109": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "110": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "111": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "112": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "113": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "115": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "116": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "117": {
+      "fn": null,
+      "offset": [
+        146,
+        166
+      ],
+      "op": "RETURN",
+      "path": "30"
+    },
+    "118": {
+      "offset": [
+        172,
+        200
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "119": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x7E"
+    },
+    "122": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x1B6"
+    },
+    "125": {
+      "fn": null,
+      "jump": "i",
+      "offset": [
+        172,
+        200
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "126": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "127": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "129": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "130": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "131": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "133": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "135": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "137": {
+      "op": "SHL"
+    },
+    "138": {
+      "op": "SUB"
+    },
+    "139": {
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "140": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "141": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "142": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "143": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "144": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "145": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "146": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "147": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "148": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "149": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "151": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "152": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "153": {
+      "fn": null,
+      "offset": [
+        172,
+        200
+      ],
+      "op": "RETURN",
+      "path": "30"
+    },
+    "154": {
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "155": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0xA2"
+    },
+    "158": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x1C5"
+    },
+    "161": {
+      "fn": null,
+      "jump": "i",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "162": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "163": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "165": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "166": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "167": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "169": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "170": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "171": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "172": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "173": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "174": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "175": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "176": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "177": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "178": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "179": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "180": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "181": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "182": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "183": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "184": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "185": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "186": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "187": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "188": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP6",
+      "path": "30"
+    },
+    "189": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "190": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "191": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "192": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "193": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "194": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "196": {
+      "op": "JUMPDEST"
+    },
+    "197": {
+      "op": "DUP4"
+    },
+    "198": {
+      "op": "DUP2"
+    },
+    "199": {
+      "op": "LT"
+    },
+    "200": {
+      "op": "ISZERO"
+    },
+    "201": {
+      "op": "PUSH2",
+      "value": "0xDC"
+    },
+    "204": {
+      "op": "JUMPI"
+    },
+    "205": {
+      "op": "DUP2"
+    },
+    "206": {
+      "op": "DUP2"
+    },
+    "207": {
+      "op": "ADD"
+    },
+    "208": {
+      "op": "MLOAD"
+    },
+    "209": {
+      "op": "DUP4"
+    },
+    "210": {
+      "op": "DUP3"
+    },
+    "211": {
+      "op": "ADD"
+    },
+    "212": {
+      "op": "MSTORE"
+    },
+    "213": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "215": {
+      "op": "ADD"
+    },
+    "216": {
+      "op": "PUSH2",
+      "value": "0xC4"
+    },
+    "219": {
+      "op": "JUMP"
+    },
+    "220": {
+      "op": "JUMPDEST"
+    },
+    "221": {
+      "op": "POP"
+    },
+    "222": {
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "223": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "224": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "225": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "226": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "227": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "228": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "229": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "230": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "231": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1F"
+    },
+    "233": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "234": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "235": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "236": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x109"
+    },
+    "239": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "240": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "241": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "242": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "243": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "244": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "245": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "247": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "248": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "250": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "251": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x100"
+    },
+    "254": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "EXP",
+      "path": "30"
+    },
+    "255": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "256": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "NOT",
+      "path": "30"
+    },
+    "257": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "258": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "259": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "260": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "262": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "263": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "264": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "265": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "266": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "267": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "268": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "269": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "270": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "271": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "273": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "274": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "275": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "276": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "277": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "278": {
+      "fn": null,
+      "offset": [
+        206,
+        228
+      ],
+      "op": "RETURN",
+      "path": "30"
+    },
+    "279": {
+      "offset": [
+        119,
+        140
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "280": {
+      "fn": null,
+      "offset": [
+        119,
+        140
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x7E"
+    },
+    "283": {
+      "fn": null,
+      "offset": [
+        119,
+        140
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x253"
+    },
+    "286": {
+      "fn": null,
+      "jump": "i",
+      "offset": [
+        119,
+        140
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "287": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "288": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x1AE"
+    },
+    "291": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x4"
+    },
+    "293": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "294": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "CALLDATASIZE",
+      "path": "30"
+    },
+    "295": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "296": {
+      "op": "PUSH1",
+      "value": "0x80"
+    },
+    "298": {
+      "op": "DUP2"
+    },
+    "299": {
+      "op": "LT"
+    },
+    "300": {
+      "op": "ISZERO"
+    },
+    "301": {
+      "op": "PUSH2",
+      "value": "0x135"
+    },
+    "304": {
+      "op": "JUMPI"
+    },
+    "305": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "307": {
+      "op": "DUP1"
+    },
+    "308": {
+      "op": "REVERT"
+    },
+    "309": {
+      "op": "JUMPDEST"
+    },
+    "310": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "312": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "314": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "316": {
+      "op": "SHL"
+    },
+    "317": {
+      "op": "SUB"
+    },
+    "318": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "319": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "320": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "321": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "322": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "323": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "325": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "326": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "327": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "328": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "329": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "331": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "332": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "333": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "334": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "335": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "336": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "337": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "338": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "339": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "340": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "341": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x80"
+    },
+    "343": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "344": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "345": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x60"
+    },
+    "347": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "348": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "349": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "350": {
+      "op": "PUSH5",
+      "value": "0x100000000"
+    },
+    "356": {
+      "op": "DUP2"
+    },
+    "357": {
+      "op": "GT"
+    },
+    "358": {
+      "op": "ISZERO"
+    },
+    "359": {
+      "op": "PUSH2",
+      "value": "0x16F"
+    },
+    "362": {
+      "op": "JUMPI"
+    },
+    "363": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "365": {
+      "op": "DUP1"
+    },
+    "366": {
+      "op": "REVERT"
+    },
+    "367": {
+      "op": "JUMPDEST"
+    },
+    "368": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "369": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "370": {
+      "op": "DUP4"
+    },
+    "371": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "373": {
+      "op": "DUP3"
+    },
+    "374": {
+      "op": "ADD"
+    },
+    "375": {
+      "op": "GT"
+    },
+    "376": {
+      "op": "ISZERO"
+    },
+    "377": {
+      "op": "PUSH2",
+      "value": "0x181"
+    },
+    "380": {
+      "op": "JUMPI"
+    },
+    "381": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "383": {
+      "op": "DUP1"
+    },
+    "384": {
+      "op": "REVERT"
+    },
+    "385": {
+      "op": "JUMPDEST"
+    },
+    "386": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "387": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "388": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "389": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "391": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "392": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "393": {
+      "op": "DUP5"
+    },
+    "394": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "396": {
+      "op": "DUP4"
+    },
+    "397": {
+      "op": "MUL"
+    },
+    "398": {
+      "op": "DUP5"
+    },
+    "399": {
+      "op": "ADD"
+    },
+    "400": {
+      "op": "GT"
+    },
+    "401": {
+      "op": "PUSH5",
+      "value": "0x100000000"
+    },
+    "407": {
+      "op": "DUP4"
+    },
+    "408": {
+      "op": "GT"
+    },
+    "409": {
+      "op": "OR"
+    },
+    "410": {
+      "op": "ISZERO"
+    },
+    "411": {
+      "op": "PUSH2",
+      "value": "0x1A3"
+    },
+    "414": {
+      "op": "JUMPI"
+    },
+    "415": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "417": {
+      "op": "DUP1"
+    },
+    "418": {
+      "op": "REVERT"
+    },
+    "419": {
+      "op": "JUMPDEST"
+    },
+    "420": {
+      "op": "POP"
+    },
+    "421": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "422": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "423": {
+      "op": "POP"
+    },
+    "424": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "425": {
+      "op": "POP"
+    },
+    "426": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x262"
+    },
+    "429": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "i",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "430": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "431": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "STOP",
+      "path": "30"
+    },
+    "432": {
+      "offset": [
+        146,
+        166
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "433": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        146,
+        166
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "435": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        146,
+        166
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "436": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        146,
+        166
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "437": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        146,
+        166
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "438": {
+      "offset": [
+        172,
+        200
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "439": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        172,
+        200
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x2"
+    },
+    "441": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        172,
+        200
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "442": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "444": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "446": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "448": {
+      "op": "SHL"
+    },
+    "449": {
+      "op": "SUB"
+    },
+    "450": {
+      "offset": [
+        172,
+        200
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "451": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        172,
+        200
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "452": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        172,
+        200
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "453": {
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "454": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x3"
+    },
+    "456": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "457": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "458": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x40"
+    },
+    "460": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "461": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MLOAD",
+      "path": "30"
+    },
+    "462": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "464": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x2"
+    },
+    "466": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "468": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP6",
+      "path": "30"
+    },
+    "469": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "470": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "471": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x100"
+    },
+    "474": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MUL",
+      "path": "30"
+    },
+    "475": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "477": {
+      "op": "NOT"
+    },
+    "478": {
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "479": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "480": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP5",
+      "path": "30"
+    },
+    "481": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "482": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP4",
+      "path": "30"
+    },
+    "483": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "484": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP4",
+      "path": "30"
+    },
+    "485": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DIV",
+      "path": "30"
+    },
+    "486": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1F"
+    },
+    "488": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "489": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "490": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP5",
+      "path": "30"
+    },
+    "491": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "492": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DIV",
+      "path": "30"
+    },
+    "493": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP5",
+      "path": "30"
+    },
+    "494": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MUL",
+      "path": "30"
+    },
+    "495": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "496": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "497": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP5",
+      "path": "30"
+    },
+    "498": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "499": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "500": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "501": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "502": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "503": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "504": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "505": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "506": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "507": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "508": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "509": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "510": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "511": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "512": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "513": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x24B"
+    },
+    "516": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "517": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "518": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1F"
+    },
+    "520": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "LT",
+      "path": "30"
+    },
+    "521": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x220"
+    },
+    "524": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "525": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x100"
+    },
+    "528": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "529": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "530": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "531": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DIV",
+      "path": "30"
+    },
+    "532": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MUL",
+      "path": "30"
+    },
+    "533": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "534": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "535": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "536": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "538": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "539": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "540": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x24B"
+    },
+    "543": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "544": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "545": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "546": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "547": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "548": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "549": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "551": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "552": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "554": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "556": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "KECCAK256",
+      "path": "30"
+    },
+    "557": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "558": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "559": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "560": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "561": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "562": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "563": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "564": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "566": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "567": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "568": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "570": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "571": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "572": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "573": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "GT",
+      "path": "30"
+    },
+    "574": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x22E"
+    },
+    "577": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "578": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "579": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "580": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "581": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1F"
+    },
+    "583": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "584": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "585": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "586": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "587": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "588": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "589": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "590": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "591": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "592": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "593": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "594": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        206,
+        228
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "595": {
+      "offset": [
+        119,
+        140
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "596": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        119,
+        140
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "598": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        119,
+        140
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "599": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "601": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "603": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "605": {
+      "op": "SHL"
+    },
+    "606": {
+      "op": "SUB"
+    },
+    "607": {
+      "offset": [
+        119,
+        140
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "608": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        119,
+        140
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "609": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        119,
+        140
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "610": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "611": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        417
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "statement": 0,
+      "value": "0x0"
+    },
+    "613": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "614": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "615": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "617": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "619": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "621": {
+      "op": "SHL"
+    },
+    "622": {
+      "op": "SUB"
+    },
+    "623": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "624": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "DUP9",
+      "path": "30"
+    },
+    "625": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "626": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "628": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "630": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "632": {
+      "op": "SHL"
+    },
+    "633": {
+      "op": "SUB"
+    },
+    "634": {
+      "op": "NOT"
+    },
+    "635": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "636": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "637": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "638": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "OR",
+      "path": "30"
+    },
+    "639": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "640": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "641": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "642": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        411,
+        425
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "644": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        435,
+        449
+      ],
+      "op": "DUP7",
+      "path": "30",
+      "statement": 1
+    },
+    "645": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        435,
+        449
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "646": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        435,
+        449
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "647": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        472
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "statement": 2,
+      "value": "0x2"
+    },
+    "649": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "650": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "651": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "652": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "DUP7",
+      "path": "30"
+    },
+    "653": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "654": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "655": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "656": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "657": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "658": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "659": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "660": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "661": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "OR",
+      "path": "30"
+    },
+    "662": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "663": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        459,
+        489
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "664": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        499,
+        521
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "statement": 3,
+      "value": "0x2A3"
+    },
+    "667": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        499,
+        508
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x3"
+    },
+    "669": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        511,
+        521
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "670": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        511,
+        521
+      ],
+      "op": "DUP4",
+      "path": "30"
+    },
+    "671": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        499,
+        521
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x2AB"
+    },
+    "674": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "i",
+      "offset": [
+        499,
+        521
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "675": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        499,
+        521
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "676": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        499,
+        521
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "677": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "678": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "679": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "680": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "681": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "682": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        235,
+        528
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "683": {
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "684": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "685": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "686": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SLOAD",
+      "path": "30"
+    },
+    "687": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "689": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "690": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "692": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "693": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "694": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x100"
+    },
+    "697": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "MUL",
+      "path": "30"
+    },
+    "698": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SUB",
+      "path": "30"
+    },
+    "699": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "700": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x2"
+    },
+    "702": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "703": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DIV",
+      "path": "30"
+    },
+    "704": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "705": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "707": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "MSTORE",
+      "path": "30"
+    },
+    "708": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "710": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "712": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "KECCAK256",
+      "path": "30"
+    },
+    "713": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "714": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1F"
+    },
+    "716": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "717": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "719": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "720": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DIV",
+      "path": "30"
+    },
+    "721": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "722": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "723": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "724": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "725": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1F"
+    },
+    "727": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "LT",
+      "path": "30"
+    },
+    "728": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x2EC"
+    },
+    "731": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "732": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "733": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "734": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "735": {
+      "op": "PUSH1",
+      "value": "0xFF"
+    },
+    "737": {
+      "op": "NOT"
+    },
+    "738": {
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "739": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "740": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "AND",
+      "path": "30"
+    },
+    "741": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "OR",
+      "path": "30"
+    },
+    "742": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP6",
+      "path": "30"
+    },
+    "743": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "744": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x319"
+    },
+    "747": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "748": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "749": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "750": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "751": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "752": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "754": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "755": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP6",
+      "path": "30"
+    },
+    "756": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "757": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "758": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "759": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x319"
+    },
+    "762": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "763": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "764": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "765": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "766": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "767": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "768": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "769": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "GT",
+      "path": "30"
+    },
+    "770": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "771": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x319"
+    },
+    "774": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "775": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "776": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "CALLDATALOAD",
+      "path": "30"
+    },
+    "777": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "778": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "779": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "780": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x20"
+    },
+    "782": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "783": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "784": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "785": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "787": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "788": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "789": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x2FE"
+    },
+    "792": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "793": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "794": {
+      "op": "POP"
+    },
+    "795": {
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x325"
+    },
+    "798": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP3",
+      "path": "30"
+    },
+    "799": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "800": {
+      "op": "POP"
+    },
+    "801": {
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x329"
+    },
+    "804": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "i",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "805": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "806": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "POP",
+      "path": "30"
+    },
+    "807": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "808": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "809": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "810": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x343"
+    },
+    "813": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP2",
+      "path": "30"
+    },
+    "814": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "815": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "816": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP1",
+      "path": "30"
+    },
+    "817": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP3",
+      "path": "30"
+    },
+    "818": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "GT",
+      "path": "30"
+    },
+    "819": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ISZERO",
+      "path": "30"
+    },
+    "820": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x325"
+    },
+    "823": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPI",
+      "path": "30"
+    },
+    "824": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x0"
+    },
+    "826": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "DUP2",
+      "path": "30"
+    },
+    "827": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SSTORE",
+      "path": "30"
+    },
+    "828": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH1",
+      "path": "30",
+      "value": "0x1"
+    },
+    "830": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "ADD",
+      "path": "30"
+    },
+    "831": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "PUSH2",
+      "path": "30",
+      "value": "0x32F"
+    },
+    "834": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMP",
+      "path": "30"
+    },
+    "835": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMPDEST",
+      "path": "30"
+    },
+    "836": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "SWAP1",
+      "path": "30"
+    },
+    "837": {
+      "fn": "ReceiveApprovalMethodMock.receiveApproval",
+      "jump": "o",
+      "offset": [
+        77,
+        531
+      ],
+      "op": "JUMP",
+      "path": "30"
+    }
+  },
+  "sha1": "6e728df51a758f5d4a4bfcfc4b0ec39fe4405897",
+  "source": "pragma solidity ^0.6.1;\n\n\n/**\n* @notice Contract for using in token tests\n*/\ncontract ReceiveApprovalMethodMock {\n\n    address public sender;\n    uint256 public value;\n    address public tokenContract;\n    bytes public extraData;\n\n    function receiveApproval(\n        address _from,\n        uint256 _value,\n        address _tokenContract,\n        bytes calldata _extraData\n    )\n        external\n    {\n        sender = _from;\n        value = _value;\n        tokenContract = _tokenContract;\n        extraData = _extraData;\n    }\n\n}\n",
+  "sourceMap": "77:454:30:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;77:454:30;;;;;;;",
+  "sourcePath": "contracts/ReceiveApprovalMethodMock.sol",
+  "type": "contract"
+}

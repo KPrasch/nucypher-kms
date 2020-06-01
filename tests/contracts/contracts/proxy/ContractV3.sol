@@ -1,7 +1,7 @@
 pragma solidity ^0.6.1;
 
 
-import "./ContractV2.sol";
+import "tests/proxy/ContractV2.sol";
 
 
 contract ContractV3 is ContractV2 {

@@ -5,11 +5,11 @@ import "zeppelin/token/ERC20/SafeERC20.sol";
 import "zeppelin/math/SafeMath.sol";
 import "zeppelin/math/Math.sol";
 import "zeppelin/utils/Address.sol";
-import "contracts/lib/AdditionalMath.sol";
-import "contracts/lib/SignatureVerifier.sol";
-import "contracts/StakingEscrow.sol";
-import "contracts/NuCypherToken.sol";
-import "contracts/proxy/Upgradeable.sol";
+import "nucypher/lib/AdditionalMath.sol";
+import "nucypher/lib/SignatureVerifier.sol";
+import "nucypher/StakingEscrow.sol";
+import "nucypher/NuCypherToken.sol";
+import "nucypher/proxy/Upgradeable.sol";
 
 
 /**

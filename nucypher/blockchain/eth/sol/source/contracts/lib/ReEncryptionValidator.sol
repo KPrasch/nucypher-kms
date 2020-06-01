@@ -1,7 +1,7 @@
 pragma solidity ^0.6.1;
 
-import "contracts/lib/UmbralDeserializer.sol";
-import "contracts/lib/SignatureVerifier.sol";
+import "nucypher/lib/UmbralDeserializer.sol";
+import "nucypher/lib/SignatureVerifier.sol";
 
 /**
 * @notice Validates re-encryption correctness.

@@ -1,0 +1,47 @@
+project_structure:
+  contracts: ../../nucypher/blockchain/eth/sol/source/
+  build: ./brownie/artifacts
+  interfaces: ./brownie/abi
+  reports: ./brownie/logs
+  scripts: ./brownie/automation
+  tests: ./tests
+
+networks:
+    default: development
+    development:
+        gas_limit: 8000000
+        gas_price: 0
+        reverting_tx_gas_limit: 8000000
+        default_contract_owner: true
+        cmd_settings: null
+    live:
+        gas_limit: auto
+        gas_price: auto
+        reverting_tx_gas_limit: false
+        default_contract_owner: false
+
+compiler:
+    evm_version: berlin
+    solc:
+        version: null
+        optimizer:
+            enabled: true
+            runs: 200
+        remappings:
+            - tests=./contracts
+            - nucypher=../../nucypher/blockchain/eth/sol/source/contracts
+            - zeppelin=../../nucypher/blockchain/eth/sol/source/zeppelin
+            - aragon=../../nucypher/blockchain/eth/sol/source/aragon
+console:
+    show_colors: true
+    color_style: monokai
+    auto_suggest: true
+    completions: true
+
+hypothesis:
+    deadline: null
+    max_examples: 50
+    stateful_step_count: 10
+
+autofetch_sources: false
+dependencies: null

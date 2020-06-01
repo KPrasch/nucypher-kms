@@ -1,9 +1,9 @@
 pragma solidity ^0.6.5;
 
-import "contracts/lib/ReEncryptionValidator.sol";
-import "contracts/lib/SignatureVerifier.sol";
-import "contracts/StakingEscrow.sol";
-import "contracts/proxy/Upgradeable.sol";
+import "nucypher/lib/ReEncryptionValidator.sol";
+import "nucypher/lib/SignatureVerifier.sol";
+import "nucypher/StakingEscrow.sol";
+import "nucypher/proxy/Upgradeable.sol";
 import "zeppelin/math/SafeMath.sol";
 import "zeppelin/math/Math.sol";
 

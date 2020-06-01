@@ -1,10 +1,10 @@
 pragma solidity ^0.6.1;
 
 
-import "contracts/lib/SignatureVerifier.sol";
-import "contracts/lib/Snapshot.sol";
-import "contracts/lib/UmbralDeserializer.sol";
-import "contracts/lib/ReEncryptionValidator.sol";
+import "nucypher/lib/SignatureVerifier.sol";
+import "nucypher/lib/Snapshot.sol";
+import "nucypher/lib/UmbralDeserializer.sol";
+import "nucypher/lib/ReEncryptionValidator.sol";
 
 /**
 * @notice Contract for using SignatureVerifier library
