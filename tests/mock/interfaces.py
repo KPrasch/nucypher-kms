@@ -72,8 +72,12 @@ def mock_registry_source_manager(blockchain, test_registry, mock_backend: bool =
 
 class MockBlockchain(TesterBlockchain):
 
-    _PROVIDER_URI = MOCK_PROVIDER_URI
-    _compiler = None
+    PROVIDER_URI = MOCK_PROVIDER_URI
 
     def __init__(self):
-        super().__init__(mock_backend=True)
+        super().__init__()
+
+    def connect(self, *args, **kwargs) -> bool:
+        if 'compile_now' in kwargs:
+            raise ValueError("Mock testerchain cannot handle solidity soure compilation.")
+        return super().connect(compile_now=False, *args, **kwargs)
