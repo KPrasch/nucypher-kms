@@ -26,7 +26,7 @@ from nucypher.blockchain.eth.sol.compile.constants import DEVDOC_VERSION_PATTERN
 @example('|v99.99.99|')
 @example(f'|{DEFAULT_VERSION_STRING}|')
 @given(strategies.from_regex(DEVDOC_VERSION_PATTERN, fullmatch=True))
-@settings(max_examples=5000)
+@settings(max_examples=100)
 def test_devdoc_regex_pattern(full_match):
 
     # Not empty
