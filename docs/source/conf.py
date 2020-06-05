@@ -242,7 +242,11 @@ def run_apidoc(_):
     apidoc_command.append('*conftest*')
 
     # files/folders relative to `nucypher` project directory (results in required absolute paths)
-    exclusion_items = ['setup.py', 'tests', Path('nucypher', 'utilities'), 'scripts']
+    exclusion_items = ['setup.py',
+                       'tests',
+                       'scripts',
+                       Path('nucypher', 'utilities'),
+                       Path('nucypher', 'blockchain', 'eth', 'sol')]
     for exclusion_item in exclusion_items:
         apidoc_command.append(f'{nucypher_module_dir / exclusion_item}')
 
