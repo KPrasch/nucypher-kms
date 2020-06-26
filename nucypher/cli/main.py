@@ -17,7 +17,20 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 
 import click
 
-from nucypher.cli.commands import alice, bob, dao, enrico, felix, multisig, stake, status, ursula, worklock, cloudworkers
+from nucypher.cli.commands import (
+    alice,
+    bob,
+    dao,
+    enrico,
+    felix,
+    multisig,
+    stake,
+    status,
+    ursula,
+    worklock,
+    cloudworkers,
+    contacts
+)
 from nucypher.cli.painting.help import echo_version
 
 
@@ -53,20 +66,23 @@ def nucypher_cli():
 
 ENTRY_POINTS = (
 
-    # Characters
-    alice.alice,        # Author of Policies
-    bob.bob,            # Builder of Capsules
-    enrico.enrico,      # Encryptor of Data
-    ursula.ursula,      # Untrusted Re-Encryption Proxy
+    # Characters & Actors
+    alice.alice,    # Author of Policies
+    bob.bob,        # Builder of Capsules
+    enrico.enrico,  # Encryptor of Data
+    ursula.ursula,  # Untrusted Re-Encryption Proxy
+    stake.stake,    # Stake Management
 
     # Utility Commands
-    dao.dao,            # NuCypher DAO
-    stake.stake,        # Stake Management
     status.status,      # Network Status
-    felix.felix,        # Faucet
+    dao.dao,            # NuCypher DAO
     multisig.multisig,  # MultiSig operations
-    worklock.worklock,   # WorkLock
-    cloudworkers.cloudworkers #Remote Worker node management
+    worklock.worklock,  # WorkLock
+    felix.felix,        # Faucet
+
+    # Application commands
+    cloudworkers.cloudworkers  # Remote Worker node management
+    contacts.contacts          # Character "card" management
 )
 
 for entry_point in ENTRY_POINTS:
