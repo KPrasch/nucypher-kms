@@ -14,8 +14,10 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+from datetime import timedelta
 
 import click
+import maya
 import os
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION, NO_PASSWORD
 
@@ -58,7 +60,7 @@ from nucypher.cli.options import (
 from nucypher.cli.painting.help import paint_new_installation_help
 from nucypher.cli.painting.policies import paint_cards, paint_single_card
 from nucypher.cli.processes import get_geth_provider_process
-from nucypher.cli.types import EIP55_CHECKSUM_ADDRESS, EXISTING_READABLE_FILE
+from nucypher.cli.types import EIP55_CHECKSUM_ADDRESS, EXISTING_READABLE_FILE, WEI
 from nucypher.cli.utils import make_cli_character, setup_emitter
 from nucypher.config.characters import AliceConfiguration
 from nucypher.config.constants import NUCYPHER_ENVVAR_ALICE_ETH_PASSWORD, TEMPORARY_DOMAIN
@@ -429,6 +431,7 @@ def derive_policy_pubkey(general_config, label, character_options, config_file):
 @group_general_config
 @group_character_options
 @click.option('--bob', type=click.STRING)
+@option_force
 def grant(general_config,
           bob,
           bob_encrypting_key,
@@ -439,11 +442,13 @@ def grant(general_config,
           expiration,
           m, n,
           character_options,
-          config_file):
+          config_file,
+          force):
     """Create and enact an access policy for some Bob. """
 
     if bob and any((bob_encrypting_key, bob_verifying_key)):
-        raise click.BadOptionUsage()
+        message = '--bob canot be used with --bob-encrypting-key or --bob-veryfying key'
+        raise click.BadOptionUsage(option_name='--bob', message=message)
 
     # Setup
     emitter = setup_emitter(general_config)
@@ -452,20 +457,47 @@ def grant(general_config,
     # Grantee validation
     if bob:
         card = Card.load(identifier=bob)
-        bob_verifying_key = card.verifying_key
-        bob_encrypting_key = card.encrypting_key
-        emitter.message(f'Loaded card from storage {card.id}')
+        bob_verifying_key = card.verifying_key.hex()
+        bob_encrypting_key = card.encrypting_key.hex()
+        emitter.message(f'Loaded card from storage\n'
+                        f'*{card.nickname or card.id.hex()}*\n'
+                        f'Encrypting Key | {card.encrypting_key.hex()}\n'
+                        f'Verifying Key  | {card.verifying_key.hex()}',
+                        color='green')
+        if not force:
+            click.confirm('Is this the correct grantee (Bob)?', abort=True)
 
     # Policy validation
     if ALICE.federated_only:
         if any((value, rate)):
-            raise click.BadOptionUsage(option_name="--value, --rate",
-                                       message="Can't use --value or --rate with a federated Alice.")
+            message= "Can't use --value or --rate with a federated Alice."
+            raise click.BadOptionUsage(option_name="--value, --rate", message=message)
     elif bool(value) and bool(rate):
         raise click.BadOptionUsage(option_name="--rate", message="Can't use --value if using --rate")
-    elif not (bool(value) or bool(rate)):
+
+    # Policy Shares
+    if not n:
+        n = ALICE.n
+        if not force and not click.confirm(f'Use default value for N ({n})?'):
+            n = click.prompt('Enter total number of shares (N)', type=click.INT)
+    if not m:
+        m = ALICE.m
+        if not force and not click.confirm(f'Use default value for M ({m})?'):
+            n = click.prompt('Enter threshold (M)', type=click.IntRange(1, n+1))
+
+    # Policy Expiration
+    if not force and not expiration:
+        formats = ('%m-%d-%Y', '%Y-%m-%d %H:%M:%S')
+        expiration = click.prompt('Enter policy expiration datetime', type=click.DateTime(formats=formats))
+
+    # Policy Value
+    if not (bool(value) or bool(rate)):
         rate = ALICE.default_rate  # TODO #1709
-        click.confirm(f"Confirm default rate {rate}?", abort=True)
+        if not force:
+            use_default = click.confirm(f"Confirm default rate {rate}?")
+            if not use_default:
+                rate = click.prompt('Enter rate per period in Wei', type=WEI)
+                # TODO: Validate interactively collected rate here?
 
     # Request
     grant_request = {

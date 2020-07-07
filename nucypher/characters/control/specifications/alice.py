@@ -32,12 +32,12 @@ class PolicyBaseSchema(BaseSchema):
         click=click.option(
             '--bob-encrypting-key',
             help="Bob's encrypting key as a hexadecimal string",
-            type=click.STRING, required=True,))
+            type=click.STRING, required=False,))
     bob_verifying_key = fields.Key(
         required=True, load_only=True,
         click=click.option(
             '--bob-verifying-key', help="Bob's verifying key as a hexadecimal string",
-            type=click.STRING, required=True))
+            type=click.STRING, required=False))
     m = fields.M(
         required=True, load_only=True,
         click=options.option_m)
