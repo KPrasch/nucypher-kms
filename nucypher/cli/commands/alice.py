@@ -428,7 +428,9 @@ def derive_policy_pubkey(general_config, label, character_options, config_file):
 @option_config_file
 @group_general_config
 @group_character_options
+@click.option('--bob', type=click.STRING)
 def grant(general_config,
+          bob,
           bob_encrypting_key,
           bob_verifying_key,
           label,
@@ -440,11 +442,21 @@ def grant(general_config,
           config_file):
     """Create and enact an access policy for some Bob. """
 
+    if bob and any((bob_encrypting_key, bob_verifying_key)):
+        raise click.BadOptionUsage()
+
     # Setup
     emitter = setup_emitter(general_config)
     ALICE = character_options.create_character(emitter, config_file, general_config.json_ipc)
 
-    # Input validation
+    # Grantee validation
+    if bob:
+        card = Card.load(identifier=bob)
+        bob_verifying_key = card.verifying_key
+        bob_encrypting_key = card.encrypting_key
+        emitter.message(f'Loaded card from storage {card.id}')
+
+    # Policy validation
     if ALICE.federated_only:
         if any((value, rate)):
             raise click.BadOptionUsage(option_name="--value, --rate",
