@@ -29,7 +29,7 @@ from umbral.keys import UmbralPublicKey
 from umbral.signing import Signature
 
 from nucypher.blockchain.eth.registry import BaseContractRegistry, InMemoryContractRegistry
-from nucypher.blockchain.eth.signers import Signer
+from nucypher.blockchain.eth.signers.base import Signer
 from nucypher.characters.control.controllers import CLIController, JSONRPCController
 from nucypher.config.keyring import NucypherKeyring
 from nucypher.config.node import CharacterConfiguration
