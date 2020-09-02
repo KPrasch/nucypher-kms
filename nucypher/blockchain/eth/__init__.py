@@ -15,11 +15,12 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from nucypher.blockchain.eth.signers import Signer, ClefSigner, KeystoreSigner
+from nucypher.blockchain.eth.signers import Signer, ClefSigner, KeystoreSigner, TrezorSigner
 
 SIGNERS = {
     ClefSigner.URI_SCHEME: ClefSigner,
     KeystoreSigner.URI_SCHEME: KeystoreSigner,
+    TrezorSigner.URI_SCHEME: TrezorSigner,
 }
 
 Signer.SIGNERS = SIGNERS
