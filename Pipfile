@@ -57,7 +57,7 @@ bandit = "*"
 mypy = "*"
 coverage = "*"
 # Develop & Deploy
- py-solc-x = "==0.10.1"
+py-solc-x = "==0.10.1"
 
 [scripts]
 install-solc = "python3 scripts/installation/install_solc.py"
