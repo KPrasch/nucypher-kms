@@ -16,14 +16,15 @@
 """
 
 from nucypher.blockchain.eth.signers.base import Signer
-from nucypher.blockchain.eth.signers.software import ClefSigner, KeystoreSigner
+from nucypher.blockchain.eth.signers.software import ClefSigner, KeystoreSigner, FrameSigner
 from nucypher.blockchain.eth.signers.hardware import TrezorSigner
 
 
 SIGNERS = {
     ClefSigner.URI_SCHEME: ClefSigner,
     KeystoreSigner.URI_SCHEME: KeystoreSigner,
-    TrezorSigner.URI_SCHEME: TrezorSigner
+    TrezorSigner.URI_SCHEME: TrezorSigner,
+    FrameSigner.URI_SCHEME: FrameSigner
 }
 
 Signer.SIGNERS = SIGNERS

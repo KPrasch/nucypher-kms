@@ -32,6 +32,8 @@ from eth_utils.applicators import apply_formatters_to_dict
 from hexbytes.main import HexBytes
 from web3.main import Web3
 from web3.providers.ipc import IPCProvider
+from web3.providers.rpc import HTTPProvider
+from web3.providers.websocket import WebsocketProvider
 
 from nucypher.blockchain.eth.constants import NULL_ADDRESS
 from nucypher.blockchain.eth.decorators import validate_checksum_address
@@ -334,6 +336,112 @@ class KeystoreSigner(Signer):
     def accounts(self) -> List[str]:
         """Return a list of known keystore accounts read from"""
         return list(self.__keys.keys())
+
+    @validate_checksum_address
+    def unlock_account(self, account: str, password: str, duration: int = None) -> bool:
+        """
+        Decrypt the signing material from the key metadata file and cache it on
+        the keystore instance is decryption is successful.
+        """
+        if not self.__signers.get(account):
+            try:
+                key_metadata = self.__keys[account]
+            except ValueError:
+                return False  # Decryption Failed
+            except KeyError:
+                raise self.UnknownAccount(account=account)
+            else:
+                # TODO: It is possible that password is None here passed form the above leayer,
+                #       causing Account.decrypt to crash, expecting a value for password.
+                signing_key = Account.from_key(Account.decrypt(key_metadata, password))
+                self.__signers[account] = signing_key
+        return True
+
+    @validate_checksum_address
+    def lock_account(self, account: str) -> bool:
+        """
+        Deletes a local signer by its checksum address or raises UnknownAccount if
+        the address is not a member of this keystore.  Returns True if the account is no longer
+        tracked and was successfully locked.
+        """
+        try:
+            self.__signers.pop(account)  # mutate
+        except KeyError:
+            if account not in self.accounts:
+                raise self.UnknownAccount(account=account)
+        return account not in self.__signers
+
+    @validate_checksum_address
+    def sign_transaction(self, transaction_dict: dict) -> HexBytes:
+        """
+        Produce a raw signed ethereum transaction signed by the account specified
+        in the 'from' field of the transaction dictionary.
+        """
+
+        sender = transaction_dict['from']
+        signer = self.__get_signer(account=sender)
+
+        # TODO: Handle this at a higher level?
+        # Do not include a 'to' field for contract creation.
+        if not transaction_dict['to']:
+            transaction_dict = dissoc(transaction_dict, 'to')
+
+        raw_transaction = signer.sign_transaction(transaction_dict=transaction_dict).rawTransaction
+        return raw_transaction
+
+    @validate_checksum_address
+    def sign_message(self, account: str, message: bytes, **kwargs) -> HexBytes:
+        signer = self.__get_signer(account=account)
+        signature = signer.sign_message(signable_message=encode_defunct(primitive=message)).signature
+        return signature
+
+
+class FrameSigner(Signer):
+
+    URI_SCHEME = 'frame'
+    DEFAULT_PORT = 1248  # default frame port
+
+    def __init__(self, port: str = DEFAULT_PORT):
+        super().__init__()
+        host = f'ws://localhost:{port}'
+        self.w3 = Web3(provider=WebsocketProvider(endpoint_uri=host))
+        self.__host = host
+
+    def _rpc_request(self, endpoint: str, *request_args):
+        """Error handler for clef IPC requests  # TODO: Use web3 RequestHandler"""
+        try:
+            response = self.w3.manager.request_blocking(endpoint, request_args)
+        except FileNotFoundError:
+            raise FileNotFoundError(f'Frame service not found. Is Frame running and available at "{self.host}"?')
+        except ConnectionRefusedError:
+            raise ConnectionRefusedError(f'Frame refused connection. Is Frame running and available at "{self.host}"?')
+        return response
+
+    @property
+    def host(self) -> str:
+        """Read only access to the host URI"""
+        return self.__host
+
+    @classmethod
+    def from_signer_uri(cls, uri: str) -> 'Signer':
+        """Return a keystore signer from URI string i.e. keystore:///my/path/keystore """
+        decoded_uri = urlparse(uri)
+        if decoded_uri.scheme != cls.URI_SCHEME:
+            raise cls.InvalidSignerURI(uri)
+        import ipdb; ipdb.set_trace()
+
+        return cls(port=decoded_uri.port)
+
+    @validate_checksum_address
+    def is_device(self, account: str) -> bool:
+        return False
+
+    @property
+    def accounts(self) -> List[str]:
+        import ipdb; ipdb.set_trace()
+        normalized_addresses = self._rpc_request(endpoint="eth_Accounts")
+        checksum_addresses = [to_checksum_address(addr) for addr in normalized_addresses]
+        return checksum_addresses
 
     @validate_checksum_address
     def unlock_account(self, account: str, password: str, duration: int = None) -> bool:
