@@ -16,63 +16,64 @@
 """
 
 import rlp
+import struct
 import trezorlib
-from eth_account._utils.transactions import assert_valid_fields, Transaction
+from eth_account._utils.transactions import (
+    assert_valid_fields,
+    Transaction,
+    serializable_unsigned_transaction_from_dict
+)
 from eth_utils.address import to_canonical_address
 from eth_utils.applicators import apply_key_map
 from eth_utils.conversions import to_int
 from functools import wraps
 from hexbytes import HexBytes
+from ledgerblue import getDongle
+from ledgerblue.comm import getDongle
+from ledgerblue.commException import CommException
 from trezorlib import ethereum
 from trezorlib.client import get_default_client
 from trezorlib.tools import parse_path, Address, H_
 from trezorlib.transport import TransportException
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict, Callable
 from web3 import Web3
 
-from nucypher.blockchain.eth.decorators import validate_checksum_address
-from nucypher.blockchain.eth.signers.base import Signer
+from nucypher.blockchain.eth.signers.base import HardwareWallet
 
 
-def handle_trezor_call(device_func):
-    """
-    Decorator for calls to trezorlib that require physical device interactions.
-    """
+def handle_trezor_call(device_func) -> Callable:
+    """Decorator for calls to trezorlib that require physical device interactions."""
     @wraps(device_func)
     def wrapped(trezor, *args, **kwargs):
         import usb1  # may not be installable on some systems (consider CI)
         try:
             result = device_func(trezor, *args, **kwargs)
         except usb1.USBErrorNoDevice:
-            error = "The client cannot communicate to the TREZOR USB device. Was it disconnected?"
+            error = "Nucypher cannot communicate to the TREZOR USB device. Was it disconnected?"
             raise trezor.NoDeviceDetected(error)
         except usb1.USBErrorBusy:
             raise trezor.DeviceError("The TREZOR USB device is busy.")
         else:
             return result
-
     return wrapped
 
 
-class TrezorSigner(Signer):
+def handle_ledger_call(device_func) -> Callable:
+    """Decorator for calls to ledgerblue that require physical device interactions."""
+    @wraps(device_func)
+    def wrapped(ledger, *args, **kwargs):
+        try:
+            result = device_func(ledger, *args, **kwargs)
+        except (OSError, CommException):
+            error = "Nucypher cannot communicate to the ledger USB device. Was it disconnected?"
+            raise ledger.NoDeviceDetected(error)
+        else:
+            return result
+    return wrapped
+
+
+class TrezorSigner(HardwareWallet):
     """A trezor message and transaction signing client."""
-
-    # Key Derivation Paths
-
-    __BIP_44 = 44
-    __ETH_COIN_TYPE = 60
-
-    CHAIN_ID = 0  # 0 is mainnet
-    DEFAULT_ACCOUNT = 0
-    DEFAULT_ACCOUNT_INDEX = 0
-    DERIVATION_ROOT = f"{__BIP_44}'/{__ETH_COIN_TYPE}'/{DEFAULT_ACCOUNT}'/{CHAIN_ID}"
-    ADDRESS_CACHE_SIZE = 10  # default number of accounts to derive and internally track
-
-    class DeviceError(Exception):
-        """Base exception for trezor signing API"""
-
-    class NoDeviceDetected(DeviceError):
-        """Raised when an operation requires a device but none are available"""
 
     def __init__(self):
         try:
@@ -152,20 +153,6 @@ class TrezorSigner(Signer):
             raise cls.InvalidSignerURI(f'{uri} is not a valid trezor URI scheme')
         return cls()
 
-    def is_device(self, account: str) -> bool:
-        """Trezor is always a device."""
-        return True
-
-    @validate_checksum_address
-    def unlock_account(self, account: str, password: str, duration: int = None) -> bool:
-        """Defer account unlocking to the trezor, do not indicate application level unlocking logic."""
-        return True
-
-    @validate_checksum_address
-    def lock_account(self, account: str) -> bool:
-        """Defer account locking to the trezor, do not indicate application level unlocking logic."""
-        return True
-
     @property
     def accounts(self) -> List[str]:
         """Returns a list of cached trezor checksum addresses from initial derivation."""
@@ -216,11 +203,12 @@ class TrezorSigner(Signer):
         # If `chain_id` is included, an EIP-155 transaction signature will be applied
         # https://github.com/trezor/trezor-core/pull/311
         if 'chainId' not in transaction_dict:
-            raise self.SignerError('Invalid EIP-155 transaction - "chain_id" field is missing in trezor signing request.')
+            raise self.SignerError(
+                'Invalid EIP-155 transaction - "chain_id" field is missing in trezor signing request.')
 
         trezor_transaction = self._format_transaction(transaction_dict=transaction_dict)
         n = self.__get_address_path(checksum_address=checksum_address)
-        v, r, s = self.__sign_transaction(n=n, trezor_transaction=trezor_transaction)
+        _v, _r, _s = self.__sign_transaction(n=n, trezor_transaction=trezor_transaction)
 
         # Format the transaction for eth_account Transaction consumption
         # ChainID is longer needed since it is later derived with v = (v + 2) * (chain_id + 35)

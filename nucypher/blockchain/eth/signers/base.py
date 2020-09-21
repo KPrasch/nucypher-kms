@@ -18,12 +18,13 @@
 
 from collections import namedtuple
 
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, ABCMeta
 from typing import List
 from urllib.parse import urlparse
 
 from hexbytes.main import HexBytes
 
+from blockchain.eth.decorators import validate_checksum_address
 from nucypher.utilities.logging import Logger
 
 
@@ -99,3 +100,38 @@ class Signer(ABC):
     @abstractmethod
     def sign_message(self, account: str, message: bytes, **kwargs) -> HexBytes:
         return NotImplemented
+
+
+class HDWallet(Signer, metaclass=ABCMeta):
+
+    __BIP_44 = 44
+    __ETH_COIN_TYPE = 60
+
+    CHAIN_ID = 0  # 0 is mainnet
+    DEFAULT_ACCOUNT = 0
+    DEFAULT_ACCOUNT_INDEX = 0
+    DERIVATION_ROOT = f"{__BIP_44}'/{__ETH_COIN_TYPE}'/{DEFAULT_ACCOUNT}'/{CHAIN_ID}"
+    ADDRESS_CACHE_SIZE = 10  # default number of accounts to derive and internally track
+
+
+class HardwareWallet(HDWallet, metaclass=ABCMeta):
+
+    class DeviceError(Exception):
+        """Base exception for trezor signing API"""
+
+    class NoDeviceDetected(DeviceError):
+        """Raised when an operation requires a device but none are available"""
+
+    def is_device(self, account: str) -> bool:
+        """Always a device."""
+        return True
+
+    @validate_checksum_address
+    def unlock_account(self, account: str, password: str, duration: int = None) -> bool:
+        """Defer account unlocking to the hardware, do not indicate application level unlocking logic."""
+        return True
+
+    @validate_checksum_address
+    def lock_account(self, account: str) -> bool:
+        """Defer account locking to the hardware, do not indicate application level unlocking logic."""
+        return True
