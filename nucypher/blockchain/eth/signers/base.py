@@ -15,16 +15,12 @@
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-from collections import namedtuple
-
 from abc import ABC, abstractmethod, ABCMeta
+from hexbytes.main import HexBytes
 from typing import List
 from urllib.parse import urlparse
 
-from hexbytes.main import HexBytes
-
-from blockchain.eth.decorators import validate_checksum_address
+from nucypher.blockchain.eth.decorators import validate_checksum_address
 from nucypher.utilities.logging import Logger
 
 

@@ -217,9 +217,197 @@ class TrezorSigner(HardwareWallet):
         transaction_dict['to'] = to_canonical_address(checksum_address)  # str -> bytes
 
         # Create RLP serializable Transaction instance with eth_account
-        signed_transaction = Transaction(v=to_int(v),  # int
-                                         r=to_int(r),  # bytes -> int
-                                         s=to_int(s),  # bytes -> int
+        signed_transaction = Transaction(v=to_int(_v),  # int
+                                         r=to_int(_r),  # bytes -> int
+                                         s=to_int(_s),  # bytes -> int
+                                         **transaction_dict)
+
+        # Optionally encode as RLP for broadcasting
+        if rlp_encoded:
+            signed_transaction = HexBytes(rlp.encode(signed_transaction))
+
+        return signed_transaction
+
+
+class LedgerSigner(HardwareWallet):
+    """
+    A ledger message and transaction signing client.
+
+    Big thanks to @kayagoban for their "shadowlands" implementation &
+    showing python authors the way to use ledger like geth does.
+
+    Citations and References
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    - https://github.com/kayagoban/shadowlands/blob/master/shadowlands/credstick/ledger_ethdriver.py
+    - https://gist.github.com/bargst/5f896e4a5984593d43f1b4eb66f79d68
+    - https://github.com/LedgerHQ/blue-app-eth/blob/master/doc/ethapp.asc
+
+
+    The transaction signing protocol is defined as follows:
+       CLA | INS | P1 | P2 | Lc  | Le
+       ----+-----+----+----+-----+---
+        E0 | 04  | 00: first transaction data block
+                   80: subsequent transaction data block
+                      | 00 | variable | variable
+
+    Where the input for the first transaction block (first 255 bytes) is:
+
+    Description                                      | Length
+    -------------------------------------------------+----------
+    Number of BIP 32 derivations to perform (max 10) | 1 byte
+    First derivation index (big endian)              | 4 bytes
+    ...                                              | 4 bytes
+    Last derivation index (big endian)               | 4 bytes
+    RLP transaction chunk                            | arbitrary
+
+    """
+
+    # Ethereum ledger app opcodes
+    CLA = b'\xe0'
+    INS_OPCODE_GET_ADDRESS = b'\x02'
+    INS_OPCODE_SIGN_TRANS = b'\x04'
+    INS_OPCODE_GET_VERSION = b'\x06'
+
+    # get address protocol
+    P1_RETURN_ADDRESS = b'\x00'
+    P1_RETURN_AND_VERIFY_ADDRESS = b'\x01'
+    P2_NO_CHAIN_CODE = b'\x00'
+    P2_RETURN_CHAIN_CODE = b'\x01'
+
+    # transaction protocol
+    P1_FIRST_TRANS_DATA_BLOCK = b'\x00'
+    P1_SUBSEQUENT_TRANS_DATA_BLOCK = b'\x80'
+    P2_UNUSED_PARAMETER = b'\x00'
+    P2_UNUSED_PARAMETER2 = b'\x01'
+
+    @handle_ledger_call
+    def __init__(self):
+        self.dongle = getDongle(debug=False)
+
+    @classmethod
+    def uri_scheme(cls) -> str:
+        return 'ledger'
+
+    @classmethod
+    @handle_ledger_call
+    def open(cls):
+        # getDongle(True) forces verification of the user address on the device.
+        cls._driver = getDongle(False)
+        cls.manufacturerStr = cls._driver.device.get_manufacturer_string()
+        cls.productStr = cls._driver.device.get_product_string()
+
+    @handle_ledger_call
+    def close(self):
+        self.dongle.device.close()
+        self.dongle = None
+
+    @handle_ledger_call
+    def version(self):
+        apdu = b'\xe0\x06\x00\x00\x00\x04'
+        result = self.dongle.exchange(apdu)
+        return result
+
+    def _parse_bip32_path(self, offset):
+        """
+        Convert an offset to a bytes payload to be sent to the ledger
+        representing bip32 derivation path.
+        """
+        path = self.DERIVATION_ROOT + str(offset)
+        result = bytes()
+        elements = path.split('/')
+        for pathElement in elements:
+            element = pathElement.split("'")
+            if len(element) == 1:
+                result = result + struct.pack(">I", int(element[0]))
+            else:
+                result = result + struct.pack(">I", 0x80000000 | int(element[0]))
+        return result
+
+    @staticmethod
+    def encode_path(hd_path: str):
+        result = b''
+        if len(hd_path) == 0:
+            return result
+        elements = hd_path.split('/')
+        for pathElement in elements:
+            element = pathElement.split('\'')
+            if len(element) == 1:
+                result = result + struct.pack(">I", int(element[0]))
+            else:
+                result = result + struct.pack(">I", 0x80000000 | int(element[0]))
+        return result
+
+    def __get_address_path(self, index: int = None, checksum_address: str = None):
+        """Resolves a checksum address into an HD path and returns it."""
+        if index is not None and checksum_address:
+            raise ValueError("Expected index or checksum address; Got both.")
+        elif index is not None:
+            hd_path = self._parse_bip32_path(f"{self.DERIVATION_ROOT}/{index}")
+        else:
+            try:
+                hd_path = self.__addresses[checksum_address]
+            except KeyError:
+                raise RuntimeError(f"{checksum_address} was not loaded into the device address cache.")
+        return hd_path
+
+    @property
+    def accounts(self, limit=5, page=0):
+        """List Ethereum HD wallet address of the ledger device"""
+        return list(map(lambda offset: self.get_address(offset), range(page * limit, (page + 1) * limit)))
+
+    def sign_message(self, account: str, message: bytes, **kwargs) -> HexBytes:
+        return NotImplemented  # TODO: Implement message signing for the ledger
+
+    @handle_ledger_call
+    def sign_transaction(self, transaction_dict: Dict, rlp_encoded: bool = True):
+
+        # Consume the sender inside the transaction request's 'from field.
+        sender = transaction_dict.pop('from')
+        tx = serializable_unsigned_transaction_from_dict(transaction_dict)
+        encodedTx = rlp.encode(tx)
+
+        # Resolve the sender address into an HD path on the ledger.
+        hd_path = self.__get_address_path(checksum_address=sender)
+        encodedPath = self.encode_path(hd_path)
+
+        # Each path element is 4 bytes.  How many path elements are we sending?
+        derivationPathCount = (len(encodedPath) // 4).to_bytes(1, 'big')
+
+        # Prepend the byte representing the count of path elements to the path encoding itself.
+        encodedPath = derivationPathCount + encodedPath
+        dataPayload = encodedPath + encodedTx
+
+        # Big thanks to the Geth team for their ledger implementation (and documentation).
+        # To the others reading, the ledger can only take 255 bytes of data payload per apdu exchange.
+        # hence, you have to chunk and use 0x08 for the P1 opcode on subsequent calls.
+
+        p1_op = self.P1_FIRST_TRANS_DATA_BLOCK
+        while len(dataPayload) > 0:
+            chunk_size = 255
+            if chunk_size > len(dataPayload):
+                chunk_size = len(dataPayload)
+
+            encodedChunkSize = chunk_size.to_bytes(1, 'big')
+            apdu = self.CLA                     \
+                   + self.INS_OPCODE_SIGN_TRANS \
+                   + p1_op                      \
+                   + self.P2_UNUSED_PARAMETER   \
+                   + encodedChunkSize           \
+                   + dataPayload[:chunk_size]
+
+            result = self.dongle.exchange(apdu)  # <-- Ledger
+            dataPayload = dataPayload[chunk_size:]
+            p1_op = self.P1_SUBSEQUENT_TRANS_DATA_BLOCK
+
+            _v = result[0]
+            _r = int((result[1:1 + 32]).hex(), 16)
+            _s = int((result[1 + 32: 1 + 32 + 32]).hex(), 16)
+
+        # Create RLP serializable Transaction instance with eth_account
+        signed_transaction = Transaction(v=to_int(_v),
+                                         r=to_int(_r),
+                                         s=to_int(_s),
                                          **transaction_dict)
 
         # Optionally encode as RLP for broadcasting
