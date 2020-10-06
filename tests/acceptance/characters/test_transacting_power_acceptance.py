@@ -55,8 +55,7 @@ def test_character_transacting_power_signing(testerchain, agency, test_registry)
     assert is_verified is True
 
     # Sign Transaction
-    transaction_dict = {'nonce': testerchain.client.w3.eth.getTransactionCount(eth_address),
-                        'gasPrice': testerchain.client.w3.eth.gasPrice,
+    transaction_dict = {'gasPrice': testerchain.client.w3.eth.gasPrice,
                         'gas': 100000,
                         'from': eth_address,
                         'to': testerchain.unassigned_accounts[1],

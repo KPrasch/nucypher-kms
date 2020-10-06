@@ -208,10 +208,7 @@ class TrezorSigner(Signer):
         signed_message = ethereum.sign_message(self.__client, hd_path, message)
         return HexBytes(signed_message.signature)
 
-    def sign_transaction(self,
-                         transaction_dict: dict,
-                         rlp_encoded: bool = True
-                         ) -> Union[HexBytes, Transaction]:
+    def sign_transaction(self, transaction_dict: dict) -> Union[HexBytes, Transaction]:
         """
         Sign a transaction with a trezor hardware wallet.
 
@@ -273,7 +270,6 @@ class TrezorSigner(Signer):
                                          s=to_int(_s),  # bytes -> int
                                          **transaction_dict)
 
-        # Optionally encode as RLP for broadcasting
-        if rlp_encoded:
-            signed_transaction = HexBytes(rlp.encode(signed_transaction))
+        # Encode as RLP
+        signed_transaction = HexBytes(rlp.encode(signed_transaction))
         return signed_transaction

@@ -74,8 +74,7 @@ def test_transacting_power_sign_transaction(testerchain):
     assert power.is_active is False
     assert power.is_unlocked is False
 
-    transaction_dict = {'nonce': testerchain.client.w3.eth.getTransactionCount(eth_address),
-                        'gasPrice': testerchain.client.w3.eth.gasPrice,
+    transaction_dict = {'gasPrice': testerchain.client.w3.eth.gasPrice,
                         'gas': 100000,
                         'from': eth_address,
                         'to': testerchain.unassigned_accounts[1],
@@ -102,7 +101,6 @@ def test_transacting_power_sign_transaction(testerchain):
 
     # Try signing with missing transaction fields
     del transaction_dict['gas']
-    del transaction_dict['nonce']
     with pytest.raises(TypeError):
         power.sign_transaction(transaction_dict=transaction_dict)
 
@@ -126,7 +124,6 @@ def test_transacting_power_sign_agent_transaction(testerchain, agency, test_regi
     contract_function = token_agent.contract.functions.approve(testerchain.etherbase_account, 100)
 
     payload = {'chainId': int(testerchain.client.chain_id),
-               'nonce': testerchain.client.w3.eth.getTransactionCount(testerchain.etherbase_account),
                'from': testerchain.etherbase_account,
                'gasPrice': testerchain.client.gas_price}
 

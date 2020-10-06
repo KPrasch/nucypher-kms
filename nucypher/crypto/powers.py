@@ -22,6 +22,7 @@ from typing import List, Optional, Tuple
 from umbral import pre
 from umbral.keys import UmbralKeyingMaterial, UmbralPrivateKey, UmbralPublicKey
 
+from nucypher.blockchain.eth.signers.middleware import construct_signer_middleware
 from nucypher.blockchain.eth.decorators import validate_checksum_address
 from nucypher.blockchain.eth.interfaces import BlockchainInterface, BlockchainInterfaceFactory
 from nucypher.blockchain.eth.signers.software import Web3Signer
@@ -119,20 +120,24 @@ class TransactingPower(CryptoPowerUp):
         Instantiates a TransactingPower for the given checksum_address.
         """
 
-        # Auth
-        if not signer:
-            # TODO: Consider making this required
-            blockchain = BlockchainInterfaceFactory.get_interface()
-            signer = Web3Signer(client=blockchain.client)
-        self._signer = signer
-        self.__account = account
-        self.__password = password
-
         # Config
         self.__is_unlocked = False
         self.__blockchain = None
         self.__cache = cache
         self.__activated = False
+
+        # Auth
+        if not signer:
+            # TODO: Make this required.
+            signer = Web3Signer(client=self.blockchain.client)
+        self._signer = signer
+        self.__account = account
+        self.__password = password
+
+        # TODO: Is this a good home?
+        signer_middleware = construct_signer_middleware(signer=self._signer)
+        self.blockchain.client.add_middleware(signer_middleware)
+
 
     def __enter__(self):
         return self.unlock_account()

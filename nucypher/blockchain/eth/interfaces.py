@@ -15,14 +15,8 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
 import os
 import pprint
-import time
-from typing import Callable, NamedTuple, Tuple, Union, Optional
-from urllib.parse import urlparse
-
-import click
 import requests
 from constant_sorrow.constants import (
     INSUFFICIENT_ETH,
@@ -36,15 +30,16 @@ from eth_tester.exceptions import TransactionFailed as TestTransactionFailed
 from eth_typing import ChecksumAddress
 from eth_utils import to_checksum_address
 from hexbytes.main import HexBytes
-from web3 import Web3, middleware
+from typing import NamedTuple, Tuple, Union, Optional
+from urllib.parse import urlparse
+from web3 import Web3
 from web3.contract import Contract, ContractConstructor, ContractFunction
 from web3.exceptions import TimeExhausted, ValidationError
 from web3.gas_strategies import time_based
-from web3.middleware import geth_poa_middleware
 from web3.providers import BaseProvider
 from web3.types import TxReceipt
 
-from nucypher.blockchain.eth.clients import EthereumClient, POA_CHAINS, InfuraClient
+from nucypher.blockchain.eth.clients import EthereumClient, InfuraClient
 from nucypher.blockchain.eth.decorators import validate_checksum_address
 from nucypher.blockchain.eth.providers import (
     _get_auto_provider,
@@ -394,17 +389,16 @@ class BlockchainInterface:
                       transaction_gas_limit: int = None,
                       ) -> dict:
 
-        base_payload = {'chainId': int(self.client.chain_id),
-                        'nonce': self.client.w3.eth.getTransactionCount(sender_address, 'pending'),  # TODO: Internal nonce tracking for workers
-                        'from': sender_address}
+        base_payload = {'chainId': int(self.client.chain_id), 'from': sender_address}
 
-        # Aggregate
         if not payload:
             payload = {}
         payload.update(base_payload)
+
         # Explicit gas override - will skip gas estimation in next operation.
         if transaction_gas_limit:
             payload['gas'] = int(transaction_gas_limit)
+
         return payload
 
     @validate_checksum_address
@@ -428,6 +422,10 @@ class BlockchainInterface:
                                                   transaction_dict=payload,
                                                   contract_function=contract_function,
                                                   logger=self.log)
+
+        # TODO: Where does this belong?
+        if transaction_dict.get('to') == b'':
+            del transaction_dict['to']
         return transaction_dict
 
     def sign_and_broadcast_transaction(self,
@@ -473,7 +471,6 @@ class BlockchainInterface:
             emitter.message(f'Confirm transaction {transaction_name} on hardware wallet... '
                             f'({cost} ETH @ {price_gwei} gwei)',
                             color='yellow')
-        signed_raw_transaction = self.transacting_power.sign_transaction(transaction_dict)
 
         #
         # Broadcast
@@ -484,7 +481,7 @@ class BlockchainInterface:
 
         # time.sleep(1)  # FIXME: workaround for reused nonce
         try:
-            txhash = self.client.send_raw_transaction(signed_raw_transaction)  # <--- BROADCAST
+            txhash = self.client.send_transaction(transaction_dict)  # <--- BROADCAST
         except (TestTransactionFailed, ValueError):
             raise  # TODO: Unify with Transaction failed handling -- Entry point for _handle_failed_transaction
         else:

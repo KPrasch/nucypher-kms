@@ -388,9 +388,6 @@ class EthereumClient:
     def send_transaction(self, transaction_dict: dict) -> str:
         return self.w3.eth.sendTransaction(transaction=transaction_dict)
 
-    def send_raw_transaction(self, transaction_bytes: bytes) -> str:
-        return self.w3.eth.sendRawTransaction(raw_transaction=transaction_bytes)
-
     def sign_message(self, account: str, message: bytes) -> str:
         """
         Calls the appropriate signing function for the specified account on the

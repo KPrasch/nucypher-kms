@@ -41,7 +41,6 @@ from nucypher.blockchain.eth.signers.base import Signer
 class Web3Signer(Signer):
 
     def __init__(self, client):
-        super().__init__()
         self.__client = client
 
     @classmethod

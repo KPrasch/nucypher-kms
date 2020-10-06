@@ -15,14 +15,10 @@
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-from collections import namedtuple
-
 from abc import ABC, abstractmethod
+from hexbytes.main import HexBytes
 from typing import List
 from urllib.parse import urlparse
-
-from hexbytes.main import HexBytes
 
 from nucypher.utilities.logging import Logger
 
