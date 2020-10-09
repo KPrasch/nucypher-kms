@@ -18,7 +18,7 @@
 
 from web3.gas_strategies import time_based
 
-from nucypher.blockchain.eth.interfaces import BlockchainInterface
+from nucypher.blockchain.eth.clients import EthereumClient
 
 
 def test_get_gas_strategy():
@@ -30,6 +30,6 @@ def test_get_gas_strategy():
                               'fast': time_based.fast_gas_price_strategy  # 60s
                               }
     for gas_strategy_name, expected_gas_strategy in bundled_gas_strategies.items():
-        gas_strategy = BlockchainInterface.GAS_STRATEGIES[gas_strategy_name]
+        gas_strategy = EthereumClient.GAS_STRATEGIES[gas_strategy_name]
         assert expected_gas_strategy == gas_strategy
         assert callable(gas_strategy)

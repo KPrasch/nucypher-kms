@@ -492,7 +492,7 @@ def _make_testerchain(mock_backend: bool = False) -> TesterBlockchain:
     if mock_backend:
         testerchain = MockBlockchain()
     else:
-        testerchain = TesterBlockchain(eth_airdrop=True, free_transactions=True)
+        testerchain = TesterBlockchain(eth_airdrop=True)
 
     return testerchain
 
@@ -981,13 +981,14 @@ def mock_transacting_power_activation(testerchain):
                                                          signer=Web3Signer(testerchain.client),
                                                          account=account)
         testerchain.transacting_power.activate()
+        testerchain.transacting_power.unlock_account()
 
     return _mock_transacting_power_activation
 
 
 @pytest.fixture(scope="module")
 def fleet_of_highperf_mocked_ursulas(ursula_federated_test_config, request):
-    # good_serials = _determine_good_serials(10000, 50000)
+    # good_serials = _determine_good_serials(10000, 50000)  # wheaties
     try:
         quantity = request.param
     except AttributeError:

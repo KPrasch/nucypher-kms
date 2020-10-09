@@ -23,6 +23,8 @@ from nucypher.utilities import EtherchainGasPriceDatafeed, UpvestGasPriceDatafee
 from nucypher.utilities.datafeeds import Datafeed
 
 
+
+
 def datafeed_fallback_gas_price_strategy(web3: Web3, transaction_params: TxParams = None) -> Wei:
     feeds = (EtherchainGasPriceDatafeed, UpvestGasPriceDatafeed)
 

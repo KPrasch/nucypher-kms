@@ -26,23 +26,6 @@ from web3.types import RPCEndpoint, RPCResponse
 from nucypher.utilities.logging import Logger
 
 
-def nonce_tracking_middleware(
-        make_request: Callable[[RPCEndpoint, Any], Any],
-        web3: "Web3"
-        ) -> Callable[[RPCEndpoint, Any], RPCResponse]:
-    cache = list()
-
-    def middleware(method: RPCEndpoint, params: Any) -> RPCResponse:
-        if method == 'eth_sendRawTransaction':
-            time.sleep(2)
-            result = make_request(method, params)
-            cache.append((method, params))
-        else:
-            result = make_request(method, params)
-        return result
-    return middleware
-
-
 class RetryRequestMiddleware:
     """
     Automatically retries rpc requests whenever a 429 status code is returned.

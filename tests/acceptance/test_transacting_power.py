@@ -75,6 +75,7 @@ def test_transacting_power_sign_transaction(testerchain):
     assert power.is_unlocked is False
 
     transaction_dict = {'gasPrice': testerchain.client.w3.eth.gasPrice,
+                        'nonce': 42,
                         'gas': 100000,
                         'from': eth_address,
                         'to': testerchain.unassigned_accounts[1],
@@ -124,6 +125,7 @@ def test_transacting_power_sign_agent_transaction(testerchain, agency, test_regi
     contract_function = token_agent.contract.functions.approve(testerchain.etherbase_account, 100)
 
     payload = {'chainId': int(testerchain.client.chain_id),
+               'nonce': 99,
                'from': testerchain.etherbase_account,
                'gasPrice': testerchain.client.gas_price}
 

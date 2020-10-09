@@ -133,7 +133,7 @@ def test_collect_inflation_rewards(software_stakeholder, manual_worker, testerch
 
     # Wait out stake lock periods, manually make a commitment once per period.
     for period in range(stake.periods_remaining-1):
-        worker.commit_to_next_period()
+         worker.commit_to_next_period()
         testerchain.time_travel(periods=1)
 
     mock_transacting_power_activation(account=stake.staker_address, password=INSECURE_DEVELOPMENT_PASSWORD)

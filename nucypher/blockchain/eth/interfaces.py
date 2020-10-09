@@ -68,17 +68,8 @@ class BlockchainInterface:
     ethereum contracts with the given web3 provider backend.
     """
 
-    TIMEOUT = 600  # seconds  # TODO: Correlate with the gas strategy - #2070
-
-    DEFAULT_GAS_STRATEGY = 'fast'
-    GAS_STRATEGIES = {'glacial': time_based.glacial_gas_price_strategy,     # 24h
-                      'slow': time_based.slow_gas_price_strategy,           # 1h
-                      'medium': time_based.medium_gas_price_strategy,       # 5m
-                      'fast': time_based.fast_gas_price_strategy            # 60s
-                      }
-
-    process = NO_PROVIDER_PROCESS.bool_value(False)
-    Web3 = Web3
+    TIMEOUT = 600  # seconds  # TODO: Correlate with the gas strategy (only applies to wait_for_receipt) - #2070
+    Web3 = Web3    # for mocking
 
     _contract_factory = VersionedContract
 
@@ -147,8 +138,7 @@ class BlockchainInterface:
                  light: bool = False,
                  provider_uri: str = NO_BLOCKCHAIN_CONNECTION,
                  provider: BaseProvider = NO_BLOCKCHAIN_CONNECTION,
-                 client: Optional[EthereumClient] = None,
-                 gas_strategy: str = DEFAULT_GAS_STRATEGY):
+                 client: Optional[EthereumClient] = None):
 
         """
         TODO: #1502 - Move to API docs.
@@ -219,7 +209,6 @@ class BlockchainInterface:
         self.client = client or NO_BLOCKCHAIN_CONNECTION         # type: EthereumClient
         self.transacting_power = READ_ONLY_INTERFACE
         self.is_light = light
-        self.gas_strategy = self.GAS_STRATEGIES.get(gas_strategy)
 
     def __repr__(self):
         r = '{name}({uri})'.format(name=self.__class__.__name__, uri=self.provider_uri)
@@ -241,15 +230,6 @@ class BlockchainInterface:
             return False
         return self.client.is_connected
 
-    def _init_gas_strategy(self) -> None:
-        # Bundled web3 strategies are too expensive for Infura (it takes ~1 minute to get a price),
-        # so we use external gas price oracles, instead (see #2139)
-        if isinstance(self.client, InfuraClient):
-            gas_strategy = datafeed_fallback_gas_price_strategy
-        else:
-            gas_strategy = self.gas_strategy
-        self.client.set_gas_strategy(gas_strategy=gas_strategy)
-
     def connect(self) -> bool:
         if self.client:
             self.log.info("Using pre-configured ethereum client {}".format(self.provider_uri))
@@ -264,7 +244,8 @@ class BlockchainInterface:
                 raise self.ConnectionFailed(f'Connection Failed - {str(self.provider_uri)} - is RPC enabled?')
             except FileNotFoundError:         # IPC File Protocol
                 raise self.ConnectionFailed(f'Connection Failed - {str(self.provider_uri)} - is IPC enabled?')
-        self._init_gas_strategy()  # TODO: is this a good home?
+
+        self.client._init_gas_strategy()  # TODO: is this a good home?
         return self.is_connected
 
     @property

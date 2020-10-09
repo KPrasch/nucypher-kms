@@ -1691,7 +1691,7 @@ class Wallet:
 
     @validate_checksum_address
     def __contains__(self, checksum_address: str) -> bool:
-        return bool(checksum_address in self.accounts)
+        return checksum_address in self.accounts
 
     @property
     def active_account(self) -> str:
@@ -1702,7 +1702,7 @@ class Wallet:
             signer_accounts = self.__signer.accounts
             self.__client_accounts.extend([a for a in signer_accounts if a not in self.__client_accounts])
         client_accounts = self.blockchain.client.accounts  # Accounts via connected provider
-        self.__client_accounts.extend([a for a in client_accounts if a not in self.__client_accounts])
+        self.__client_accounts.extend(client_accounts)
 
     @property
     def accounts(self) -> Tuple:

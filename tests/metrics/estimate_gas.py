@@ -33,6 +33,7 @@ from umbral.signing import Signer
 from unittest.mock import Mock
 from zope.interface import provider
 
+from blockchain.eth.registry import InMemoryContractRegistry
 from nucypher.blockchain.economics import StandardTokenEconomics
 from nucypher.blockchain.eth.agents import AdjudicatorAgent, NucypherTokenAgent, PolicyManagerAgent, StakingEscrowAgent
 from nucypher.blockchain.eth.constants import NUCYPHER_CONTRACT_NAMES
@@ -166,7 +167,9 @@ def estimate_gas(analyzer: AnalyzeGas = None) -> None:
         percentage_penalty_coefficient=2,
         reward_coefficient=2
     )
-    testerchain, registry = TesterBlockchain.bootstrap_network(economics=economics)
+
+    registry = InMemoryContractRegistry()
+    testerchain = TesterBlockchain.bootstrap_network(registry=registry, economics=economics)
     web3 = testerchain.w3
 
     print("\n********* SIZE OF MAIN CONTRACTS *********")

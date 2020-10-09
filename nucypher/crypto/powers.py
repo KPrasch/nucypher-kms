@@ -134,11 +134,6 @@ class TransactingPower(CryptoPowerUp):
         self.__account = account
         self.__password = password
 
-        # TODO: Is this a good home?
-        signer_middleware = construct_signer_middleware(signer=self._signer)
-        self.blockchain.client.add_middleware(signer_middleware)
-
-
     def __enter__(self):
         return self.unlock_account()
 
