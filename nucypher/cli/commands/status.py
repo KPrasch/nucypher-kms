@@ -15,11 +15,13 @@
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+
 import os
 
 import click
 
-from nucypher.blockchain.eth.agents import ContractAgency, PolicyManagerAgent, StakingEscrowAgent
+from nucypher.blockchain.eth.token import NU
+from nucypher.blockchain.eth.agents import ContractAgency, PolicyManagerAgent, StakingEscrowAgent, NucypherTokenAgent
 from nucypher.blockchain.eth.constants import (
     POLICY_MANAGER_CONTRACT_NAME,
     STAKING_ESCROW_CONTRACT_NAME
@@ -165,3 +167,29 @@ def fee_range(general_config, registry_options):
     emitter, registry, blockchain = registry_options.setup(general_config=general_config)
     policy_agent = ContractAgency.get_agent(PolicyManagerAgent, registry=registry)
     paint_fee_rate_range(emitter=emitter, policy_agent=policy_agent)
+
+
+@status.command()
+@group_registry_options
+@group_general_config
+def supply(general_config, registry_options):
+    emitter, registry, blockchain = registry_options.setup(general_config=general_config)
+    token_agent = ContractAgency.get_agent(NucypherTokenAgent, registry=registry)
+    staking_agent = ContractAgency.get_agent(StakingEscrowAgent, registry=registry)
+    token_supply = NU.from_nunits(token_agent.contract.functions.totalSupply().call())
+    future_rewards = NU.from_nunits(staking_agent.contract.functions.getReservedReward().call())
+    locked_nunits, nstakers_and_tokens = staking_agent.contract.functions.getActiveStakers(1, 0, 0).call()
+    locked_nu = NU.from_nunits(locked_nunits)
+    circulating = token_supply - future_rewards
+    # percent_locked = (locked_nu / circulating) * 100
+    swarm_size = len(nstakers_and_tokens)
+
+    emitter.echo(f"""
+NuCypher Supply Snapshot
+==========================================
+Token Supply {token_supply}
+Future Rewards {future_rewards}
+Locked NU {locked_nu}
+Circulating NU {circulating}
+Swarm Size {swarm_size}
+    """)
