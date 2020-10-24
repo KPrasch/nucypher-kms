@@ -176,20 +176,20 @@ def supply(general_config, registry_options):
     emitter, registry, blockchain = registry_options.setup(general_config=general_config)
     token_agent = ContractAgency.get_agent(NucypherTokenAgent, registry=registry)
     staking_agent = ContractAgency.get_agent(StakingEscrowAgent, registry=registry)
-    token_supply = NU.from_nunits(token_agent.contract.functions.totalSupply().call())
-    future_rewards = NU.from_nunits(staking_agent.contract.functions.getReservedReward().call())
+    token_supply = round(NU.from_nunits(token_agent.contract.functions.totalSupply().call()), 2)
+    future_rewards = round(NU.from_nunits(staking_agent.contract.functions.getReservedReward().call()), 2)
     locked_nunits, nstakers_and_tokens = staking_agent.contract.functions.getActiveStakers(1, 0, 0).call()
-    locked_nu = NU.from_nunits(locked_nunits)
+    locked_nu = round(NU.from_nunits(locked_nunits), 2)
     circulating = token_supply - future_rewards
-    # percent_locked = (locked_nu / circulating) * 100
+    percent_locked = round((int(locked_nu) / int(circulating)) * 100, 2)
     swarm_size = len(nstakers_and_tokens)
-
     emitter.echo(f"""
 NuCypher Supply Snapshot
 ==========================================
-Token Supply {token_supply}
-Future Rewards {future_rewards}
-Locked NU {locked_nu}
-Circulating NU {circulating}
-Swarm Size {swarm_size}
+Max Supply......... {token_supply}
+Future Rewards..... {future_rewards}
+Locked ............ {locked_nu}
+Circulating ....... {circulating}
+Percent Locked .... {percent_locked}%
+Stakers ........... {swarm_size}
     """)
