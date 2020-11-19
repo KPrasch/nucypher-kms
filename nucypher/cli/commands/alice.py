@@ -14,22 +14,25 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-from datetime import timedelta
+
 
 import click
 import maya
 import os
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION, NO_PASSWORD
+from datetime import timedelta
 
+from nucypher.blockchain.eth.signers import ClefSigner
 from nucypher.blockchain.eth.signers.software import ClefSigner
 from nucypher.characters.control.emitters import StdoutEmitter
 from nucypher.characters.control.interfaces import AliceInterface
 from nucypher.cli.actions.auth import get_client_password, get_nucypher_password
 from nucypher.cli.actions.configure import (
     destroy_configuration,
-    handle_missing_configuration_file, get_or_update_configuration
+    handle_missing_configuration_file,
+    get_or_update_configuration
 )
-from nucypher.cli.actions.select import select_client_account, select_config_file, select_card
+from nucypher.cli.actions.select import select_client_account, select_config_file
 from nucypher.cli.commands.deploy import option_gas_strategy
 from nucypher.cli.config import group_general_config
 from nucypher.cli.options import (
@@ -58,9 +61,8 @@ from nucypher.cli.options import (
     option_lonely
 )
 from nucypher.cli.painting.help import paint_new_installation_help
-from nucypher.cli.painting.policies import paint_cards, paint_single_card
 from nucypher.cli.processes import get_geth_provider_process
-from nucypher.cli.types import EIP55_CHECKSUM_ADDRESS, EXISTING_READABLE_FILE, WEI
+from nucypher.cli.types import EIP55_CHECKSUM_ADDRESS, WEI
 from nucypher.cli.utils import make_cli_character, setup_emitter
 from nucypher.config.characters import AliceConfiguration
 from nucypher.config.constants import NUCYPHER_ENVVAR_ALICE_ETH_PASSWORD, TEMPORARY_DOMAIN
@@ -430,7 +432,7 @@ def derive_policy_pubkey(general_config, label, character_options, config_file):
 @option_config_file
 @group_general_config
 @group_character_options
-@click.option('--bob', type=click.STRING)
+@click.option('--bob', type=click.STRING, help="The card id or nickname of a stored Bob card.")
 @option_force
 def grant(general_config,
           bob,
@@ -447,7 +449,7 @@ def grant(general_config,
     """Create and enact an access policy for some Bob. """
 
     if bob and any((bob_encrypting_key, bob_verifying_key)):
-        message = '--bob canot be used with --bob-encrypting-key or --bob-veryfying key'
+        message = '--bob cannot be used with --bob-encrypting-key or --bob-veryfying key'
         raise click.BadOptionUsage(option_name='--bob', message=message)
 
     # Setup
