@@ -84,8 +84,8 @@ ENTRY_POINTS = (
     felix.felix,        # Faucet
 
     # Application commands
-    cloudworkers.cloudworkers  # Remote Worker node management
-    contacts.contacts          # Character "card" management
+    cloudworkers.cloudworkers,  # Remote Worker node management
+    contacts.contacts,          # Character "card" management
 )
 
 for entry_point in ENTRY_POINTS:
