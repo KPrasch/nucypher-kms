@@ -490,7 +490,13 @@ def grant(general_config,
     # Policy Expiration
     if not force and not expiration:
         formats = ('%m-%d-%Y', '%Y-%m-%d %H:%M:%S')
-        expiration = click.prompt('Enter policy expiration datetime', type=click.DateTime(formats=formats))
+        if ALICE.duration_periods:
+            expiration = maya.now() + timedelta(days=ALICE.duration_periods)  # default  # TODO: use a default in days or periods?
+            if not click.confirm(f'Use default policy duration (expires {expiration})?'):
+                expiration = click.prompt('Enter policy expiration datetime', type=click.DateTime(formats=formats))
+        else:
+            # No alice default available
+            expiration = click.prompt('Enter policy expiration datetime', type=click.DateTime(formats=formats))
 
     # Policy Value
     if not (bool(value) or bool(rate)):
@@ -515,6 +521,10 @@ def grant(general_config,
             grant_request['value'] = value
         elif rate:
             grant_request['rate'] = rate
+
+    if len(ALICE.known_nodes) < 2:
+        emitter.message(f'Performing initial nucypher node discovery')
+    emitter.message(f'Granting access to {bob_verifying_key}')
     return ALICE.controller.grant(request=grant_request)
 
 
