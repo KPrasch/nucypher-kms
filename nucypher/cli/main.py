@@ -31,11 +31,14 @@ from nucypher.cli.commands import (
     cloudworkers,
     contacts
 )
-from nucypher.cli.painting.help import echo_version
+from nucypher.cli.painting.help import echo_version, echo_config_location
 
 
 @click.group()
-@click.option('--version', help="Echo the CLI version", is_flag=True, callback=echo_version, expose_value=False, is_eager=True)
+@click.option('--version', help="Echo the CLI version",
+              is_flag=True, callback=echo_version, expose_value=False, is_eager=True)
+@click.option('--config', help="Echo the configuration and log directory locations",
+              is_flag=True, callback=echo_config_location, expose_value=False, is_eager=True)
 def nucypher_cli():
     """Top level command for all things nucypher."""
 
