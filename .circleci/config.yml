@@ -373,7 +373,10 @@ commands:
     steps:
       - run:
           name: Install Python Development Dependencies with Pip
-          command: pip3 install --user -e .[dev]
+          command: |
+            python -m pip install pip==20.2.4
+            pip3 --version
+            pip3 install --user -e .[dev]
       - run:
           name: Install Solidity Compiler
           command: python3 ./scripts/installation/install_solc.py
@@ -679,7 +682,10 @@ jobs:
       - prepare_environment
       - run:
           name: Install Documentation Build Dependencies
-          command: pip3 install --use-feature=2020-resolver --user .[docs]
+          command: |
+            python -m pip install pip==20.2.4
+            pip3 --version
+            pip3 install --use-feature=2020-resolver --user .[docs]
       - run:
           name: Build Sphinx Documentation
           command: make docs
