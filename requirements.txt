@@ -10,7 +10,7 @@ blake2b-py==0.1.3
 bytestring-splitter==2.2.0
 cached-property==1.5.2
 certifi==2020.11.8
-cffi==1.14.3
+cffi==1.14.4
 chardet==3.0.4
 click==7.1.2
 coincurve==13.0.0
@@ -44,7 +44,7 @@ ipfshttpclient==0.7.0a1; python_full_version >= '3.5.4' and python_full_version 
 itsdangerous==1.1.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 jinja2==2.11.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
 jsonschema==3.2.0
-libusb1==1.8
+libusb1==1.8.1
 lmdb==0.99
 lru-dict==1.1.6
 mako==1.1.3
@@ -72,7 +72,7 @@ pycryptodome==3.9.9
 pyethash==0.1.27
 pyhamcrest==2.0.2; python_version >= '3.5'
 pynacl==1.4.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-pyopenssl==19.1.0
+pyopenssl==20.0.0
 pyrsistent==0.17.3; python_version >= '3.5'
 pysha3==1.0.2
 python-dateutil==2.8.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'
@@ -80,7 +80,7 @@ pytz==2020.4
 pytzdata==2020.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 regex==2020.11.13
 requests==2.25.0
-rlp==2.0.0
+rlp==2.0.1
 semantic-version==2.8.5; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 service-identity==18.1.0
 six==1.15.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'
@@ -98,8 +98,8 @@ tzlocal==2.1
 umbral==0.1.3a2
 urllib3==1.26.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'
 varint==1.0.2
-watchdog==0.10.3
-web3==5.13.0
+watchdog==0.10.4
+web3==5.13.1
 websockets==8.1; python_full_version >= '3.6.1'
 werkzeug==1.0.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
 zope.interface==5.2.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
