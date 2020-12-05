@@ -685,7 +685,7 @@ jobs:
           command: |
             python -m pip install pip==20.2.4
             pip3 --version
-            pip3 install --use-feature=2020-resolver --user .[docs]
+            pip3 install --user .[docs]
       - run:
           name: Build Sphinx Documentation
           command: make docs
