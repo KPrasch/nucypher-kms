@@ -21,7 +21,7 @@ import os
 
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION
 
-from nucypher.cli.actions.configure import forget as forget_nodes
+from nucypher.cli.actions.configure import forget as forget_nodes, perform_ip_checkup
 from nucypher.blockchain.economics import EconomicsFactory
 from nucypher.blockchain.eth.signers.software import ClefSigner
 from nucypher.blockchain.eth.utils import datetime_at_period
@@ -71,7 +71,8 @@ from nucypher.config.constants import (
     TEMPORARY_DOMAIN
 )
 from nucypher.config.keyring import NucypherKeyring
-from nucypher.utilities.networking import determine_external_ip_address
+from nucypher.utilities.networking import determine_external_ip_address, get_external_ip_from_centralized_source, \
+    UnknownIPAddress
 
 
 class UrsulaConfigOptions:
@@ -344,6 +345,7 @@ def forget(general_config, config_options, config_file):
 @group_character_options
 @option_config_file
 @option_dry_run
+@option_force
 @group_general_config
 @click.option('--interactive', '-I', help="Run interactively", is_flag=True, default=False)
 @click.option('--prometheus', help="Run the ursula prometheus exporter", is_flag=True, default=False)
@@ -351,7 +353,9 @@ def forget(general_config, config_options, config_file):
 @click.option("--metrics-listen-address", help="Run a prometheus metrics exporter on specified IP address", default='')
 @click.option("--metrics-prefix", help="Create metrics params with specified prefix", default="ursula")
 @click.option("--metrics-interval", help="The frequency of metrics collection", type=click.INT, default=90)
-def run(general_config, character_options, config_file, interactive, dry_run, prometheus, metrics_port, metrics_listen_address, metrics_prefix, metrics_interval):
+@click.option("--ip-checkup/--no-ip-checkup", help="Verify external IP matches configuration", default=True)
+def run(general_config, character_options, config_file, interactive, dry_run, prometheus, metrics_port,
+        metrics_listen_address, metrics_prefix, metrics_interval, force, ip_checkup):
     """Run an "Ursula" node."""
 
     worker_address = character_options.config_options.worker_address
@@ -381,7 +385,11 @@ def run(general_config, character_options, config_file, interactive, dry_run, pr
                                                     listen_address=metrics_listen_address,
                                                     collection_interval=metrics_interval)
 
-    # TODO should we just not call run at all for "dry_run"
+    if ip_checkup:
+        perform_ip_checkup(emitter=emitter, ursula=ursula, force=force)
+
+    # TODO: should we just not call run at all for "dry_run"
+    # RE: That might make the some tests less accurate
     try:
         URSULA.run(emitter=emitter,
                    start_reactor=not dry_run,
