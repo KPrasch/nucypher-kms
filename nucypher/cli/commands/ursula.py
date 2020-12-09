@@ -18,10 +18,8 @@
 
 import click
 import os
-
 from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION
 
-from nucypher.cli.actions.configure import forget as forget_nodes, perform_ip_checkup
 from nucypher.blockchain.economics import EconomicsFactory
 from nucypher.blockchain.eth.signers.software import ClefSigner
 from nucypher.blockchain.eth.utils import datetime_at_period
@@ -29,8 +27,9 @@ from nucypher.cli.actions.auth import get_client_password, get_nucypher_password
 from nucypher.cli.actions.configure import (
     destroy_configuration,
     handle_missing_configuration_file,
-    get_or_update_configuration
+    get_or_update_configuration, configure_external_ip_address
 )
+from nucypher.cli.actions.configure import forget as forget_nodes, perform_ip_checkup
 from nucypher.cli.actions.select import select_client_account, select_config_file, select_network
 from nucypher.cli.commands.deploy import option_gas_strategy
 from nucypher.cli.config import group_general_config
@@ -71,8 +70,6 @@ from nucypher.config.constants import (
     TEMPORARY_DOMAIN
 )
 from nucypher.config.keyring import NucypherKeyring
-from nucypher.utilities.networking import determine_external_ip_address, get_external_ip_from_centralized_source, \
-    UnknownIPAddress
 
 
 class UrsulaConfigOptions:
@@ -176,17 +173,12 @@ class UrsulaConfigOptions:
                                                        provider_uri=self.provider_uri,
                                                        signer_uri=self.signer_uri)
 
-        rest_host = self.rest_host
-        if not rest_host:
-            rest_host = os.environ.get(NUCYPHER_ENVVAR_WORKER_IP_ADDRESS)
-            if not rest_host:
-                # TODO: Something less centralized... :-(
-                # TODO: Ask Ursulas instead
-                rest_host = determine_external_ip_address(emitter, force=force)
+        if not self.rest_host:
+            self.rest_host = configure_external_ip_address(emitter, network=self.domain, force=force)
 
         return UrsulaConfiguration.generate(password=get_nucypher_password(confirm=True),
                                             config_root=config_root,
-                                            rest_host=rest_host,
+                                            rest_host=self.rest_host,
                                             rest_port=self.rest_port,
                                             db_filepath=self.db_filepath,
                                             domain=self.domain,
@@ -297,9 +289,7 @@ def ursula():
 @option_config_root
 @group_general_config
 def init(general_config, config_options, force, config_root):
-    """
-    Create a new Ursula node configuration.
-    """
+    """Create a new Ursula node configuration."""
     emitter = setup_emitter(general_config, config_options.worker_address)
     _pre_launch_warnings(emitter, dev=None, force=force)
     if not config_root:
@@ -316,9 +306,7 @@ def init(general_config, config_options, force, config_root):
 @option_force
 @group_general_config
 def destroy(general_config, config_options, config_file, force):
-    """
-    Delete Ursula node configuration.
-    """
+    """Delete Ursula node configuration."""
     emitter = setup_emitter(general_config, config_options.worker_address)
     _pre_launch_warnings(emitter, dev=config_options.dev, force=force)
     if not config_file:
