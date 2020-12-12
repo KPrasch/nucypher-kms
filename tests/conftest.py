@@ -15,7 +15,6 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
 from collections import defaultdict
 
 import pytest
@@ -196,3 +195,9 @@ def patch_card_directory(session_mocker):
                                 new_callable=session_mocker.PropertyMock)
     yield
     tmpdir.cleanup()
+
+
+def mock_get_external_ip_from_url_source(session_mocker):
+    """Prevent tests from making a call to third party external networks"""
+    target = 'nucypher.utilities.networking.get_external_ip_from_centralized_source'
+    session_mocker.patch(target, return_value=None)
