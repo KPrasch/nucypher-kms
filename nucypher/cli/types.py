@@ -14,6 +14,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+from urllib.parse import urlparse
 
 import click
 from cryptography.exceptions import InternalError
@@ -22,6 +23,7 @@ from eth_utils import to_checksum_address
 from ipaddress import ip_address
 from umbral.keys import UmbralPublicKey
 
+from nucypher.blockchain.eth.signers import Signer
 from nucypher.blockchain.economics import StandardTokenEconomics
 from nucypher.blockchain.eth.interfaces import BlockchainInterface
 from nucypher.blockchain.eth.networks import NetworksInventory
@@ -120,11 +122,28 @@ class UmbralPublicKeyHex(click.ParamType):
         return value
 
 
+class SignerURI(click.ParamType):
+    name = 'nucypher_signer_uri'
+
+    def convert(self, value, param, ctx):
+        uri_breakdown = urlparse(value)
+        scheme = uri_breakdown.scheme or uri_breakdown.path or uri_breakdown.netloc
+        if scheme not in Signer._SIGNERS:
+            message = f"{value} is not a valid signer URI.  Available schemes are {', '.join(Signer._SIGNERS)}."
+            self.fail(message)
+        return value
+
+
 # Ethereum
 EIP55_CHECKSUM_ADDRESS = ChecksumAddress()
 WEI = click.IntRange(min=1, clamp=False)  # TODO: Better validation for ether and wei values?
 GWEI = DecimalRange(min=0)
 
+# Interface
+GAS_STRATEGY_CHOICES = click.Choice(list(BlockchainInterface.GAS_STRATEGIES.keys()))
+SIGNER_URI = SignerURI()
+
+# Staking
 __min_allowed_locked = NU.from_nunits(StandardTokenEconomics._default_minimum_allowed_locked).to_tokens()
 MIN_ALLOWED_LOCKED_TOKENS = Decimal(__min_allowed_locked)
 STAKED_TOKENS_RANGE = DecimalRange(min=__min_allowed_locked)
@@ -137,5 +156,5 @@ EXISTING_READABLE_FILE = click.Path(exists=True, dir_okay=False, file_okay=True,
 NETWORK_PORT = click.IntRange(min=0, max=65535, clamp=False)
 IPV4_ADDRESS = IPv4Address()
 
-GAS_STRATEGY_CHOICES = click.Choice(list(BlockchainInterface.GAS_STRATEGIES.keys()))
+# Misc
 UMBRAL_PUBLIC_KEY_HEX = UmbralPublicKeyHex()

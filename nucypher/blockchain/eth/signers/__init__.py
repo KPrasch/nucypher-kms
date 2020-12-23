@@ -15,13 +15,21 @@
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+
 from nucypher.blockchain.eth.signers.base import Signer
 from nucypher.blockchain.eth.signers.software import ClefSigner, KeystoreSigner
 from nucypher.blockchain.eth.signers.hardware import TrezorSigner
 
 
-Signer._SIGNERS = {
-    ClefSigner.uri_scheme(): ClefSigner,
-    KeystoreSigner.uri_scheme(): KeystoreSigner,
+HARDWARE_SIGNERS = {
     TrezorSigner.uri_scheme(): TrezorSigner
 }
+
+SOFTWARE_SIGNERS = {
+    ClefSigner.uri_scheme(): ClefSigner,
+    KeystoreSigner.uri_scheme(): KeystoreSigner,
+}
+
+SIGNERS = {**HARDWARE_SIGNERS, **SOFTWARE_SIGNERS}
+
+Signer._SIGNERS = SIGNERS
