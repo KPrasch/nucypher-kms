@@ -18,26 +18,7 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 import math
 import os
 import pprint
-import threading
-import time
-from typing import Callable, NamedTuple, Tuple, Union, Optional
-from typing import List
-from urllib.parse import urlparse
-
-import click
 import requests
-from eth_tester import EthereumTester
-from eth_tester.exceptions import TransactionFailed as TestTransactionFailed
-from eth_typing import ChecksumAddress
-from eth_utils import to_checksum_address
-from hexbytes.main import HexBytes
-from web3 import Web3, middleware, IPCProvider, WebsocketProvider, HTTPProvider
-from web3.contract import Contract, ContractConstructor, ContractFunction
-from web3.exceptions import ValidationError, TimeExhausted
-from web3.middleware import geth_poa_middleware
-from web3.providers import BaseProvider
-from web3.types import TxReceipt
-
 from constant_sorrow.constants import (
     INSUFFICIENT_ETH,
     NO_BLOCKCHAIN_CONNECTION,
@@ -45,6 +26,21 @@ from constant_sorrow.constants import (
     READ_ONLY_INTERFACE,
     UNKNOWN_TX_STATUS
 )
+from eth_tester import EthereumTester
+from eth_tester.exceptions import TransactionFailed as TestTransactionFailed
+from eth_typing import ChecksumAddress
+from eth_utils import to_checksum_address
+from hexbytes.main import HexBytes
+from typing import Callable, NamedTuple, Tuple, Union, Optional
+from typing import List
+from urllib.parse import urlparse
+from web3 import Web3, middleware, IPCProvider, WebsocketProvider, HTTPProvider
+from web3.contract import Contract, ContractConstructor, ContractFunction
+from web3.exceptions import ValidationError, TimeExhausted
+from web3.middleware import geth_poa_middleware
+from web3.providers import BaseProvider
+from web3.types import TxReceipt
+
 from nucypher.blockchain.eth.clients import EthereumClient, POA_CHAINS, InfuraClient
 from nucypher.blockchain.eth.decorators import validate_checksum_address
 from nucypher.blockchain.eth.providers import (
@@ -385,31 +381,38 @@ class BlockchainInterface:
         # TODO: #1504 - Additional Handling of validation failures (gas limits, invalid fields, etc.)
         """
 
+        # Extract the exception's message or data.
         try:
-            # Assume this error is formatted as an IPC response
             response = exception.args[0]
-            code = response['code']
-            message = response['message']
-
-        except (ValueError, IndexError, AttributeError, KeyError, TypeError):
-            # TODO: #1504 - Try even harder to determine if this is insufficient funds causing the issue,
-            #               This may be best handled at the agent or actor layer for registry and token interactions.
-            # Worst case scenario - raise the exception held in context implicitly
+        except AttributeError:
+            # Python exceptions must have the 'args attribute'.
+            raise ValueError(f'{exception} is not a valid Exception instance.')
+        except IndexError:
+            # No exception data or message available.
             raise exception
 
-        else:
-            if int(code) != cls.TransactionFailed.IPC_CODE:
-                # Only handle client-specific exceptions
-                # https://www.jsonrpc.org/specification Section 5.1
-                raise exception
+        # Assume this error is formatted as a valid eth RPC response.
+        try:
+            code = response['code']
+            message = response['message']
+        except KeyError:
+            # TODO: #1504 - Try even harder to determine if this is insufficient funds causing the issue,
+            #               This may be best handled at the agent or actor layer for registry and token interactions.
+            # Response data does not contain valid RPC fields.
+            raise exception
 
-            if logger:
-                logger.critical(message)  # simple context
+        if int(code) != cls.TransactionFailed.IPC_CODE:
+            # Only handle client-specific exceptions
+            # https://www.jsonrpc.org/specification Section 5.1
+            raise exception
 
-            transaction_failed = cls.TransactionFailed(message=message,  # rich error (best case)
-                                                       contract_function=contract_function,
-                                                       transaction_dict=transaction_dict)
-            raise transaction_failed from exception
+        if logger:
+            logger.critical(message)  # simple context
+
+        transaction_failed = cls.TransactionFailed(message=message,  # rich error (best case)
+                                                   contract_function=contract_function,
+                                                   transaction_dict=transaction_dict)
+        raise transaction_failed from exception
 
     def __log_transaction(self, transaction_dict: dict, contract_function: ContractFunction):
         """
