@@ -172,12 +172,12 @@ def test_keystore_locking(mock_account, good_signer, unknown_address, mocker):
         good_signer.unlock_account(account=unknown_address, password=INSECURE_DEVELOPMENT_PASSWORD)
 
     # Missing password
-    with pytest.raises(Signer.AccessDenied, match='No password supplied to unlock account.'):
+    with pytest.raises(Signer.AuthenticationFailed, match='No password supplied to unlock account.'):
         good_signer.unlock_account(account=mock_account.address, password=None)
 
     # Wrong password
     mocker.patch.dict(good_signer._KeystoreSigner__signers, {}, clear=True)
-    with pytest.raises(Signer.AccessDenied, match="Invalid or incorrect signer password."):
+    with pytest.raises(Signer.AuthenticationFailed, match="Invalid or incorrect ethereum account password."):
         good_signer.unlock_account(account=mock_account.address, password='imadeupthispassworditisverygood')
 
     # Correct account and password
