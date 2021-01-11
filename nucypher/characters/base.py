@@ -60,6 +60,7 @@ class Character(Learner):
     def __init__(self,
                  domain: str = None,
                  known_node_class: object = None,
+                 discovery_labels=None,
                  is_me: bool = True,
                  federated_only: bool = False,
                  checksum_address: str = NO_BLOCKCHAIN_CONNECTION.bool_value(False),
@@ -185,6 +186,7 @@ class Character(Learner):
                              domain=domain,
                              network_middleware=self.network_middleware,
                              node_class=known_node_class,
+                             discovery_labels=discovery_labels,
                              *args, **kwargs)
 
         #
