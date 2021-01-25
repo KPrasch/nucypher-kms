@@ -35,11 +35,10 @@ from nucypher.cli.main import nucypher_cli
 from nucypher.config.characters import StakeHolderConfiguration, UrsulaConfiguration
 from nucypher.config.constants import TEMPORARY_DOMAIN
 from nucypher.utilities.logging import Logger
-
 from tests.constants import FAKE_PASSWORD_CONFIRMED, FEE_RATE_RANGE, INSECURE_DEVELOPMENT_PASSWORD, MOCK_IP_ADDRESS, \
     TEST_PROVIDER_URI, YES_ENTER
 from tests.utils.middleware import MockRestMiddleware
-from tests.utils.ursula import MOCK_KNOWN_URSULAS_CACHE, MOCK_URSULA_STARTING_PORT, select_test_port
+from tests.utils.ursula import MOCK_KNOWN_URSULAS_CACHE, select_test_port
 
 
 @mock.patch('nucypher.config.characters.StakeHolderConfiguration.default_filepath', return_value='/non/existent/file')
@@ -594,6 +593,7 @@ def test_collect_rewards_integration(click_runner,
                     registry=agency_local_registry,
                     rest_host='127.0.0.1',
                     rest_port=ursula_port,
+                    provider_uri=TEST_PROVIDER_URI,
                     network_middleware=MockRestMiddleware(),
                     db_filepath=tempfile.mkdtemp(),
                     domain=TEMPORARY_DOMAIN)

@@ -16,12 +16,12 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import json
+import os
 import random
+import tempfile
 
 import maya
-import os
 import pytest
-import tempfile
 from web3 import Web3
 
 from nucypher.blockchain.eth.actors import Staker
@@ -41,7 +41,7 @@ from tests.constants import (FAKE_PASSWORD_CONFIRMED, INSECURE_DEVELOPMENT_PASSW
                              ONE_YEAR_IN_SECONDS,
                              TEST_PROVIDER_URI)
 from tests.utils.middleware import MockRestMiddleware
-from tests.utils.ursula import MOCK_KNOWN_URSULAS_CACHE, MOCK_URSULA_STARTING_PORT, select_test_port
+from tests.utils.ursula import MOCK_KNOWN_URSULAS_CACHE, select_test_port
 
 
 #
@@ -524,7 +524,7 @@ def test_collect_rewards_integration(click_runner,
                     registry=agency_local_registry,
                     rest_host='127.0.0.1',
                     rest_port=ursula_port,
-                    commit_now=False,
+                    provider_uri=TEST_PROVIDER_URI,
                     network_middleware=MockRestMiddleware(),
                     db_filepath=tempfile.mkdtemp(),
                     domain=TEMPORARY_DOMAIN)
