@@ -15,12 +15,11 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from copy import copy
-
 import tempfile
-from tests.constants import MOCK_PROVIDER_URI
-from eth_tester.exceptions import ValidationError
+from copy import copy
 from unittest.mock import patch
+
+from eth_tester.exceptions import ValidationError
 
 from nucypher.characters.lawful import Alice, Ursula
 from nucypher.config.constants import TEMPORARY_DOMAIN
