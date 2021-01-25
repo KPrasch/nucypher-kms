@@ -28,7 +28,6 @@ from tests.utils.ursula import MOCK_URSULA_STARTING_PORT
 TEST_CHARACTER_CONFIG_BASE_PARAMS = dict(
     dev_mode=True,
     domain=TEMPORARY_DOMAIN,
-    start_learning_now=False,
     abort_on_learning_error=True,
     save_metadata=False,
     reload_metadata=False
@@ -39,7 +38,7 @@ def assemble(federated: bool,
              checksum_address: str = None,
              provider_uri: str = None,
              test_registry: BaseContractRegistry = None,
-             known_nodes: List[Ursula] = None) -> dict:
+             seed_nodes: List[Ursula] = None) -> dict:
 
     """Assemble a dictionary of keyword arguments to use when constructing a test configuration."""
 
@@ -57,7 +56,7 @@ def assemble(federated: bool,
                           provider_uri=provider_uri if not federated else None,
                           registry=test_registry if not federated else None,
                           network_middleware=MockRestMiddleware(),
-                          known_nodes=known_nodes,
+                          seed_nodes=seed_nodes,
                           checksum_address=checksum_address)
 
     # Combine and return

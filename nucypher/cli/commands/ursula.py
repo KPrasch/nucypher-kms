@@ -268,8 +268,7 @@ class UrsulaCharacterOptions:
                                         teacher_uri=self.teacher_uri,
                                         unlock_keyring=not self.config_options.dev,
                                         lonely=self.config_options.lonely,
-                                        client_password=client_password,
-                                        start_learning_now=load_seednodes)
+                                        client_password=client_password)
             return ursula_config, URSULA
 
         except NucypherKeyring.AuthenticationFailed as e:

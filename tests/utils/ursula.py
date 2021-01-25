@@ -18,28 +18,24 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 
 import contextlib
 import socket
-import tempfile
-
 from cryptography.x509 import Certificate
 from typing import Iterable, List, Optional, Set
-
-from nucypher.characters.lawful import Bob
-from nucypher.crypto.utils import canonical_address_from_umbral_key
-
-from nucypher.blockchain.eth.actors import Staker
-from nucypher.blockchain.eth.interfaces import BlockchainInterface
-from nucypher.characters.lawful import Ursula
-from nucypher.config.characters import UrsulaConfiguration
-from nucypher.crypto.powers import TransactingPower
-from nucypher.policy.collections import WorkOrder, IndisputableEvidence
-from tests.constants import (
-    NUMBER_OF_URSULAS_IN_DEVELOPMENT_NETWORK
-)
-from tests.mock.datastore import MOCK_DB
 from umbral import pre
 from umbral.curvebn import CurveBN
 from umbral.keys import UmbralPrivateKey
 from umbral.signing import Signer
+
+from nucypher.blockchain.eth.actors import Staker
+from nucypher.blockchain.eth.interfaces import BlockchainInterface
+from nucypher.characters.lawful import Bob
+from nucypher.characters.lawful import Ursula
+from nucypher.config.characters import UrsulaConfiguration
+from nucypher.config.constants import TEMPORARY_DOMAIN
+from nucypher.crypto.utils import canonical_address_from_umbral_key
+from nucypher.policy.collections import WorkOrder, IndisputableEvidence
+from nucypher.utilities.networking import LOCALHOST
+from tests.constants import NUMBER_OF_URSULAS_IN_DEVELOPMENT_NETWORK
+from tests.mock.datastore import MOCK_DB
 
 
 def select_test_port() -> int:
@@ -52,7 +48,7 @@ def select_test_port() -> int:
 
     closed_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     with contextlib.closing(closed_socket) as open_socket:
-        open_socket.bind(('localhost', 0))
+        open_socket.bind((LOCALHOST, 0))
         port = open_socket.getsockname()[1]
 
         if port == UrsulaConfiguration.DEFAULT_REST_PORT or port > 64000:
@@ -65,7 +61,8 @@ def select_test_port() -> int:
 def make_federated_ursulas(ursula_config: UrsulaConfiguration,
                            quantity: int = NUMBER_OF_URSULAS_IN_DEVELOPMENT_NETWORK,
                            know_each_other: bool = True,
-                           **ursula_overrides) -> Set[Ursula]:
+                           **ursula_overrides
+                           ) -> Set[Ursula]:
 
     if not MOCK_KNOWN_URSULAS_CACHE:
         starting_port = MOCK_URSULA_STARTING_PORT
@@ -73,13 +70,9 @@ def make_federated_ursulas(ursula_config: UrsulaConfiguration,
         starting_port = max(MOCK_KNOWN_URSULAS_CACHE.keys()) + 1
 
     federated_ursulas = set()
-
     for port in range(starting_port, starting_port+quantity):
-
-        ursula = ursula_config.produce(rest_port=port + 100,
-                                       db_filepath=MOCK_DB,
-                                       **ursula_overrides)
-
+        ursula = ursula_config.produce(rest_port=port + 100, db_filepath=MOCK_DB, **ursula_overrides)
+        ursula.start_learning_loop()
         federated_ursulas.add(ursula)
 
         # Store this Ursula in our global testing cache.
@@ -208,7 +201,8 @@ def _mock_ursula_reencrypts(ursula, corrupt_cfrag: bool = False):
 
     cfrag_signature = ursula.stamp(bytes(cfrag))
 
-    bob = Bob.from_public_keys(verifying_key=pub_key_bob)
+    bob = Bob.from_public_keys(domain=TEMPORARY_DOMAIN,
+                               verifying_key=pub_key_bob)
     task = WorkOrder.PRETask(capsule, task_signature, cfrag, cfrag_signature)
     work_order = WorkOrder(bob, None, alice_address, {capsule: task}, None, ursula, blockhash)
 

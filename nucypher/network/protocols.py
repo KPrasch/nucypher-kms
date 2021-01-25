@@ -14,9 +14,13 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+
 from bytestring_splitter import VariableLengthBytestring
 from eth_utils import is_checksum_address
 from urllib.parse import urlparse
+
+from nucypher.utilities.networking import LOOPBACK_IP, LOCALHOST
 
 
 class SuspiciousActivity(RuntimeError):
@@ -63,8 +67,7 @@ class InterfaceInfo:
     expected_bytes_length = lambda: VariableLengthBytestring
 
     def __init__(self, host, port) -> None:
-        loopback, localhost = '127.0.0.1', 'localhost'
-        self.host = loopback if host == localhost else host
+        self.host = LOOPBACK_IP if host == LOCALHOST else host
         self.port = int(port)
 
     def __iter__(self):

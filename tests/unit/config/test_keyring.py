@@ -14,10 +14,17 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+
 from cryptography.hazmat.primitives.asymmetric import ec
 
-from nucypher.config.keyring import _assemble_key_data, _PrivateKeySerializer, _generate_tls_keys, \
+from nucypher.config.keyring import (
+    _assemble_key_data,
+    _PrivateKeySerializer,
+    _generate_tls_keys,
     _TLSPrivateKeySerializer
+)
+from nucypher.utilities.networking import LOOPBACK_IP
 
 
 def test_private_key_serialization():
@@ -31,7 +38,7 @@ def test_private_key_serialization():
 
 
 def test_tls_private_key_serialization():
-    host = '127.0.0.1'
+    host = LOOPBACK_IP
     checksum_address = '0xdeadbeef'
     curve = ec.SECP384R1
 

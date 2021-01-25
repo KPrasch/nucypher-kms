@@ -20,6 +20,7 @@ import pytest
 from constant_sorrow import constants
 from cryptography.exceptions import InvalidSignature
 
+from nucypher.config.constants import TEMPORARY_DOMAIN
 from nucypher.characters.lawful import Alice, Bob, Character
 from nucypher.crypto import api
 from nucypher.crypto.powers import (CryptoPower, NoSigningPower, SigningPower)
@@ -27,14 +28,16 @@ from nucypher.crypto.powers import (CryptoPower, NoSigningPower, SigningPower)
 """
 Chapter 1: SIGNING
 """
+
+
 def test_actor_without_signing_power_cannot_sign():
     """
     We can create a Character with no real CryptoPower to speak of.
     This Character can't even sign a message.
     """
     cannot_sign = CryptoPower(power_ups=[])
-    non_signer = Character(crypto_power=cannot_sign,
-                           start_learning_now=False,
+    non_signer = Character(domain=TEMPORARY_DOMAIN,
+                           crypto_power=cannot_sign,
                            federated_only=True)
 
     # The non-signer's stamp doesn't work for signing...
@@ -54,8 +57,10 @@ def test_actor_with_signing_power_can_sign():
     """
     message = b"Llamas."
 
-    signer = Character(crypto_power_ups=[SigningPower], is_me=True,
-                       start_learning_now=False, federated_only=True)
+    signer = Character(crypto_power_ups=[SigningPower],
+                       is_me=True,
+                       federated_only=True,
+                       domain=TEMPORARY_DOMAIN)
     stamp_of_the_signer = signer.stamp
 
     # We can use the signer's stamp to sign a message (since the signer is_me)...
@@ -76,10 +81,10 @@ def test_anybody_can_verify():
     Here, we show that anybody can do it without needing to directly access Crypto.
     """
     # Alice can sign by default, by dint of her _default_crypto_powerups.
-    alice = Alice(federated_only=True, start_learning_now=False)
+    alice = Alice(domain=TEMPORARY_DOMAIN, federated_only=True)
 
     # So, our story is fairly simple: an everyman meets Alice.
-    somebody = Character(start_learning_now=False, federated_only=True)
+    somebody = Character(domain=TEMPORARY_DOMAIN, federated_only=True)
 
     # Alice signs a message.
     message = b"A message for all my friends who can only verify and not sign."
@@ -97,12 +102,12 @@ def test_anybody_can_verify():
     # Signature verification also works when Alice is not living with our
     # everyman in the same process, and he only knows her by her public key
     alice_pubkey_bytes = bytes(alice.stamp)
-    hearsay_alice = Character.from_public_keys({SigningPower: alice_pubkey_bytes})
+    hearsay_alice = Character.from_public_keys({SigningPower: alice_pubkey_bytes}, domain=TEMPORARY_DOMAIN)
 
     cleartext = somebody.verify_from(hearsay_alice, message, signature, decrypt=False)
     assert cleartext is constants.NO_DECRYPTION_PERFORMED
 
-    hearsay_alice = Character.from_public_keys(verifying_key=alice_pubkey_bytes)
+    hearsay_alice = Character.from_public_keys(verifying_key=alice_pubkey_bytes, domain=TEMPORARY_DOMAIN)
 
     cleartext = somebody.verify_from(hearsay_alice, message, signature, decrypt=False)
     assert cleartext is constants.NO_DECRYPTION_PERFORMED
@@ -118,8 +123,8 @@ def test_anybody_can_encrypt():
     """
     Similar to anybody_can_verify() above; we show that anybody can encrypt.
     """
-    someone = Character(start_learning_now=False, federated_only=True)
-    bob = Bob(is_me=False, federated_only=True)
+    someone = Character(domain=TEMPORARY_DOMAIN, federated_only=True)
+    bob = Bob(is_me=False, federated_only=True, domain=TEMPORARY_DOMAIN)
 
     cleartext = b"This is Officer Rod Farva. Come in, Ursula!  Come in Ursula!"
 

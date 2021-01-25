@@ -158,7 +158,7 @@ def collect(alice: Alice,
             i += 1  # continue
 
 
-def make_alice(known_nodes: Optional[Set[Ursula]] = None):
+def make_alice(seed_nodes: Optional[Set[Ursula]] = None):
     """Initializes a new 'persistent alice configuration' for grant metrics collection."""
     alice_config = AliceConfiguration(
         provider_uri=ETHEREUM_PROVIDER_URI,
@@ -166,8 +166,7 @@ def make_alice(known_nodes: Optional[Set[Ursula]] = None):
         signer_uri=f'keystore://{SIGNER_URI}',
         config_root=os.path.join(TEMP_ALICE_DIR),
         domain=DOMAIN,
-        known_nodes=known_nodes,
-        start_learning_now=False,
+        seed_nodes=seed_nodes,
         federated_only=False,
         learn_on_same_thread=True,
         gas_strategy=GAS_STRATEGY,
@@ -208,6 +207,6 @@ def aggregate_nodes() -> Tuple[Set[Ursula], Set[Ursula]]:
 
 if __name__ == '__main__':
     setup()
-    seednodes, handpicked_ursulas = aggregate_nodes()
-    alice = make_alice(known_nodes=seednodes)
+    seed_nodes, handpicked_ursulas = aggregate_nodes()
+    alice = make_alice(seed_nodes=seed_nodes)
     collect(alice=alice, handpicked_ursulas=handpicked_ursulas)

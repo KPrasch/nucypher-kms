@@ -73,9 +73,8 @@ doctor = Bob(
     domain=TEMPORARY_DOMAIN,
     federated_only=True,
     crypto_power_ups=power_ups,
-    start_learning_now=True,
     abort_on_learning_error=True,
-    known_nodes=[ursula],
+    seed_nodes=[ursula],
     save_metadata=False,
     network_middleware=RestMiddleware(),
 )

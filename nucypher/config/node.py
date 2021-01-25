@@ -103,7 +103,6 @@ class CharacterConfiguration(BaseConfiguration):
                  # Learner
                  learn_on_same_thread: bool = False,
                  abort_on_learning_error: bool = False,
-                 start_learning_now: bool = True,
 
                  # Network
                  controller_port: int = None,
@@ -113,7 +112,7 @@ class CharacterConfiguration(BaseConfiguration):
                  lonely: bool = False,
 
                  # Node Storage
-                 known_nodes: set = None,
+                 seed_nodes: set = None,
                  node_storage: NodeStorage = None,
                  reload_metadata: bool = True,
                  save_metadata: bool = True,
@@ -170,10 +169,9 @@ class CharacterConfiguration(BaseConfiguration):
         self.domain = domain
         self.learn_on_same_thread = learn_on_same_thread
         self.abort_on_learning_error = abort_on_learning_error
-        self.start_learning_now = start_learning_now
         self.save_metadata = save_metadata
         self.reload_metadata = reload_metadata
-        self.known_nodes = known_nodes or set()  # handpicked
+        self.seed_nodes = seed_nodes or set()  # handpicked
         self.lonely = lonely
 
         # Configuration
@@ -418,7 +416,6 @@ class CharacterConfiguration(BaseConfiguration):
             domain=self.domain,
             learn_on_same_thread=self.learn_on_same_thread,
             abort_on_learning_error=self.abort_on_learning_error,
-            start_learning_now=self.start_learning_now,
             save_metadata=self.save_metadata,
             node_storage=self.node_storage.payload(),
             lonely=self.lonely,
@@ -456,7 +453,7 @@ class CharacterConfiguration(BaseConfiguration):
             payload.update(dict(registry=self.registry, signer=signer))
 
         payload.update(dict(network_middleware=self.network_middleware or self.DEFAULT_NETWORK_MIDDLEWARE(),
-                            known_nodes=self.known_nodes,
+                            seed_nodes=self.seed_nodes,
                             node_storage=self.node_storage,
                             keyring=self.keyring,
                             crypto_power_ups=self.derive_node_power_ups()))

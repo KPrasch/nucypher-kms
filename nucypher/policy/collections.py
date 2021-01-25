@@ -423,7 +423,7 @@ class WorkOrder:
         if not signature.verify(receipt_bytes, bob_verifying_key):
             raise InvalidSignature()
 
-        bob = Bob.from_public_keys(verifying_key=bob_verifying_key)
+        bob = Bob.from_public_keys(domain=ursula.domain, verifying_key=bob_verifying_key)
         return cls(bob=bob,
                    ursula=ursula,
                    arrangement_id=arrangement_id,

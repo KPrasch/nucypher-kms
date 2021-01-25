@@ -18,7 +18,6 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 
 import click
 import os
-from constant_sorrow.constants import NO_BLOCKCHAIN_CONNECTION
 
 from nucypher.cli.actions.auth import (
     get_client_password,
@@ -26,7 +25,6 @@ from nucypher.cli.actions.auth import (
     unlock_nucypher_keyring
 )
 from nucypher.cli.actions.configure import destroy_configuration, handle_missing_configuration_file
-from nucypher.cli.utils import setup_emitter
 from nucypher.cli.config import group_general_config
 from nucypher.cli.literature import (
     CONFIRM_OVERWRITE_DATABASE,
@@ -54,8 +52,10 @@ from nucypher.cli.options import (
 )
 from nucypher.cli.painting.help import paint_new_installation_help
 from nucypher.cli.types import NETWORK_PORT
+from nucypher.cli.utils import setup_emitter
 from nucypher.config.characters import FelixConfiguration
 from nucypher.config.constants import DEFAULT_CONFIG_ROOT, NUCYPHER_ENVVAR_WORKER_ETH_PASSWORD
+from nucypher.utilities.networking import LOOPBACK_IP
 
 option_port = click.option('--port', help="The host port to run Felix HTTP services on", type=NETWORK_PORT, default=FelixConfiguration.DEFAULT_REST_PORT)
 
@@ -128,7 +128,7 @@ group_config_options = group_options(
     network=option_network(),
     provider_uri=option_provider_uri(),
     signer_uri=option_signer_uri,
-    host=click.option('--host', help="The host to run Felix HTTP services on", type=click.STRING, default='127.0.0.1'),
+    host=click.option('--host', help="The host to run Felix HTTP services on", type=click.STRING, default=LOOPBACK_IP),
     db_filepath=option_db_filepath,
     checksum_address=option_checksum_address,
     registry_filepath=option_registry_filepath,

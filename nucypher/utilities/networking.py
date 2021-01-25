@@ -38,8 +38,21 @@ class InvalidWorkerIP(RuntimeError):
     """Raised when an Ursula is using an invalid IP address for it's server."""
 
 
+# Used for IP address determination as a last resort
 CENTRALIZED_IP_ORACLE_URL = 'https://ifconfig.me/'
 
+LOOPBACK_IP = '127.0.0.1'
+
+LOCALHOST = 'localhost'
+
+# Ursulas cannot use these IPs
+RESERVED_IP_ADDRESSES = (
+    LOOPBACK_IP,
+    '0.0.0.0',
+    '1.2.3.4'
+)
+
+IP_DETECTION_LOGGER = Logger('external-ip-detection')
 
 RequestErrors = (
     # https://requests.readthedocs.io/en/latest/user/quickstart/#errors-and-exceptions
@@ -48,15 +61,6 @@ RequestErrors = (
     RequestException,
     HTTPError
 )
-
-RESERVED_IP_ADDRESSES = (
-    '0.0.0.0',
-    '127.0.0.1',
-    '1.2.3.4'
-)
-
-IP_DETECTION_LOGGER = Logger('external-ip-detection')
-
 
 
 def validate_worker_ip(worker_ip: str) -> None:

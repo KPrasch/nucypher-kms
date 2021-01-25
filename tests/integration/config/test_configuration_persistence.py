@@ -34,7 +34,6 @@ def test_alices_powers_are_persistent(federated_ursulas, tmpdir):
         config_root=config_root,
         network_middleware=MockRestMiddleware(),
         domain=TEMPORARY_DOMAIN,
-        start_learning_now=False,
         federated_only=True,
         save_metadata=False,
         reload_metadata=False
@@ -68,8 +67,8 @@ def test_alices_powers_are_persistent(federated_ursulas, tmpdir):
     m, n = 3, 4
     policy_end_datetime = maya.now() + datetime.timedelta(days=5)
 
-    bob = Bob(federated_only=True,
-              start_learning_now=False,
+    bob = Bob(domain=TEMPORARY_DOMAIN,
+              federated_only=True,
               network_middleware=MockRestMiddleware())
 
     bob_policy = alice.grant(bob, label, m=m, n=n, expiration=policy_end_datetime)
@@ -93,8 +92,7 @@ def test_alices_powers_are_persistent(federated_ursulas, tmpdir):
     new_alice_config = AliceConfiguration.from_configuration_file(
         filepath=alice_config_file,
         network_middleware=MockRestMiddleware(),
-        known_nodes=federated_ursulas,
-        start_learning_now=False,
+        seed_nodes=federated_ursulas,
         config_root=config_root
     )
 
@@ -108,8 +106,8 @@ def test_alices_powers_are_persistent(federated_ursulas, tmpdir):
     assert alices_receiving_key == new_alice.public_keys(DecryptingPower)
 
     # Bob's eldest brother, Roberto, appears too
-    roberto = Bob(federated_only=True,
-                  start_learning_now=False,
+    roberto = Bob(domain=TEMPORARY_DOMAIN,
+                  federated_only=True,
                   network_middleware=MockRestMiddleware())
 
     # Alice creates a new policy for Roberto. Note how all the parameters

@@ -16,11 +16,11 @@ along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import json
-import random
 
 import maya
 import os
 import pytest
+import random
 import tempfile
 from web3 import Web3
 
@@ -36,12 +36,13 @@ from nucypher.cli.main import nucypher_cli
 from nucypher.config.characters import UrsulaConfiguration
 from nucypher.config.constants import TEMPORARY_DOMAIN
 from nucypher.utilities.logging import Logger
+from nucypher.utilities.networking import LOOPBACK_IP
 from tests.constants import (FAKE_PASSWORD_CONFIRMED, INSECURE_DEVELOPMENT_PASSWORD,
                              MOCK_INDIVIDUAL_ALLOCATION_FILEPATH, MOCK_IP_ADDRESS,
                              ONE_YEAR_IN_SECONDS,
-                             TEST_PROVIDER_URI)
+                             TEST_PROVIDER_URI, MOCK_PROVIDER_URI)
 from tests.utils.middleware import MockRestMiddleware
-from tests.utils.ursula import MOCK_KNOWN_URSULAS_CACHE, MOCK_URSULA_STARTING_PORT, select_test_port
+from tests.utils.ursula import MOCK_KNOWN_URSULAS_CACHE, select_test_port
 
 
 #
@@ -519,15 +520,17 @@ def test_collect_rewards_integration(click_runner,
 
     ursula_port = select_test_port()
     ursula = Ursula(is_me=True,
+                    provider_uri=MOCK_PROVIDER_URI,
                     checksum_address=staker_address,
                     worker_address=worker_address,
                     registry=agency_local_registry,
-                    rest_host='127.0.0.1',
+                    rest_host=LOOPBACK_IP,
                     rest_port=ursula_port,
-                    commit_now=False,
                     network_middleware=MockRestMiddleware(),
                     db_filepath=tempfile.mkdtemp(),
                     domain=TEMPORARY_DOMAIN)
+
+    ursula.start_learning_loop()
 
     MOCK_KNOWN_URSULAS_CACHE[ursula_port] = ursula
     assert ursula.worker_address == worker_address

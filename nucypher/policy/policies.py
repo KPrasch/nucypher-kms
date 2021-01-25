@@ -185,6 +185,7 @@ class Policy(ABC):
 
     POLICY_ID_LENGTH = 16
 
+    _crash_on_error = True  # enactment error
     log = Logger("Policy")
 
     class NotEnoughUrsulas(Exception):
@@ -247,9 +248,7 @@ class Policy(ABC):
                              address: ChecksumAddress,
                              network_middleware: RestMiddleware,
                              ) -> Tuple[Ursula, Arrangement]:
-        """
-        Attempt to propose an arrangement to the node with the given address.
-        """
+        """Attempt to propose an arrangement to the node with the given address."""
 
         if address not in self.alice.known_nodes:
             raise RuntimeError(f"{address} is not known")
@@ -271,13 +270,11 @@ class Policy(ABC):
         # We could just return the arrangement and get the Ursula object
         # from `known_nodes` later, but when we introduce slashing in FleetSensor,
         # the address can already disappear from `known_nodes` by that time.
-        return (ursula, arrangement)
+        return ursula, arrangement
 
     @abstractmethod
     def _make_reservoir(self, handpicked_addresses: Sequence[ChecksumAddress]) -> MergedReservoir:
-        """
-        Builds a `MergedReservoir` to use for drawing addresses to send proposals to.
-        """
+        """Builds a `MergedReservoir` to use for drawing addresses to send proposals to."""
         raise NotImplementedError
 
     def _make_arrangements(self,
@@ -321,18 +318,15 @@ class Policy(ABC):
 
         accepted_arrangements = {ursula: arrangement for ursula, arrangement in successes.values()}
         failures = worker_pool.get_failures()
-
         accepted_addresses = ", ".join(ursula.checksum_address for ursula in accepted_arrangements)
 
         if len(accepted_arrangements) < self.n:
-
             rejected_proposals = "\n".join(f"{address}: {exception}" for address, exception in failures.items())
-
-            self.log.debug(
-                "Could not find enough Ursulas to accept proposals.\n"
-                f"Accepted: {accepted_addresses}\n"
-                f"Rejected:\n{rejected_proposals}")
-            raise self._not_enough_ursulas_exception()
+            message = "Could not find enough Ursulas to accept proposals.\n" \
+                f"Accepted: {accepted_addresses}\n" \
+                f"Rejected:\n{rejected_proposals}"
+            self.log.debug(message)
+            raise self._not_enough_ursulas_exception()(message)
         else:
             self.log.debug(f"Finished proposing arrangements; accepted: {accepted_addresses}")
 
@@ -368,7 +362,6 @@ class Policy(ABC):
                 status = e.status
             else:
                 status = response.status_code
-
             return status
 
         value_factory = AllAtOnceFactory(list(zip(arrangements, self.kfrags)))
@@ -377,16 +370,17 @@ class Policy(ABC):
                                  target_successes=self.n,
                                  timeout=timeout,
                                  threadpool_size=self.n)
+        worker_pool.start()  # Fire
+        worker_pool.join()  # Block until everything is complete. We need all the workers to finish.
 
-        worker_pool.start()
-
-        # Block until everything is complete. We need all the workers to finish.
-        worker_pool.join()
-
+        # Check for success
         successes = worker_pool.get_successes()
-
         if len(successes) != self.n:
-            raise Policy.EnactmentError()
+            failures = worker_pool.get_failures()
+            for node, error in failures:
+                self.log.debug(str(error))
+            error = list(failures.values())[0]  # select the first error
+            raise error
 
         # TODO: Enable re-tries?
         statuses = {ursula_and_kfrag[0].checksum_address: status for ursula_and_kfrag, status in successes.items()}
@@ -600,12 +594,10 @@ class BlockchainPolicy(Policy):
 
     def _make_reservoir(self, handpicked_addresses):
         try:
-            reservoir = self.alice.get_stakers_reservoir(duration=self.duration_periods,
-                                                         without=handpicked_addresses)
+            reservoir = self.alice.get_stakers_reservoir(duration=self.duration_periods, without=handpicked_addresses)
         except StakingEscrowAgent.NotEnoughStakers:
             # TODO: do that in `get_stakers_reservoir()`?
             reservoir = StakersReservoir({})
-
         return MergedReservoir(handpicked_addresses, reservoir)
 
     def _publish_to_blockchain(self, ursulas) -> dict:

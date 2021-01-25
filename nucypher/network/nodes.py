@@ -15,30 +15,43 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import contextlib
-import datetime
-import time
-from collections import defaultdict, deque
-from contextlib import suppress
-from queue import Queue
-from typing import Iterable, List
-from typing import Set, Tuple, Union
 
+from collections import defaultdict, deque
+
+import contextlib
 import maya
 import requests
+import time
+from bytestring_splitter import (
+    BytestringSplitter,
+    BytestringSplittingError,
+    PartiallyKwargifiedBytes,
+    VariableLengthBytestring
+)
+from constant_sorrow import constant_or_bytes
+from constant_sorrow.constants import (
+    CERTIFICATE_NOT_SAVED,
+    FLEET_STATES_MATCH,
+    NEVER_SEEN,
+    NOT_SIGNED,
+    NO_KNOWN_NODES,
+    NO_STORAGE_AVAILIBLE,
+    UNKNOWN_FLEET_STATE,
+    UNKNOWN_VERSION,
+    RELAX
+)
+from contextlib import suppress
 from cryptography.x509 import Certificate
 from eth_utils import to_checksum_address
+from queue import Queue
 from requests.exceptions import SSLError
 from twisted.internet import reactor, task
 from twisted.internet.defer import Deferred
+from typing import Iterable, List, Type, Optional
+from typing import Set, Tuple, Union
+from umbral.signing import Signature
 
 import nucypher
-from bytestring_splitter import BytestringSplitter, BytestringSplittingError, PartiallyKwargifiedBytes, \
-    VariableLengthBytestring
-from constant_sorrow import constant_or_bytes
-from constant_sorrow.constants import (CERTIFICATE_NOT_SAVED, FLEET_STATES_MATCH, NEVER_SEEN, NOT_SIGNED,
-                                       NO_KNOWN_NODES, NO_STORAGE_AVAILIBLE, UNKNOWN_FLEET_STATE, UNKNOWN_VERSION,
-                                       RELAX)
 from nucypher.acumen.nicknames import Nickname
 from nucypher.acumen.perception import FleetSensor
 from nucypher.blockchain.economics import EconomicsFactory
@@ -46,18 +59,16 @@ from nucypher.blockchain.eth.agents import ContractAgency, StakingEscrowAgent
 from nucypher.blockchain.eth.constants import NULL_ADDRESS
 from nucypher.blockchain.eth.registry import BaseContractRegistry
 from nucypher.config.constants import SeednodeMetadata
-from nucypher.config.storages import ForgetfulNodeStorage
+from nucypher.config.storages import NodeStorage, ForgetfulNodeStorage
 from nucypher.crypto.api import recover_address_eip_191, verify_eip_191, InvalidNodeCertificate
 from nucypher.crypto.kits import UmbralMessageKit
-from nucypher.crypto.powers import DecryptingPower, NoSigningPower, SigningPower, TransactingPower
+from nucypher.crypto.powers import DecryptingPower, NoSigningPower, SigningPower
 from nucypher.crypto.signing import signature_splitter
 from nucypher.network import LEARNING_LOOP_VERSION
 from nucypher.network.exceptions import NodeSeemsToBeDown
 from nucypher.network.middleware import RestMiddleware
 from nucypher.network.protocols import SuspiciousActivity
-from nucypher.network.server import TLSHostingPower
 from nucypher.utilities.logging import Logger
-from umbral.signing import Signature
 
 
 class NodeSprout(PartiallyKwargifiedBytes):
@@ -198,18 +209,16 @@ class Learner:
 
     def __init__(self,
                  domain: str,
-                 node_class: object = None,
-                 network_middleware: RestMiddleware = None,
-                 start_learning_now: bool = False,
+                 node_class: Optional[Type['Character']] = None,
+                 network_middleware: Optional[RestMiddleware] = None,
                  learn_on_same_thread: bool = False,
-                 known_nodes: tuple = None,
-                 seed_nodes: Tuple[tuple] = None,
-                 node_storage=None,
+                 seed_nodes: Optional[Set['Teacher']] = None,
+                 node_storage:  Optional[NodeStorage] = None,
                  save_metadata: bool = False,
                  abort_on_learning_error: bool = False,
                  lonely: bool = False,
-                 verify_node_bonding: bool = True,
-                 ) -> None:
+                 verify_node_bonding: bool = True
+                 ):
 
         self.log = Logger("learning-loop")  # type: Logger
 
@@ -223,7 +232,6 @@ class Learner:
             default_middleware = self.__DEFAULT_MIDDLEWARE_CLASS()
         self.network_middleware = network_middleware or default_middleware
         self.save_metadata = save_metadata
-        self.start_learning_now = start_learning_now
         self.learn_on_same_thread = learn_on_same_thread
 
         self._abort_on_learning_error = abort_on_learning_error
@@ -239,7 +247,6 @@ class Learner:
         self._discovery_canceller = DiscoveryCanceller()
 
         if not node_storage:
-            # Fallback storage backend
             node_storage = self.__DEFAULT_NODE_STORAGE(federated_only=self.federated_only)
         self.node_storage = node_storage
         if save_metadata and node_storage is NO_STORAGE_AVAILIBLE:
@@ -249,123 +256,91 @@ class Learner:
         self.node_class = node_class or Ursula
         self.node_class.set_cert_storage_function(node_storage.store_node_certificate)  # TODO: Fix this temporary workaround for on-disk cert storage.  #1481
 
-        known_nodes = known_nodes or tuple()
-        self.unresponsive_startup_nodes = list()  # TODO: Buckets - Attempt to use these again later  #567
-        for node in known_nodes:
-            try:
-                self.remember_node(node, eager=True)
-            except self.UnresponsiveTeacher:
-                self.unresponsive_startup_nodes.append(node)
-
         self.teacher_nodes = deque()
         self._current_teacher_node = None  # type: Union[Teacher, None]
         self._learning_task = task.LoopingCall(self.keep_learning_about_nodes)
-
         if self._DEBUG_MODE:
-            # Very slow, but provides useful info when trying to track down a stray Character.
-            # Seems mostly useful for Bob or federated Ursulas, but perhaps useful for other Characters as well.
+            self.__debug()
 
-            import inspect, os
-            frames = inspect.stack(3)
-            self._learning_task = task.LoopingCall(self.keep_learning_about_nodes, learner=self, frames=frames)
-            self._init_frames = frames
-            from tests.conftest import global_mutable_where_everybody
-            test_name = os.environ["PYTEST_CURRENT_TEST"]
-            global_mutable_where_everybody[test_name].append(self)
-            self._FOR_TEST = test_name
-            ########################
-
-        self._learning_round = 0  # type: int
-        self._rounds_without_new_nodes = 0  # type: int
-        self._seed_nodes = seed_nodes or []
+        self._learning_round: int = 0
+        self._rounds_without_new_nodes: int = 0
+        self._seed_nodes = set(seed_nodes) if seed_nodes else set()
         self.unresponsive_seed_nodes = set()
 
-        if self.start_learning_now and not self.lonely:
-            self.start_learning_loop(now=self.learn_on_same_thread)
+    def __debug(self):
+        """
+        Very slow, but provides useful info when trying to track down a stray Character.
+        Seems mostly useful for Bob or federated Ursulas, but perhaps useful for other Characters as well.
+        """
+        import inspect, os
+        frames = inspect.stack(3)
+        self._learning_task = task.LoopingCall(self.keep_learning_about_nodes, learner=self, frames=frames)
+        self._init_frames = frames
+        from tests.conftest import global_mutable_where_everybody
+        test_name = os.environ["PYTEST_CURRENT_TEST"]
+        global_mutable_where_everybody[test_name].append(self)
+        self._FOR_TEST = test_name
 
     @property
     def known_nodes(self):
         return self.__known_nodes
 
-    def load_seednodes(self, read_storage: bool = True, record_fleet_state=False):
-        """
-        Engage known nodes from storages and pre-fetch hardcoded seednode certificates for node learning.
+    def load_seednodes(self,
+                       read_storage: bool = True,
+                       record_fleet_state=False,
+                       min_stake: int = 0,
+                       reload: bool = False
+                       ) -> None:
 
-        TODO: Dehydrate this with nucypher.utilities.seednodes.load_seednodes
-        """
-        if self.done_seeding:
-            raise RuntimeError("Already finished seeding.  Why try again?  Is this a thread safety problem?")
+        if self.done_seeding and not reload:
+            return
 
-        discovered = []
-
-        if self.domain:
-            canonical_sage_uris = self.network_middleware.TEACHER_NODES.get(self.domain, ())
-
-            for uri in canonical_sage_uris:
-                try:
-                    maybe_sage_node = self.node_class.from_teacher_uri(teacher_uri=uri,
-                                                                       min_stake=0,  # TODO: Where to get this?
-                                                                       federated_only=self.federated_only,
-                                                                       network_middleware=self.network_middleware,
-                                                                       registry=self.registry)
-                except NodeSeemsToBeDown:
-                    self.unresponsive_seed_nodes.add(uri)
-                else:
-                    if maybe_sage_node is UNKNOWN_VERSION:
-                        continue
-                    else:
-                        new_node = self.remember_node(maybe_sage_node, record_fleet_state=False)
-                        discovered.append(new_node)
-
-        for seednode_metadata in self._seed_nodes:
-
-            self.log.debug(
-                "Seeding from: {}|{}:{}".format(seednode_metadata.checksum_address,
-                                                seednode_metadata.rest_host,
-                                                seednode_metadata.rest_port))
-
-            seed_node = self.node_class.from_seednode_metadata(seednode_metadata=seednode_metadata,
-                                                               network_middleware=self.network_middleware,
-                                                               )
-            if seed_node is False:
-                self.unresponsive_seed_nodes.add(seednode_metadata)
-            elif seed_node is UNKNOWN_VERSION:
-                continue  # TODO: Bucket this?  We already emitted a warning.
+        # Hardcoded nodes
+        canonical_sage_uris = self.network_middleware.TEACHER_NODES.get(self.domain, tuple())
+        for uri in canonical_sage_uris:
+            try:
+                teacher = self.node_class.from_teacher_uri(teacher_uri=uri,
+                                                           min_stake=min_stake,
+                                                           federated_only=self.federated_only,
+                                                           network_middleware=self.network_middleware,
+                                                           registry=self.registry)
+            except NodeSeemsToBeDown:
+                self.unresponsive_seed_nodes.add(uri)
             else:
-                self.unresponsive_seed_nodes.discard(seednode_metadata)
-                new_node = self.remember_node(seed_node, record_fleet_state=False)
-                discovered.append(new_node)
+                self._seed_nodes.add(teacher)
 
+        # Injected nodes
+        for node in self._seed_nodes:
+            if node is UNKNOWN_VERSION:
+                continue
+            self.log.debug(f"Seeding from: {node.checksum_address}|{node.rest_interface}")
+            self.remember_node(node)
+            self.unresponsive_seed_nodes.discard(node)
+
+        # Engages node storage
+        if read_storage:
+            self.read_nodes_from_storage()  # calls remember node
+
+        # FIN
+        self.done_seeding = True
         if not self.unresponsive_seed_nodes:
             self.log.info("Finished learning about all seednodes.")
 
-        self.done_seeding = True
-
-        nodes_restored_from_storage = self.read_nodes_from_storage() if read_storage else []
-        discovered.extend(nodes_restored_from_storage)
-
-        if discovered and record_fleet_state:
+        # post-seeding state
+        if record_fleet_state:
             self.known_nodes.record_fleet_state()
 
-        return discovered
-
-    def read_nodes_from_storage(self) -> List:
+    def read_nodes_from_storage(self) -> None:
         stored_nodes = self.node_storage.all(federated_only=self.federated_only)  # TODO: #466
-
-        restored_from_disk = []
         invalid_nodes = defaultdict(list)
         for node in stored_nodes:
             if node.domain != self.domain:
                 invalid_nodes[node.domain].append(node)
                 continue
-            restored_node = self.remember_node(node, record_fleet_state=False)  # TODO: Validity status 1866
-            restored_from_disk.append(restored_node)
-
+            self.remember_node(node, record_fleet_state=False)  # TODO: Validity status 1866
         if invalid_nodes:
-            self.log.warn(f"We're learning about domain '{self.domain}', but found nodes from other domains; "
-                          f"let's ignore them. These domains and nodes are: {dict(invalid_nodes)}")
-
-        return restored_from_disk
+            self.log.warn(f"Ignoring nodes from other domains: "
+                          f"Learning about domain '{self.domain}', but found nodes from {dict(invalid_nodes)}")
 
     def remember_node(self,
                       node,
@@ -449,7 +424,7 @@ class Learner:
     def start_learning_loop(self, now=False):
         if self._learning_task.running:
             return False
-        elif now:
+        if now:
             self.log.info("Starting Learning Loop NOW.")
             self.learn_from_teacher_node()
 
@@ -752,13 +727,11 @@ class Learner:
 
         if not self.done_seeding:
             try:
-                remembered_seednodes = self.load_seednodes(record_fleet_state=False)
+                self.load_seednodes(record_fleet_state=False)
             except Exception as e:
                 # Even if we aren't aborting on learning errors, we want this to crash the process pronto.
                 e.crash_right_now = True
                 raise
-            else:
-                remembered.extend(remembered_seednodes)
 
         self._learning_round += 1
 
@@ -785,9 +758,9 @@ class Learner:
         # These except clauses apply to the current_teacher itself, not the learned-about nodes.
         except NodeSeemsToBeDown as e:
             unresponsive_nodes.add(current_teacher)
-            self.log.info(f"Teacher {str(current_teacher)} is perhaps down:{e}.")  # FIXME: This was printing the node bytestring. Is this really necessary?  #1712
+            self.log.info(f"Teacher {str(current_teacher)} is perhaps down:{e}.")  # FIXME: This is printing the node bytestring. Is this really necessary?  #1712
             return
-        except current_teacher.InvalidNode as e:
+        except Teacher.InvalidNode as e:
             # Ugh.  The teacher is invalid.  Rough.
             # TODO: Bucket separately and report.
             unresponsive_nodes.add(current_teacher)  # This does nothing.
@@ -902,7 +875,7 @@ class Learner:
                               f'{sprout} is not bonded to a Staker.')
 
             # TODO: Handle invalid sprouts
-            # except sprout.Invalidsprout:
+            # except sprout.InvalidSprout:
             #     self.log.warn(sprout.invalid_metadata_message.format(sprout))
 
             except sprout.SuspiciousActivity:

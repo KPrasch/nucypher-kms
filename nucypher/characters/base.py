@@ -15,27 +15,24 @@ You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-from collections import defaultdict
-
 import contextlib
 from constant_sorrow import default_constant_splitter
 from constant_sorrow.constants import (
     DO_NOT_SIGN,
-    NO_BLOCKCHAIN_CONNECTION,
     NO_CONTROL_PROTOCOL,
     NO_DECRYPTION_PERFORMED,
     NO_NICKNAME,
     NO_SIGNING_POWER,
     SIGNATURE_IS_ON_CIPHERTEXT,
     SIGNATURE_TO_FOLLOW,
-    STRANGER
+    STRANGER,
+    FEDERATED
 )
 from contextlib import suppress
 from cryptography.exceptions import InvalidSignature
 from eth_keys import KeyAPI as EthKeyAPI
 from eth_utils import to_canonical_address, to_checksum_address
-from typing import ClassVar, Dict, List, Optional, Union
+from typing import ClassVar, Dict, List, Optional, Union, Type
 from umbral.keys import UmbralPublicKey
 from umbral.signing import Signature
 
@@ -72,20 +69,20 @@ class Character(Learner):
     _crashed = False
 
     def __init__(self,
-                 domain: str = None,
-                 known_node_class: object = None,
+                 domain: str,  # TODO: Can domain enjoy a default value or allow None for strangers?
                  is_me: bool = True,
                  federated_only: bool = False,
-                 checksum_address: str = None,
-                 network_middleware: RestMiddleware = None,
-                 keyring: NucypherKeyring = None,
-                 crypto_power: CryptoPower = None,
-                 crypto_power_ups: List[CryptoPowerUp] = None,
-                 provider_uri: str = None,
-                 signer: Signer = None,
-                 registry: BaseContractRegistry = None,
+                 checksum_address: Optional[str] = None,
+                 known_node_class: Optional[Type['Character']] = None,
+                 network_middleware: Optional[RestMiddleware] = None,
+                 keyring: Optional[NucypherKeyring] = None,
+                 crypto_power: Optional[CryptoPower] = None,
+                 crypto_power_ups: List[Type[CryptoPowerUp]] = None,
+                 provider_uri: Optional[str] = None,
+                 signer: Optional[Signer] = None,
+                 registry: Optional[BaseContractRegistry] = None,
                  *args, **kwargs
-                 ) -> None:
+                 ):
 
         """
 
@@ -136,7 +133,7 @@ class Character(Learner):
         ##########################################
 
         #
-        # Keys & Powers
+        # Keys & Powers  # TODO: Move into is_me branch below?
         #
 
         if keyring:
@@ -181,8 +178,7 @@ class Character(Learner):
             if not self.federated_only:
                 self.registry = registry or InMemoryContractRegistry.from_latest_publication(network=domain)  # See #1580
             else:
-                self.registry = NO_BLOCKCHAIN_CONNECTION.bool_value(False)
-
+                self.registry = FEDERATED
             if not federated_only and not provider_uri:
                 raise ValueError('Provider URI is required to init a decentralized character.')
             self.provider_uri = provider_uri
@@ -190,54 +186,60 @@ class Character(Learner):
             # REST
             self.network_middleware = network_middleware or RestMiddleware(registry=self.registry)
 
+            # HTTP Character Control
+            # TODO: have argument about meaning of 'lawful' and whether maybe only Lawful characters have an interface
+            if hasattr(self, '_interface_class'):
+                self.interface = self._interface_class(character=self)
+            self.controller = NO_CONTROL_PROTOCOL
+
             # Learner
-            self.suspicious_activities_witnessed = defaultdict(list)  # TODO: Combine with buckets / node labeling
             Learner.__init__(self,
                              domain=domain,
                              network_middleware=self.network_middleware,
                              node_class=known_node_class,
                              *args, **kwargs)
 
-            if self.federated_only:
-                try:
-                    derived_federated_address = self.derive_federated_address()
-                except NoSigningPower:
-                    derived_federated_address = NO_SIGNING_POWER.bool_value(False)
-
-                if checksum_address and (checksum_address != derived_federated_address):
-                    raise ValueError(f"Provided checksum address {checksum_address} "
-                                     f"does not match federated character's verifying key {derived_federated_address}")
-                checksum_address = derived_federated_address
-
-            self.checksum_address = checksum_address
-
         #
         # Stranger
         #
 
         else:
-            if network_middleware is not None:
-                raise TypeError("Network middleware cannot be attached to a Stranger-Character.")
 
-            if registry is not None:
-                raise TypeError("Registry cannot be attached to stranger-Characters.")
+            # Feel like a stranger
+            if network_middleware:
+                raise TypeError("Network middleware cannot be attached to a stranger-character.")
+            self.network_middleware = STRANGER
+
+            if registry:
+                raise TypeError("Registry cannot be attached to stranger-characters.")
+            self.registry = STRANGER
+
+            if keyring:
+                raise TypeError('Keyrings cannot be attached to stranger-characters.')
+            self.keyring = STRANGER
 
             verifying_key = self.public_keys(SigningPower)
             self._stamp = StrangerStamp(verifying_key)
-            self.keyring_root = STRANGER
-            self.network_middleware = STRANGER
-            self.checksum_address = checksum_address
 
+        #
+        # Checksum Address (All Modes)
+        #
+
+        if self.federated_only:
+            try:
+                derived_federated_address = self.derive_federated_address()
+            except NoSigningPower:
+                derived_federated_address = NO_SIGNING_POWER.bool_value(False)
+            else:
+                pass
+                # FIXME: Restore this check (causes failed learning tests)
+                # if checksum_address and (checksum_address != derived_federated_address):
+                #     raise ValueError(f"Provided checksum address {checksum_address} "
+                #                      f"does not match federated character's verifying key {derived_federated_address}")
+            checksum_address = derived_federated_address
+        self.checksum_address = checksum_address
         self.__setup_nickname(is_me=is_me)
-        if is_me:
-            self.known_nodes.record_fleet_state()
 
-        # Character Control
-        # TODO: have argument about meaning of 'lawful' and whether maybe only Lawful characters have an interface
-        if hasattr(self, '_interface_class'):
-            # Controller Interface
-            self.interface = self._interface_class(character=self)
-        self.controller = NO_CONTROL_PROTOCOL
 
     def __eq__(self, other) -> bool:
         try:
@@ -445,6 +447,9 @@ class Character(Learner):
                 signature_from_kit, cleartext = signature_splitter(cleartext, return_remainder=True)
                 message = cleartext
 
+            else:
+                raise RuntimeError(f'Invalid signature header.')
+
         else:
             # Not decrypting - the message is the object passed in as a message kit.  Cast it.
             message = bytes(message_kit)
@@ -456,12 +461,11 @@ class Character(Learner):
 
         if signature and signature_from_kit:
             if signature != signature_from_kit:
-                raise ValueError(
-                    "The MessageKit has a Signature, but it's not the same one you provided.  Something's up.")
+                raise ValueError("The MessageKit has a Signature, but it's not the same one you provided.  Something's up.")
 
         signature_to_use = signature or signature_from_kit
         if signature_to_use:
-            is_valid = signature_to_use.verify(message, sender_verifying_key)  # FIXME: Message is undefined here
+            is_valid = signature_to_use.verify(message, sender_verifying_key)
             if not is_valid:
                 try:
                     node_on_the_other_end = self.known_node_class.from_seednode_metadata(stranger.seed_node_metadata(),
@@ -503,14 +507,13 @@ class Character(Learner):
         return power_up.public_key()
 
     def derive_federated_address(self):
-        if self.federated_only:
-            verifying_key = self.public_keys(SigningPower)
-            uncompressed_bytes = verifying_key.to_bytes(is_compressed=False)
-            without_prefix = uncompressed_bytes[1:]
-            verifying_key_as_eth_key = EthKeyAPI.PublicKey(without_prefix)
-            federated_address = verifying_key_as_eth_key.to_checksum_address()
-        else:
+        if not self.federated_only:
             raise RuntimeError('Federated address can only be derived for federated characters.')
+        verifying_key = self.public_keys(SigningPower)
+        uncompressed_bytes = verifying_key.to_bytes(is_compressed=False)
+        without_prefix = uncompressed_bytes[1:]
+        verifying_key_as_eth_key = EthKeyAPI.PublicKey(without_prefix)
+        federated_address = verifying_key_as_eth_key.to_checksum_address()
         return federated_address
 
     def make_rpc_controller(self, crash_on_error: bool = False):

@@ -17,6 +17,7 @@
 
 import pytest
 
+from nucypher.config.constants import TEMPORARY_DOMAIN
 from nucypher.characters.lawful import Bob, Alice
 from nucypher.crypto.powers import DecryptingPower, SigningPower
 from nucypher.policy.identity import Card
@@ -25,8 +26,8 @@ from tests.utils.middleware import MockRestMiddleware
 
 @pytest.mark.parametrize('character_class', (Bob, Alice))
 def test_character_card(character_class):
-    character = character_class(federated_only=True,
-                                start_learning_now=False,
+    character = character_class(domain=TEMPORARY_DOMAIN,
+                                federated_only=True,
                                 network_middleware=MockRestMiddleware())
 
     character_card = character.get_card()

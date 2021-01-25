@@ -38,7 +38,8 @@ from constant_sorrow.constants import (
     UNKNOWN_VERSION,
     READY,
     INVALIDATED,
-    NOT_SIGNED
+    NOT_SIGNED,
+    ENRICO
 )
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization import Encoding
@@ -70,7 +71,6 @@ from nucypher.blockchain.eth.constants import ETH_ADDRESS_BYTE_LENGTH
 from nucypher.blockchain.eth.interfaces import BlockchainInterfaceFactory
 from nucypher.blockchain.eth.registry import BaseContractRegistry
 from nucypher.blockchain.eth.signers.software import Web3Signer
-from nucypher.blockchain.eth.token import WorkTracker, StakeList
 from nucypher.characters.banners import ALICE_BANNER, BOB_BANNER, ENRICO_BANNER, URSULA_BANNER
 from nucypher.characters.base import Character, Learner
 from nucypher.characters.control.controllers import WebController
@@ -484,25 +484,27 @@ class Bob(Character):
     _default_crypto_powerups = [SigningPower, DecryptingPower]
 
     class IncorrectCFragsReceived(Exception):
-        """
-        Raised when Bob detects incorrect CFrags returned by some Ursulas
-        """
+        """Raised when Bob detects incorrect CFrags returned by some Ursulas"""
 
         def __init__(self, evidence: List):
             self.evidence = evidence
 
-    def __init__(self, treasure_maps: Optional[Dict] = None, controller: bool = True, *args, **kwargs) -> None:
-        Character.__init__(self, known_node_class=Ursula, *args, **kwargs)
+    def __init__(self,
+                 is_me: bool = True,
+                 treasure_maps: Optional[Dict] = None,
+                 controller: bool = True,
+                 *args, **kwargs):
 
-        if controller:
-            self.make_cli_controller()
-
+        Character.__init__(self, is_me=is_me, known_node_class=Ursula, *args, **kwargs)
         if not treasure_maps:
             treasure_maps = dict()
         self.treasure_maps = treasure_maps
 
         from nucypher.policy.collections import WorkOrderHistory  # Need a bigger strategy to avoid circulars.
         self._completed_work_orders = WorkOrderHistory()
+
+        if is_me and controller:
+            self.make_cli_controller()
 
         self.log = Logger(self.__class__.__name__)
         self.log.info(self.banner)
@@ -573,7 +575,7 @@ class Bob(Character):
         return unknown_ursulas, known_ursulas, treasure_map.m
 
     def _try_orient(self, treasure_map, alice_verifying_key):
-        alice = Alice.from_public_keys(verifying_key=alice_verifying_key)
+        alice = Alice.from_public_keys(domain=self.domain, verifying_key=alice_verifying_key)
         compass = self.make_compass_for_alice(alice)
         try:
             treasure_map.orient(compass)
@@ -829,6 +831,7 @@ class Bob(Character):
 
             self._try_orient(treasure_map, alice_verifying_key)
             # self.treasure_maps[treasure_map.public_id()] = treasure_map # TODO: Can we?
+
         else:
             map_id = self.construct_map_id(alice_verifying_key, label)
             treasure_map = self.treasure_maps[map_id]
@@ -1060,7 +1063,7 @@ class Ursula(Teacher, Character, Worker):
                  abort_on_learning_error: bool = False,
                  federated_only: bool = False,
                  crypto_power=None,
-                 known_nodes: Iterable[Teacher] = None,
+                 seed_nodes: Iterable[Teacher] = None,
 
                  **character_kwargs
                  ) -> None:
@@ -1071,7 +1074,7 @@ class Ursula(Teacher, Character, Worker):
                            federated_only=federated_only,
                            crypto_power=crypto_power,
                            abort_on_learning_error=abort_on_learning_error,
-                           known_nodes=known_nodes,
+                           seed_nodes=seed_nodes,
                            domain=domain,
                            known_node_class=Ursula,
                            **character_kwargs)
@@ -1092,18 +1095,16 @@ class Ursula(Teacher, Character, Worker):
             # Decentralized Worker
             if not federated_only:
 
-                # Prepare a TransactingPower from worker node's transacting keys
-                transacting_power = TransactingPower(account=worker_address,
-                                                     password=client_password,
-                                                     signer=self.signer,
-                                                     cache=True)
-                self.transacting_power = transacting_power
-                self._crypto_power.consume_power_up(transacting_power)
+                # Ethereum transacting power
+                self.transacting_power = self.__get_transacting_power(worker_address=worker_address,
+                                                                      client_password=client_password)
+                self.__worker_address = self.transacting_power.account
 
                 # Use this power to substantiate the stamp
                 self.__substantiate_stamp()
                 decentralized_identity_evidence = self.__decentralized_identity_evidence
 
+                # Initialize Ursula's blockchain actor
                 try:
                     Worker.__init__(self,
                                     is_me=is_me,
@@ -1116,23 +1117,19 @@ class Ursula(Teacher, Character, Worker):
                     self.stop(halt_reactor=False)
                     raise
 
-            self.rest_server = self._make_local_server(host=rest_host,
-                                                       port=rest_port,
-                                                       db_filepath=db_filepath,
-                                                       domain=domain)
-
+            # Worker HTTP Server
+            self.rest_server = self.__make_local_server(host=rest_host,
+                                                        port=rest_port,
+                                                        db_filepath=db_filepath,
+                                                        domain=domain)
             # Self-signed TLS certificate of self for Teacher.__init__
             certificate_filepath = self._crypto_power.power_ups(TLSHostingPower).keypair.certificate_filepath
             certificate = self._crypto_power.power_ups(TLSHostingPower).keypair.certificate
 
-            # Initial Impression
-            self.known_nodes.record_fleet_state(additional_nodes_to_track=[self])
-            message = "THIS IS YOU: {}: {}".format(self.__class__.__name__, self)
-            self.log.info(message)
-            self.log.info(self.banner.format(self.nickname))
-
         else:
             # Stranger HTTP Server
+            # TODO: Reduce to interface info only
+            # self.rest_interface = InterfaceInfo(host=rest_host, port=rest_port)
             self.rest_server = ProxyRESTServer(rest_host=rest_host, rest_port=rest_port)
 
         # Teacher (All Modes)
@@ -1143,6 +1140,21 @@ class Ursula(Teacher, Character, Worker):
                          interface_signature=interface_signature,
                          timestamp=timestamp,
                          decentralized_identity_evidence=decentralized_identity_evidence)
+
+        # Initial Impression
+        if is_me:
+            self.known_nodes.record_fleet_state(additional_nodes_to_track=[self])
+            self.log.info("THIS IS YOU: {}: {}".format(self.__class__.__name__, self))
+            self.log.info(self.banner.format(self.nickname))
+
+    def __get_transacting_power(self, worker_address: ChecksumAddress, client_password: Optional[str] = None):
+        # Prepare a TransactingPower from worker node's transacting keys
+        transacting_power = TransactingPower(account=worker_address,
+                                             password=client_password,
+                                             signer=self.signer,
+                                             cache=True)
+        self._crypto_power.consume_power_up(transacting_power)
+        return transacting_power
 
     def __get_hosting_power(self, host: str) -> TLSHostingPower:
         try:
@@ -1161,7 +1173,8 @@ class Ursula(Teacher, Character, Worker):
             self._crypto_power.consume_power_up(tls_hosting_power)  # Consume!
         return tls_hosting_power
 
-    def _make_local_server(self, host, port, domain, db_filepath) -> ProxyRESTServer:
+    def __make_local_server(self, host, port, domain, db_filepath) -> ProxyRESTServer:
+        """Returns an Ursula's server for hosting."""
         rest_app, datastore = make_rest_app(
             this_node=self,
             db_filepath=db_filepath,
@@ -1178,7 +1191,6 @@ class Ursula(Teacher, Character, Worker):
         transacting_power = self._crypto_power.power_ups(TransactingPower)
         signature = transacting_power.sign_message(message=bytes(self.stamp))
         self.__decentralized_identity_evidence = signature
-        self.__worker_address = transacting_power.account
         message = f"Created decentralized identity evidence: {self.__decentralized_identity_evidence[:10].hex()}"
         self.log.debug(message)
 
@@ -1415,7 +1427,7 @@ class Ursula(Teacher, Character, Worker):
 
         NOTE: This is a federated only method.
         """
-        seed_uri = f'{seednode_metadata.checksum_address}@{seednode_metadata.rest_host}:{seednode_metadata.rest_port}'
+        seed_uri = f'{seednode_metadata.checksum_address}@{seednode_metadata.rest_interface}'
         return cls.from_seed_and_stake_info(seed_uri=seed_uri, *args, **kwargs)
 
     @classmethod
@@ -1645,6 +1657,8 @@ class Ursula(Teacher, Character, Worker):
         try:
             return self.rest_server.datastore
         except AttributeError:
+            if not self.is_me:
+                raise AttributeError("Stranger nodes do not have a rest server attached")
             raise AttributeError("No rest server attached")
 
     @property
@@ -1707,9 +1721,11 @@ class Enrico(Character):
     def __init__(self, policy_encrypting_key=None, controller: bool = True, *args, **kwargs):
         self._policy_pubkey = policy_encrypting_key
 
-        # Enrico never uses the blockchain, hence federated_only)
-        kwargs['federated_only'] = True
-        kwargs['known_node_class'] = None
+        # Enrico...
+        kwargs['is_me'] = True             # ...has no stranger form
+        kwargs['federated_only'] = True    # ...never uses the blockchain
+        kwargs['known_node_class'] = None  # ...does not participate in node discovery
+        kwargs['domain'] = None            # ...does not use domains or peering
         super().__init__(*args, **kwargs)
 
         if controller:
@@ -1733,9 +1749,9 @@ class Enrico(Character):
         :param label: The label with which to derive the key.
         :return:
         """
-        policy_pubkey_enc = alice.get_policy_encrypting_key_from_label(label)
+        policy_encrypting_key = alice.get_policy_encrypting_key_from_label(label)
         return cls(crypto_power_ups={SigningPower: alice.stamp.as_umbral_pubkey()},
-                   policy_encrypting_key=policy_pubkey_enc)
+                   policy_encrypting_key=policy_encrypting_key)
 
     @property
     def policy_pubkey(self):

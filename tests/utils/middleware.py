@@ -122,6 +122,13 @@ class MockRestMiddlewareForLargeFleetTests(MockRestMiddleware):
                            announce_nodes=None,
                            nodes_i_need=None,
                            fleet_checksum=None):
+
+        # A quick setup so that the bytes casting of Ursulas doesn't take up all the time.
+        # (on what in the real world will be the remote node)
+        node = MOCK_KNOWN_URSULAS_CACHE[node.rest_interface.port]
+        _teacher_known_nodes_bytestring = node.bytestring_of_known_nodes()
+        node.bytestring_of_known_nodes = lambda *args, **kwargs: _teacher_known_nodes_bytestring
+
         known_nodes_bytestring = node.bytestring_of_known_nodes()
         signature = node.stamp(known_nodes_bytestring)
         r = Response(bytes(signature) + known_nodes_bytestring)

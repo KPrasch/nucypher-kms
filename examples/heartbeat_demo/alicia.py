@@ -74,8 +74,7 @@ ursula = Ursula.from_seed_and_stake_info(seed_uri=SEEDNODE_URI,
 alice_config = AliceConfiguration(
     config_root=os.path.join(TEMP_ALICE_DIR),
     domain=TEMPORARY_DOMAIN,
-    known_nodes={ursula},
-    start_learning_now=False,
+    seed_nodes={ursula},
     federated_only=True,
     learn_on_same_thread=True,
 )

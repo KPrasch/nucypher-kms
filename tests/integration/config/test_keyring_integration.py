@@ -26,6 +26,7 @@ from nucypher.characters.lawful import Alice, Bob, Ursula
 from nucypher.config.constants import TEMPORARY_DOMAIN
 from nucypher.config.keyring import NucypherKeyring
 from nucypher.crypto.powers import DecryptingPower, DelegatingPower
+from nucypher.utilities.networking import LOOPBACK_IP
 from tests.constants import INSECURE_DEVELOPMENT_PASSWORD
 
 
@@ -75,15 +76,14 @@ def test_characters_use_keyring(tmpdir):
         password=INSECURE_DEVELOPMENT_PASSWORD,
         encrypting=True,
         rest=True,
-        host='127.0.0.1',
+        host=LOOPBACK_IP,
         keyring_root=tmpdir)
     keyring.unlock(password=INSECURE_DEVELOPMENT_PASSWORD)
-    alice = Alice(federated_only=True, start_learning_now=False, keyring=keyring)
-    Bob(federated_only=True, start_learning_now=False, keyring=keyring)
+    alice = Alice(domain=TEMPORARY_DOMAIN, federated_only=True, keyring=keyring)
+    Bob(domain=TEMPORARY_DOMAIN, federated_only=True, keyring=keyring)
     Ursula(federated_only=True,
-           start_learning_now=False,
            keyring=keyring,
-           rest_host='127.0.0.1',
+           rest_host=LOOPBACK_IP,
            rest_port=12345,
            db_filepath=tempfile.mkdtemp(),
            domain=TEMPORARY_DOMAIN)

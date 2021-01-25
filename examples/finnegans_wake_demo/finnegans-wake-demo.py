@@ -76,7 +76,7 @@ label = b"secret/files/and/stuff"
 
 ALICE = Alice(network_middleware=RestMiddleware(),
               domain=TEMPORARY_DOMAIN,
-              known_nodes=[ursula],
+              seed_nodes=[ursula],
               learn_on_same_thread=True,
               federated_only=True)
 
@@ -86,11 +86,10 @@ ALICE = Alice(network_middleware=RestMiddleware(),
 # any Bob that Alice grants access.
 policy_pubkey = ALICE.get_policy_encrypting_key_from_label(label)
 
-BOB = Bob(known_nodes=[ursula],
+BOB = Bob(seed_nodes=[ursula],
           domain=TEMPORARY_DOMAIN,
           network_middleware=RestMiddleware(),
           federated_only=True,
-          start_learning_now=True,
           learn_on_same_thread=True)
 
 ALICE.start_learning_loop(now=True)

@@ -16,6 +16,7 @@
 """
 
 
+from contextlib import suppress
 from distutils.util import strtobool
 
 import click
@@ -23,12 +24,17 @@ import os
 import shutil
 from constant_sorrow.constants import NO_CONTROL_PROTOCOL
 
+from nucypher.network.exceptions import NodeSeemsToBeDown
 from nucypher.blockchain.eth.interfaces import (
     BlockchainDeployerInterface,
     BlockchainInterface,
     BlockchainInterfaceFactory
 )
-from nucypher.blockchain.eth.registry import BaseContractRegistry, InMemoryContractRegistry, LocalContractRegistry
+from nucypher.blockchain.eth.registry import (
+    BaseContractRegistry,
+    InMemoryContractRegistry,
+    LocalContractRegistry
+)
 from nucypher.characters.base import Character
 from nucypher.characters.control.emitters import StdoutEmitter
 from nucypher.cli.actions.auth import get_nucypher_password, unlock_nucypher_keyring
@@ -63,32 +69,29 @@ def make_cli_character(character_config,
     #
 
     # Handle Keyring
-
     if unlock_keyring:
         unlock_nucypher_keyring(emitter,
                                 character_configuration=character_config,
                                 password=get_nucypher_password(confirm=False))
 
     # Handle Teachers
-    # TODO: Is this still relevant?  Is it better to DRY this up by doing it later?
-    sage_nodes = list()
-
+    teacher = None
+    if teacher_uri:
+        with suppress(NodeSeemsToBeDown):
+            teacher = character_config.known_node_class.from_teacher_uri(
+                teacher_uri=teacher_uri,
+                min_stake=0,  # TODO: Where to get this?
+                federated_only=character_config.federated_only,
+                network_middleware=character_config.network_middleware,
+                registry=character_config.registry)
     #
     # Character Init
     #
 
-    # Produce Character
-    if teacher_uri:
-        maybe_sage_node = character_config.known_node_class.from_teacher_uri(teacher_uri=teacher_uri,
-                         min_stake=0,  # TODO: Where to get this?
-                         federated_only=character_config.federated_only,
-                         network_middleware=character_config.network_middleware,
-                         registry=character_config.registry)
-        sage_nodes.append(maybe_sage_node)
-
-    CHARACTER = character_config(known_nodes=sage_nodes,
-                                 network_middleware=character_config.network_middleware,
-                                 **config_args)
+    CHARACTER = character_config(
+        seed_nodes=[teacher] if teacher_uri else None,
+        network_middleware=character_config.network_middleware,
+        **config_args)
 
     #
     # Post-Init

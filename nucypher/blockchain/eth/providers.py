@@ -25,6 +25,7 @@ from web3.providers import BaseProvider
 from web3.providers.eth_tester.main import EthereumTesterProvider
 
 from nucypher.exceptions import DevelopmentInstallationRequired
+from nucypher.utilities.networking import LOCALHOST
 
 
 class ProviderError(Exception):
@@ -94,5 +95,5 @@ def _get_mock_test_provider(provider_uri) -> BaseProvider:
 
 
 def _get_tester_ganache(provider_uri=None) -> BaseProvider:
-    endpoint_uri = provider_uri or 'http://localhost:7545'
+    endpoint_uri = provider_uri or f'http://{LOCALHOST}:7545'
     return HTTPProvider(endpoint_uri=endpoint_uri)

@@ -20,6 +20,7 @@ import maya
 from typing import Union
 from umbral.keys import UmbralPublicKey
 
+from nucypher.config.constants import TEMPORARY_DOMAIN
 from nucypher.characters.control.specifications import alice, bob, enrico
 from nucypher.crypto.kits import UmbralMessageKit
 from nucypher.crypto.powers import DecryptingPower, SigningPower
@@ -78,7 +79,8 @@ class AliceInterface(CharacterPublicInterface):
                       ) -> dict:
 
         from nucypher.characters.lawful import Bob
-        bob = Bob.from_public_keys(encrypting_key=bob_encrypting_key,
+        bob = Bob.from_public_keys(domain=TEMPORARY_DOMAIN,
+                                   encrypting_key=bob_encrypting_key,
                                    verifying_key=bob_verifying_key)
 
         new_policy = self.character.create_policy(
@@ -111,7 +113,8 @@ class AliceInterface(CharacterPublicInterface):
               ) -> dict:
 
         from nucypher.characters.lawful import Bob
-        bob = Bob.from_public_keys(encrypting_key=bob_encrypting_key,
+        bob = Bob.from_public_keys(domain=self.character.domain,
+                                   encrypting_key=bob_encrypting_key,
                                    verifying_key=bob_verifying_key)
 
         new_policy = self.character.grant(bob=bob,
@@ -163,8 +166,7 @@ class AliceInterface(CharacterPublicInterface):
 
         enrico = Enrico.from_public_keys(
             verifying_key=message_kit.sender_verifying_key,
-            policy_encrypting_key=policy_encrypting_key,
-            label=label
+            policy_encrypting_key=policy_encrypting_key
         )
 
         plaintexts = self.character.decrypt_message_kit(
@@ -215,11 +217,9 @@ class BobInterface(CharacterPublicInterface):
             message_kit)  # TODO #846: May raise UnknownOpenSSLError and InvalidTag.
 
         enrico = Enrico.from_public_keys(verifying_key=message_kit.sender_verifying_key,
-                                              policy_encrypting_key=policy_encrypting_key,
-                                              label=label)
+                                         policy_encrypting_key=policy_encrypting_key)
 
         self.character.join_policy(label=label, alice_verifying_key=alice_verifying_key)
-
 
         plaintexts = self.character.retrieve(message_kit,
                                              enrico=enrico,

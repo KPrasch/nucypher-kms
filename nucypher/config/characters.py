@@ -14,7 +14,6 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-from collections import Iterable
 
 import os
 from constant_sorrow.constants import (
@@ -25,12 +24,13 @@ from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurve
 from cryptography.x509 import Certificate
 from tempfile import TemporaryDirectory
 
-from nucypher.blockchain.eth.networks import NetworksInventory
 from nucypher.blockchain.eth.actors import StakeHolder
+from nucypher.blockchain.eth.networks import NetworksInventory
 from nucypher.blockchain.eth.signers import Signer
 from nucypher.config.constants import DEFAULT_CONFIG_ROOT
 from nucypher.config.keyring import NucypherKeyring
 from nucypher.config.node import CharacterConfiguration
+from nucypher.utilities.networking import LOOPBACK_IP
 
 
 class UrsulaConfiguration(CharacterConfiguration):
@@ -40,7 +40,7 @@ class UrsulaConfiguration(CharacterConfiguration):
     NAME = CHARACTER_CLASS.__name__.lower()
 
     DEFAULT_REST_PORT = 9151
-    DEFAULT_DEVELOPMENT_REST_HOST = '127.0.0.1'
+    DEFAULT_DEVELOPMENT_REST_HOST = LOOPBACK_IP
     DEFAULT_DEVELOPMENT_REST_PORT = 10151
     DEFAULT_DB_NAME = f'{NAME}.db'
     DEFAULT_AVAILABILITY_CHECKS = False
@@ -250,7 +250,7 @@ class FelixConfiguration(CharacterConfiguration):
     DEFAULT_DB_FILEPATH = os.path.join(DEFAULT_CONFIG_ROOT, DEFAULT_DB_NAME)
     DEFAULT_REST_PORT = 6151
     DEFAULT_LEARNER_PORT = 9151
-    DEFAULT_REST_HOST = '127.0.0.1'
+    DEFAULT_REST_HOST = LOOPBACK_IP
     __DEFAULT_TLS_CURVE = ec.SECP384R1
 
     def __init__(self,

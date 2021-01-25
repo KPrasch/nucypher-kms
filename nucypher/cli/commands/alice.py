@@ -78,6 +78,7 @@ from nucypher.config.constants import (
 from nucypher.config.keyring import NucypherKeyring
 from nucypher.network.middleware import RestMiddleware
 from nucypher.policy.identity import Card
+from nucypher.utilities.networking import LOOPBACK_IP
 
 option_pay_with = click.option('--pay-with', help="Run with a specified account", type=EIP55_CHECKSUM_ADDRESS)
 option_duration_periods = click.option('--duration-periods', help="Policy duration in periods", type=click.INT)
@@ -289,7 +290,6 @@ class AliceCharacterOptions:
                                        teacher_uri=self.teacher_uri,
                                        min_stake=self.min_stake,
                                        client_password=client_password,
-                                       start_learning_now=load_seednodes,
                                        lonely=self.config_options.lonely)
 
             return ALICE
@@ -381,7 +381,7 @@ def run(general_config, character_options, config_file, controller_port, dry_run
             emitter.message(f"Alice Verifying Key {bytes(ALICE.stamp).hex()}", color="green", bold=True)
             controller = ALICE.make_web_controller(crash_on_error=general_config.debug)
             ALICE.log.info('Starting HTTP Character Web Controller')
-            emitter.message(f'Running HTTP Alice Controller at http://localhost:{controller_port}')
+            emitter.message(f'Running HTTP Alice Controller at http://{LOOPBACK_IP}:{controller_port}')
             return controller.start(http_port=controller_port, dry_run=dry_run)
 
     # Handle Crash
