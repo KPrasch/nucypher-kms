@@ -14,7 +14,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with nucypher.  If not, see <https://www.gnu.org/licenses/>.
 """
-
+from base64 import b64decode
 
 import click
 
@@ -327,6 +327,7 @@ def make_card(general_config, character_options, config_file, nickname):
 @BobInterface.connect_cli('retrieve')
 @click.option('--alice', type=click.STRING, help="The card id or nickname of a stored Alice card.")
 @click.option('--ipfs', help="Download an encrypted message from IPFS at the specified gateway URI")
+@click.option('--decode', help="Decode encrypted UTF-8 messages", is_flag=True)
 def retrieve(general_config,
              character_options,
              config_file,
@@ -336,6 +337,7 @@ def retrieve(general_config,
              message_kit,
              ipfs,
              alice,
+             decode,
              force):
     """Obtain plaintext from encrypted data, if access was granted."""
 
@@ -377,4 +379,9 @@ def retrieve(general_config,
     }
 
     response = BOB.controller.retrieve(request=bob_request_data)
+    if decode:
+        messages = list([b64decode(r).decode() for r in response['cleartexts']])
+        emitter.echo('----------Messages----------')
+        for message in messages:
+            emitter.echo(message)
     return response
